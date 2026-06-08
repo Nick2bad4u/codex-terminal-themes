@@ -1,0 +1,6 @@
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Bat builds compiled caches under AppData\Local, not in this repo.
+*.bin
