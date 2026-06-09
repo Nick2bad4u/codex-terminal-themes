@@ -1,0 +1,218 @@
+{
+    "$defs": {
+        "nullableColor": {
+            "anyOf": [
+                {
+                    "pattern": "^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$",
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "theme": {
+            "additionalProperties": false,
+            "properties": {
+                "appearance": {
+                    "enum": [
+                        "dark",
+                        "light",
+                        "unknown"
+                    ]
+                },
+                "author": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "colorSpace": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "colors": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "background": {
+                            "$ref": "#/$defs/nullableColor"
+                        },
+                        "caret": {
+                            "$ref": "#/$defs/nullableColor"
+                        },
+                        "foreground": {
+                            "$ref": "#/$defs/nullableColor"
+                        },
+                        "invisibles": {
+                            "$ref": "#/$defs/nullableColor"
+                        },
+                        "lineHighlight": {
+                            "$ref": "#/$defs/nullableColor"
+                        },
+                        "selection": {
+                            "$ref": "#/$defs/nullableColor"
+                        }
+                    },
+                    "required": [
+                        "background",
+                        "caret",
+                        "foreground",
+                        "invisibles",
+                        "lineHighlight",
+                        "selection"
+                    ],
+                    "type": "object"
+                },
+                "fileName": {
+                    "pattern": "^.+\\.tmTheme$",
+                    "type": "string"
+                },
+                "id": {
+                    "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+                    "type": "string"
+                },
+                "name": {
+                    "minLength": 1,
+                    "type": "string"
+                },
+                "path": {
+                    "pattern": "^themes/.+\\.tmTheme$",
+                    "type": "string"
+                },
+                "scopes": {
+                    "items": {
+                        "minLength": 1,
+                        "type": "string"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "semanticClass": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "statistics": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "colorReferences": {
+                            "minimum": 0,
+                            "type": "integer"
+                        },
+                        "scopedSettings": {
+                            "minimum": 0,
+                            "type": "integer"
+                        },
+                        "settings": {
+                            "minimum": 1,
+                            "type": "integer"
+                        },
+                        "uniqueScopes": {
+                            "minimum": 0,
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "colorReferences",
+                        "scopedSettings",
+                        "settings",
+                        "uniqueScopes"
+                    ],
+                    "type": "object"
+                },
+                "uuid": {
+                    "minLength": 1,
+                    "type": "string"
+                }
+            },
+            "required": [
+                "appearance",
+                "author",
+                "colorSpace",
+                "colors",
+                "fileName",
+                "id",
+                "name",
+                "path",
+                "scopes",
+                "semanticClass",
+                "statistics",
+                "uuid"
+            ],
+            "type": "object"
+        }
+    },
+    "$id": "https://raw.githubusercontent.com/Nick2bad4u/codex-terminal-themes/main/metadata/themes.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+        "$schema": {
+            "const": "./themes.schema.json"
+        },
+        "consumers": {
+            "items": {
+                "minLength": 1,
+                "type": "string"
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+        },
+        "description": {
+            "minLength": 1,
+            "type": "string"
+        },
+        "duplicateUuidGroups": {
+            "additionalProperties": {
+                "items": {
+                    "pattern": "^themes/.+\\.tmTheme$",
+                    "type": "string"
+                },
+                "minItems": 2,
+                "type": "array",
+                "uniqueItems": true
+            },
+            "type": "object"
+        },
+        "generatedBy": {
+            "const": "npm run metadata:write"
+        },
+        "name": {
+            "const": "codex-terminal-themes"
+        },
+        "schemaVersion": {
+            "const": 1
+        },
+        "themeCount": {
+            "minimum": 1,
+            "type": "integer"
+        },
+        "themeDirectory": {
+            "const": "themes"
+        },
+        "themes": {
+            "items": {
+                "$ref": "#/$defs/theme"
+            },
+            "minItems": 1,
+            "type": "array"
+        }
+    },
+    "required": [
+        "$schema",
+        "consumers",
+        "description",
+        "duplicateUuidGroups",
+        "generatedBy",
+        "name",
+        "schemaVersion",
+        "themeCount",
+        "themeDirectory",
+        "themes"
+    ],
+    "title": "Codex Terminal Theme Metadata Manifest",
+    "type": "object"
+}

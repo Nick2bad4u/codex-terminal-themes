@@ -2,9 +2,16 @@
 
 Keep this repository focused on terminal syntax theme source files and local sync validation.
 
+When adding, removing, renaming, or editing a file in `themes/`, regenerate the consumer manifest:
+
+```powershell
+npm run metadata:write
+```
+
 Before submitting changes:
 
 ```powershell
+npm run metadata:check
 npm run release:verify
 Sync-TerminalThemes.ps1 -WhatIf
 ```

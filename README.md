@@ -6,8 +6,12 @@ Source-of-truth repository for local TextMate `.tmTheme` files used by Codex and
 
 ## Layout
 
+- `metadata/themes.json` - generated consumer manifest for every theme.
+- `metadata/README.md` - consumer notes for the generated manifest.
+- `metadata/themes.schema.json` - JSON schema for the generated manifest.
 - `themes/` - flat source theme folder copied into Codex and Bat.
 - `tools/validate-themes.mjs` - validates `.tmTheme` XML/plist structure.
+- `tools/generate-theme-metadata.mjs` - regenerates and checks metadata.
 
 ## Setup
 
@@ -19,7 +23,7 @@ npm install
 
 ## Validation
 
-Validate every source theme:
+Validate every source theme and confirm the metadata manifest is current:
 
 ```powershell
 npm run validate
@@ -36,6 +40,41 @@ Validate themes and rebuild Bat's theme cache:
 ```powershell
 npm run validate:bat
 ```
+
+Regenerate the consumer metadata manifest:
+
+```powershell
+npm run metadata:write
+```
+
+Check that the committed manifest still matches the theme files:
+
+```powershell
+npm run metadata:check
+```
+
+## Metadata
+
+The generated manifest at `metadata/themes.json` is the stable consumer entry point for scripts, indexers, package consumers, and sync tools that need theme information without parsing plist XML.
+
+Use it when you need to:
+
+- list every available theme with a stable id and display name
+- filter themes by detected dark/light appearance
+- inspect global editor colors before installing a theme
+- find TextMate scopes covered by a theme
+- detect imported themes that still share historical UUIDs
+
+It includes:
+
+- theme id, display name, file name, path, UUID, author, semantic class, and color space
+- detected appearance from the global background color
+- global colors for background, foreground, caret, selection, line highlight, and invisibles
+- setting counts, color-reference counts, scoped-setting counts, and unique scope counts
+- a sorted list of TextMate scopes used by each theme
+- duplicate UUID groups for imported themes that share historical UUIDs
+
+The manifest is deterministic and validated by `npm run validate`; changing a `.tmTheme` without regenerating metadata fails the repo gate. See `metadata/README.md` for the field contract and a small consumption example.
 
 ## Sync
 

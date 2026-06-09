@@ -4,7 +4,13 @@ import nickTwoBadFourU from "eslint-config-nick2bad4u";
 const config = [
     ...nickTwoBadFourU.configs.all,
 
-    // Add repository-specific config entries below as needed.
+    {
+        files: ["metadata/themes.json"],
+        name: "Generated theme metadata manifest",
+        rules: {
+            "json/sort-keys": "off",
+        },
+    },
 ];
 
 export default config;

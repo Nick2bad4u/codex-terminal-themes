@@ -32,6 +32,7 @@
     "type": "module",
     "types": "./types/index.d.ts",
     "files": [
+        "metadata/",
         "themes/",
         "tools/",
         "types/",
@@ -49,9 +50,12 @@
         "lint:gitleaks": "gitleaks dir --config .gitleaks.toml .",
         "lint:package-json": "npmPkgJsonLint . --config .npmpackagejsonlintrc.json",
         "lint:yamllint": "yamllint -c .yamllint .",
+        "metadata:check": "node tools/generate-theme-metadata.mjs --check",
+        "metadata:write": "node tools/generate-theme-metadata.mjs --write",
         "release:verify": "npm run validate && npm run lint && npm run format:check && npm run lint:package-json && npm run lint:yamllint",
-        "validate": "node tools/validate-themes.mjs",
-        "validate:bat": "node tools/validate-themes.mjs --bat-cache"
+        "validate": "npm run validate:themes && npm run metadata:check",
+        "validate:bat": "node tools/validate-themes.mjs --bat-cache",
+        "validate:themes": "node tools/validate-themes.mjs"
     },
     "devDependencies": {
         "@types/node": "^25.9.2",
