@@ -1378,20 +1378,16 @@ document.addEventListener("keydown", (event) => {
 
 syncColorControlUi();
 
-void fetch("site-data.json")
-    .then((response) => response.json())
-    .then((data) => {
-        state.themes = readThemes(/** @type {unknown} */ (data));
+// eslint-disable-next-line n/no-top-level-await -- This file runs as a browser module, not a published Node entry point.
+const response = await fetch("site-data.json");
+// eslint-disable-next-line n/no-top-level-await -- This file runs as a browser module, not a published Node entry point.
+const data = /** @type {unknown} */ (await response.json());
+state.themes = readThemes(data);
 
-        const allScopes = new Set(
-            state.themes.flatMap((theme) =>
-                theme.rules.map((rule) => rule.scope)
-            )
-        );
+const allScopes = new Set(
+    state.themes.flatMap((theme) => theme.rules.map((rule) => rule.scope))
+);
 
-        elements.themeCount.textContent = `${state.themes.length} themes`;
-        elements.scopeCount.textContent = `${allScopes.size} styled scopes`;
-        render();
-
-        return undefined;
-    });
+elements.themeCount.textContent = `${state.themes.length} themes`;
+elements.scopeCount.textContent = `${allScopes.size} styled scopes`;
+render();
