@@ -32,6 +32,7 @@
     "type": "module",
     "types": "./types/index.d.ts",
     "files": [
+        "docs/",
         "metadata/",
         "themes/",
         "tools/",
@@ -41,6 +42,7 @@
         "LICENSE.txt",
         "README.md",
         "SECURITY.md",
+        "stylelint.config.mjs",
         "SUPPORT.md"
     ],
     "scripts": {
@@ -52,8 +54,10 @@
         "lint:yamllint": "yamllint -c .yamllint .",
         "metadata:check": "node tools/generate-theme-metadata.mjs --check",
         "metadata:write": "node tools/generate-theme-metadata.mjs --write",
+        "pages:build": "node tools/build-pages-site.mjs --write",
+        "pages:check": "node tools/build-pages-site.mjs --check",
         "release:verify": "npm run validate && npm run lint && npm run format:check && npm run lint:package-json && npm run lint:yamllint",
-        "validate": "npm run validate:themes && npm run metadata:check",
+        "validate": "npm run validate:themes && npm run metadata:check && npm run pages:check",
         "validate:bat": "node tools/validate-themes.mjs --bat-cache",
         "validate:themes": "node tools/validate-themes.mjs"
     },

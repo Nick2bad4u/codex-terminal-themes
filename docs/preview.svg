@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+    <title id="title">Codex Terminal Themes</title>
+    <desc id="description">A dark terminal syntax preview for the Codex Terminal Themes gallery.</desc>
+    <rect width="1200" height="630" fill="#111418" />
+    <rect x="72" y="72" width="1056" height="486" rx="18" fill="#050608" stroke="#2d343c" stroke-width="2" />
+    <rect x="72" y="72" width="1056" height="58" rx="18" fill="#1c2229" />
+    <circle cx="112" cy="101" r="10" fill="#f36f5f" />
+    <circle cx="146" cy="101" r="10" fill="#f3c969" />
+    <circle cx="180" cy="101" r="10" fill="#72d08b" />
+    <text x="96" y="198" fill="#ffffff" font-family="Cascadia Code, Consolas, monospace" font-size="42" font-weight="700">Codex Terminal Themes</text>
+    <text x="96" y="260" fill="#8fd3c7" font-family="Cascadia Code, Consolas, monospace" font-size="28">203 TextMate themes with online syntax previews</text>
+    <text x="96" y="350" fill="#f3c969" font-family="Cascadia Code, Consolas, monospace" font-size="26">const</text>
+    <text x="190" y="350" fill="#e8edf3" font-family="Cascadia Code, Consolas, monospace" font-size="26">theme = </text>
+    <text x="312" y="350" fill="#72d08b" font-family="Cascadia Code, Consolas, monospace" font-size="26">"AmoledShinyBlack6"</text>
+    <text x="604" y="350" fill="#e8edf3" font-family="Cascadia Code, Consolas, monospace" font-size="26">;</text>
+    <text x="96" y="404" fill="#6eb4ff" font-family="Cascadia Code, Consolas, monospace" font-size="26">preview</text>
+    <text x="218" y="404" fill="#e8edf3" font-family="Cascadia Code, Consolas, monospace" font-size="26">.render(</text>
+    <text x="348" y="404" fill="#d98cff" font-family="Cascadia Code, Consolas, monospace" font-size="26">theme</text>
+    <text x="438" y="404" fill="#e8edf3" font-family="Cascadia Code, Consolas, monospace" font-size="26">);</text>
+    <rect x="96" y="470" width="190" height="16" rx="8" fill="#8fd3c7" />
+    <rect x="310" y="470" width="150" height="16" rx="8" fill="#f3c969" />
+    <rect x="484" y="470" width="220" height="16" rx="8" fill="#d98cff" />
+    <rect x="728" y="470" width="140" height="16" rx="8" fill="#72d08b" />
+</svg>

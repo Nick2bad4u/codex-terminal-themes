@@ -1,0 +1,371 @@
+:root {
+    color: #e8edf3;
+    background: #111418;
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.5;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    min-width: 320px;
+    min-height: 100vh;
+    margin: 0;
+    color: #e8edf3;
+    background:
+        linear-gradient(180deg, rgb(21 25 30 / 96%), rgb(12 14 17 / 100%)),
+        #111418;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+.site-header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+    width: min(1600px, 100%);
+    margin: 0 auto;
+    padding: 28px 24px 18px;
+}
+
+.site-title {
+    min-width: 0;
+}
+
+.eyebrow {
+    margin: 0 0 6px;
+    color: #8fd3c7;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+h1,
+h2 {
+    margin: 0;
+    letter-spacing: 0;
+}
+
+h1 {
+    color: #ffffff;
+    font-size: clamp(2rem, 5vw, 4.5rem);
+    line-height: 0.98;
+}
+
+h2 {
+    color: #ffffff;
+    font-size: clamp(1.45rem, 3vw, 2.5rem);
+    line-height: 1.08;
+}
+
+.site-stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: end;
+    gap: 8px;
+    color: #cfd7df;
+    font-size: 0.92rem;
+}
+
+.site-stats span,
+.metadata-pill {
+    border: 1px solid rgb(255 255 255 / 12%);
+    border-radius: 6px;
+    padding: 6px 9px;
+    background: rgb(255 255 255 / 5%);
+}
+
+.app-shell {
+    display: grid;
+    grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+    gap: 18px;
+    width: min(1600px, 100%);
+    margin: 0 auto;
+    padding: 0 24px 28px;
+}
+
+.sidebar,
+.preview-panel {
+    min-width: 0;
+    border: 1px solid rgb(255 255 255 / 11%);
+    background: rgb(20 23 27 / 82%);
+}
+
+.sidebar {
+    position: sticky;
+    top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    height: calc(100vh - 116px);
+    min-height: 620px;
+    padding: 14px;
+}
+
+.control-group {
+    display: grid;
+    gap: 7px;
+}
+
+label {
+    color: #aeb8c2;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+input,
+select {
+    width: 100%;
+    min-height: 42px;
+    border: 1px solid rgb(255 255 255 / 14%);
+    border-radius: 6px;
+    padding: 0 12px;
+    color: #eef4f8;
+    background: #0d1014;
+    outline: none;
+}
+
+input:focus,
+select:focus,
+.theme-option:focus-visible {
+    border-color: #f3c969;
+    box-shadow: 0 0 0 3px rgb(243 201 105 / 22%);
+}
+
+.theme-list {
+    display: grid;
+    align-content: start;
+    gap: 8px;
+    min-height: 0;
+    overflow: auto;
+    padding-right: 4px;
+}
+
+.theme-option {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 10px;
+    width: 100%;
+    min-height: 62px;
+    border: 1px solid rgb(255 255 255 / 9%);
+    border-radius: 7px;
+    padding: 8px;
+    color: #dfe8ef;
+    text-align: left;
+    background: #15191f;
+    cursor: pointer;
+}
+
+.theme-option[aria-selected="true"] {
+    border-color: rgb(143 211 199 / 80%);
+    background: #1d2629;
+}
+
+.swatch {
+    width: 34px;
+    height: 44px;
+    border: 1px solid rgb(255 255 255 / 18%);
+    border-radius: 5px;
+}
+
+.theme-option strong,
+.theme-option span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.theme-option strong {
+    color: #ffffff;
+    font-size: 0.95rem;
+}
+
+.theme-option span {
+    color: #9faab5;
+    font-size: 0.8rem;
+}
+
+.preview-panel {
+    display: grid;
+    gap: 16px;
+    min-height: calc(100vh - 116px);
+    padding: 18px;
+}
+
+.preview-toolbar {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.preview-toolbar a {
+    border: 1px solid rgb(255 255 255 / 18%);
+    border-radius: 6px;
+    padding: 9px 12px;
+    color: #111418;
+    font-size: 0.88rem;
+    font-weight: 800;
+    text-decoration: none;
+    background: #f3c969;
+}
+
+.metadata-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.metadata-pill {
+    color: #cfd7df;
+    font-size: 0.86rem;
+}
+
+.terminal-frame {
+    overflow: hidden;
+    border: 1px solid rgb(255 255 255 / 13%);
+    border-radius: 8px;
+    background: #050608;
+}
+
+.terminal-chrome {
+    display: flex;
+    gap: 7px;
+    align-items: center;
+    height: 36px;
+    padding: 0 13px;
+    background: rgb(255 255 255 / 8%);
+}
+
+.terminal-chrome span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.terminal-chrome span:nth-child(1) {
+    background: #f36f5f;
+}
+
+.terminal-chrome span:nth-child(2) {
+    background: #f3c969;
+}
+
+.terminal-chrome span:nth-child(3) {
+    background: #72d08b;
+}
+
+.code-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    background: rgb(255 255 255 / 10%);
+}
+
+.code-sample {
+    min-width: 0;
+    min-height: 330px;
+    padding: 16px;
+}
+
+.sample-title {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+    color: inherit;
+    font-family:
+        "Cascadia Code", "Fira Code", Consolas, "Liberation Mono", monospace;
+    font-size: 0.78rem;
+    opacity: 0.78;
+}
+
+pre {
+    overflow: auto;
+    min-height: 260px;
+    margin: 0;
+    font-family:
+        "Cascadia Code", "Fira Code", Consolas, "Liberation Mono", monospace;
+    font-size: 0.9rem;
+    line-height: 1.58;
+    white-space: pre;
+}
+
+.token.bold {
+    font-weight: 700;
+}
+
+.token.italic {
+    font-style: italic;
+}
+
+.token.underline {
+    text-decoration: underline;
+}
+
+@media (max-width: 980px) {
+    .site-header {
+        align-items: start;
+        flex-direction: column;
+    }
+
+    .site-stats {
+        justify-content: start;
+    }
+
+    .app-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        position: static;
+        height: auto;
+        min-height: 0;
+    }
+
+    .theme-list {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        max-height: 360px;
+    }
+
+    .preview-panel {
+        min-height: auto;
+    }
+}
+
+@media (max-width: 740px) {
+    .site-header,
+    .app-shell {
+        padding-right: 14px;
+        padding-left: 14px;
+    }
+
+    .preview-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .preview-toolbar a {
+        text-align: center;
+    }
+
+    .code-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -9,9 +9,11 @@ Source-of-truth repository for local TextMate `.tmTheme` files used by Codex and
 - `metadata/themes.json` - generated consumer manifest for every theme.
 - `metadata/README.md` - consumer notes for the generated manifest.
 - `metadata/themes.schema.json` - JSON schema for the generated manifest.
+- `docs/` - generated GitHub Pages theme gallery.
 - `themes/` - flat source theme folder copied into Codex and Bat.
 - `tools/validate-themes.mjs` - validates `.tmTheme` XML/plist structure.
 - `tools/generate-theme-metadata.mjs` - regenerates and checks metadata.
+- `tools/build-pages-site.mjs` - regenerates and checks gallery preview data.
 
 ## Setup
 
@@ -52,6 +54,24 @@ Check that the committed manifest still matches the theme files:
 ```powershell
 npm run metadata:check
 ```
+
+Regenerate the GitHub Pages preview data:
+
+```powershell
+npm run pages:build
+```
+
+Check that the committed gallery data still matches the theme files:
+
+```powershell
+npm run pages:check
+```
+
+## Gallery
+
+The static GitHub Pages site lives in `docs/`. It showcases every theme with searchable metadata, dark/light filtering, swatches, and syntax previews for TypeScript, PowerShell, Python, and HTML/CSS.
+
+The browser app uses `docs/site-data.json`, which is generated from `metadata/themes.json` and the source `.tmTheme` files. The preview renderer uses representative TextMate scopes so users can compare theme behavior online without installing Bat, Codex, or a TextMate parser.
 
 ## Metadata
 

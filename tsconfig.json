@@ -4,6 +4,7 @@
         "allowJs": true,
         "checkJs": true,
         "lib": [
+            "DOM",
             "ES2024"
         ],
         "module": "NodeNext",
@@ -20,6 +21,7 @@
     ],
     "include": [
         "**/*.mjs",
+        "docs/**/*.js",
         "types/**/*.d.ts",
         "tools/**/*.mjs"
     ]

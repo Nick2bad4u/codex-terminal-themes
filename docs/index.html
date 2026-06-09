@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            content="width=device-width, initial-scale=1"
+            name="viewport"
+        />
+        <title>Codex Terminal Themes</title>
+        <link
+            href="styles.css"
+            rel="stylesheet"
+        />
+        <link
+            type="image/svg+xml"
+            href="preview.svg"
+            rel="icon"
+        />
+        <meta
+            content="Codex Terminal Themes"
+            property="og:title"
+        />
+        <meta
+            content="website"
+            property="og:type"
+        />
+        <meta
+            content="https://nick2bad4u.github.io/codex-terminal-themes/"
+            property="og:url"
+        />
+        <meta
+            content="https://nick2bad4u.github.io/codex-terminal-themes/preview.svg"
+            property="og:image"
+        />
+        <meta
+            content="Interactive gallery for Codex terminal TextMate themes."
+            name="description"
+        />
+    </head>
+    <body>
+        <header class="site-header">
+            <div class="site-title">
+                <p class="eyebrow">TextMate theme gallery</p>
+                <h1>Codex Terminal Themes</h1>
+            </div>
+            <div
+                class="site-stats"
+                aria-label="Theme statistics"
+            >
+                <span id="theme_count">0 themes</span>
+                <span id="scope_count">0 scopes</span>
+            </div>
+        </header>
+
+        <main class="app-shell">
+            <aside
+                class="sidebar"
+                aria-label="Theme controls"
+            >
+                <div class="control-group">
+                    <label for="theme_search">Search</label>
+                    <input
+                        id="theme_search"
+                        type="search"
+                        autocomplete="off"
+                        placeholder="Theme, author, scope"
+                    />
+                </div>
+
+                <div class="control-group">
+                    <label for="appearance_filter">Appearance</label>
+                    <select id="appearance_filter">
+                        <option value="all">All appearances</option>
+                        <option value="dark">Dark</option>
+                        <option value="light">Light</option>
+                        <option value="unknown">Unknown</option>
+                    </select>
+                </div>
+
+                <div
+                    id="theme_list"
+                    class="theme-list"
+                    role="listbox"
+                ></div>
+            </aside>
+
+            <section
+                class="preview-panel"
+                aria-live="polite"
+            >
+                <div class="preview-toolbar">
+                    <div>
+                        <p
+                            id="selected_appearance"
+                            class="eyebrow"
+                            >Theme</p
+                        >
+                        <h2 id="selected_name">Loading themes</h2>
+                    </div>
+                    <a
+                        id="theme_download"
+                        download
+                        href="../themes/"
+                        >Download</a
+                    >
+                </div>
+
+                <div
+                    id="metadata_strip"
+                    class="metadata-strip"
+                ></div>
+
+                <div
+                    id="terminal_frame"
+                    class="terminal-frame"
+                >
+                    <div class="terminal-chrome">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div
+                        id="code_grid"
+                        class="code-grid"
+                    ></div>
+                </div>
+            </section>
+        </main>
+
+        <script
+            type="module"
+            src="app.js"
+        ></script>
+    </body>
+</html>

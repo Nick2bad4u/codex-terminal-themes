@@ -6,12 +6,14 @@ When adding, removing, renaming, or editing a file in `themes/`, regenerate the 
 
 ```powershell
 npm run metadata:write
+npm run pages:build
 ```
 
 Before submitting changes:
 
 ```powershell
 npm run metadata:check
+npm run pages:check
 npm run release:verify
 Sync-TerminalThemes.ps1 -WhatIf
 ```
