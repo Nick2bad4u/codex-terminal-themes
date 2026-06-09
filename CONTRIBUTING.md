@@ -2,6 +2,8 @@
 
 Keep this repository focused on terminal syntax theme source files and local sync validation.
 
+See [DEVELOPMENT.md](DEVELOPMENT.md) for the full maintainer command reference.
+
 When adding, removing, renaming, or editing a file in `themes/`, regenerate the consumer manifest:
 
 ```powershell

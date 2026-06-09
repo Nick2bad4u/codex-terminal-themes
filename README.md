@@ -2,151 +2,123 @@
 
 [![Validate](https://github.com/Nick2bad4u/codex-terminal-themes/actions/workflows/validate.yml/badge.svg)](https://github.com/Nick2bad4u/codex-terminal-themes/actions/workflows/validate.yml)
 
-Source-of-truth repository for local TextMate `.tmTheme` files used by Codex and `bat`.
+High-contrast TextMate `.tmTheme` files for Codex terminal sessions, `bat`, and other tools that can read TextMate themes.
 
-## Layout
+Browse the theme gallery:
 
-- `metadata/themes.json` - generated consumer manifest for every theme.
-- `metadata/README.md` - consumer notes for the generated manifest.
-- `metadata/themes.schema.json` - JSON schema for the generated manifest.
-- `docs/` - generated GitHub Pages theme gallery.
-- `themes/` - flat source theme folder copied into Codex and Bat.
-- `tools/validate-themes.mjs` - validates `.tmTheme` XML/plist structure.
-- `tools/generate-theme-metadata.mjs` - regenerates and checks metadata.
-- `tools/build-pages-site.mjs` - regenerates and checks gallery preview data.
+<https://nick2bad4u.github.io/codex-terminal-themes/>
 
-## Setup
+## What You Get
 
-Install the local validation toolchain:
+- 203 TextMate themes in `themes/`.
+- A searchable online gallery with syntax previews, theme metadata, hue filtering, and color matching.
+- A generated metadata manifest at `metadata/themes.json` for scripts and theme pickers.
+- Themes that can be copied directly into Codex or Bat theme folders.
 
-```powershell
-npm install
+## Recommended Theme
+
+For Codex terminal use, start with:
+
+```text
+themes/converted-vscode-AmoledShinyBlack6.tmTheme
 ```
 
-## Validation
+It is the most customized AMOLED variant in this repo and has the broadest scope coverage for terminal-heavy workflows.
 
-Validate every source theme and confirm the metadata manifest is current:
+## Use With Codex
 
-```powershell
-npm run validate
-```
+Copy the `.tmTheme` file you want into your Codex themes directory, then select it from your Codex configuration.
 
-Run the full local gate:
+On Windows, that folder is usually:
 
 ```powershell
-npm run release:verify
+$env:USERPROFILE\.codex\themes
 ```
 
-Run TypeScript checking for the Node tools and browser gallery:
+Example:
 
 ```powershell
-npm run typecheck
+Copy-Item ".\themes\converted-vscode-AmoledShinyBlack6.tmTheme" "$env:USERPROFILE\.codex\themes\"
 ```
 
-Validate themes and rebuild Bat's theme cache:
+## Use With Bat
+
+Find Bat's config directory:
 
 ```powershell
-npm run validate:bat
+bat --config-dir
 ```
 
-Regenerate the consumer metadata manifest:
+Create a `themes` folder there if it does not exist, copy the `.tmTheme` files into it, then rebuild Bat's cache:
 
 ```powershell
-npm run metadata:write
+$batConfig = bat --config-dir
+New-Item -ItemType Directory -Force -Path "$batConfig\themes"
+Copy-Item ".\themes\converted-vscode-AmoledShinyBlack6.tmTheme" "$batConfig\themes\"
+bat cache --build
 ```
 
-Check that the committed manifest still matches the theme files:
+Use a theme once:
 
 ```powershell
-npm run metadata:check
+bat --theme "AMOLED Dark Shiny - Codex Varied v6" README.md
 ```
 
-Regenerate the GitHub Pages preview data:
+To make a Bat theme permanent, put the theme name in Bat's config file:
 
-```powershell
-npm run pages:build
+```text
+--theme="AMOLED Dark Shiny - Codex Varied v6"
 ```
 
-Check that the committed gallery data still matches the theme files:
+## Sync Everything
 
-```powershell
-npm run pages:check
-```
-
-Typecheck and validate the gallery locally:
-
-```powershell
-npm run pages:test
-```
-
-Serve the gallery locally:
-
-```powershell
-npm run pages:serve
-```
-
-Use a different port when needed:
-
-```powershell
-npm run pages:serve -- --port=5173
-```
-
-## Gallery
-
-The static GitHub Pages site lives in `docs/`. It showcases every theme with searchable metadata, dark/light filtering, swatches, and syntax previews for TypeScript, PowerShell, Python, and HTML/CSS.
-
-The browser app uses `docs/site-data.json`, which is generated from `metadata/themes.json` and the source `.tmTheme` files. The preview renderer uses representative TextMate scopes so users can compare theme behavior online without installing Bat, Codex, or a TextMate parser.
-
-## Metadata
-
-The generated manifest at `metadata/themes.json` is the stable consumer entry point for scripts, indexers, package consumers, and sync tools that need theme information without parsing plist XML.
-
-Use it when you need to:
-
-- list every available theme with a stable id and display name
-- filter themes by detected dark/light appearance
-- inspect global editor colors before installing a theme
-- find TextMate scopes covered by a theme
-- detect imported themes that still share historical UUIDs
-
-It includes:
-
-- theme id, display name, file name, path, UUID, author, semantic class, and color space
-- detected appearance from the global background color
-- global colors for background, foreground, caret, selection, line highlight, and invisibles
-- setting counts, color-reference counts, scoped-setting counts, and unique scope counts
-- a sorted list of TextMate scopes used by each theme
-- duplicate UUID groups for imported themes that share historical UUIDs
-
-The manifest is deterministic and validated by `npm run validate`; changing a `.tmTheme` without regenerating metadata fails the repo gate. See `metadata/README.md` for the field contract and a small consumption example.
-
-## Sync
-
-Use the drop-in PowerShell script:
+This repo is intended to work with a drop-in PowerShell sync script named:
 
 ```powershell
 Sync-TerminalThemes.ps1
 ```
 
-Dry run:
+Dry run first:
 
 ```powershell
 Sync-TerminalThemes.ps1 -WhatIf
 ```
 
-The script copies valid `.tmTheme` files to:
+Then sync:
 
-- `C:\Users\Nick\.codex\themes`
-- `$(bat --config-dir)\themes`
+```powershell
+Sync-TerminalThemes.ps1
+```
 
-After syncing Bat themes, it runs:
+The sync script copies valid `.tmTheme` files to the Codex theme folder and Bat's theme folder, then rebuilds Bat's cache.
+
+## Theme Metadata
+
+Use `metadata/themes.json` when you need to inspect the collection without parsing XML plist files yourself.
+
+It includes:
+
+- theme id, display name, file name, path, UUID, author, semantic class, and color space
+- detected dark, light, or unknown appearance
+- global colors such as background, foreground, selection, caret, line highlight, and invisibles
+- setting counts, color-reference counts, scoped-setting counts, and unique scope counts
+- TextMate scopes used by each theme
+- duplicate UUID groups for imported themes that share historical UUIDs
+
+See [metadata/README.md](metadata/README.md) for the manifest field contract and a small consumption example.
+
+## Troubleshooting
+
+If Bat does not show a theme, rebuild its cache:
 
 ```powershell
 bat cache --build
 ```
 
-## Invalid Themes
+If a downloaded theme does not work, make sure it is a raw `.tmTheme` XML plist file. Saving a rendered GitHub webpage as `.tmTheme` creates an HTML file that Codex and Bat cannot consume.
 
-All committed themes should parse as XML plist files. The sync script still skips invalid files by default so Bat cache rebuilds are not broken if a bad import lands locally. Use `-AllowInvalidTheme` only when copying to a consumer that tolerates those files.
+If a theme looks too flat, try a newer numbered AMOLED variant. The numbered `converted-vscode-AmoledShinyBlack*.tmTheme` files are intentional iterations, and the later versions usually have more language-specific scope coverage.
 
-When importing themes from GitHub, use raw file URLs. Saving rendered GitHub pages as `.tmTheme` files creates HTML files that Bat and Codex cannot consume.
+## Maintainers
+
+Development commands, validation, generated files, and release checks live in [DEVELOPMENT.md](DEVELOPMENT.md).

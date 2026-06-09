@@ -1,0 +1,162 @@
+# Development
+
+This document is for maintainers changing themes, metadata, tooling, or the GitHub Pages gallery.
+
+End-user installation notes live in [README.md](README.md).
+
+## Repository Layout
+
+- `themes/` - flat source folder for committed `.tmTheme` files.
+- `metadata/themes.json` - generated consumer manifest for every valid theme.
+- `metadata/themes.schema.json` - JSON Schema for the generated manifest.
+- `metadata/README.md` - manifest field contract and consumption example.
+- `docs/` - GitHub Pages gallery source and generated preview data.
+- `docs/site-data.json` - generated gallery data derived from `metadata/themes.json`.
+- `tools/validate-themes.mjs` - validates `.tmTheme` XML/plist structure.
+- `tools/generate-theme-metadata.mjs` - regenerates and checks metadata.
+- `tools/build-pages-site.mjs` - regenerates and checks gallery preview data.
+- `tools/serve-pages-site.mjs` - serves `docs/` locally for browser testing.
+
+## Setup
+
+Install the local validation toolchain:
+
+```powershell
+npm install
+```
+
+This repo expects Node.js `>=24` and npm `11`.
+
+## Common Commands
+
+Validate every source theme and confirm generated data is current:
+
+```powershell
+npm run validate
+```
+
+Run the full local gate:
+
+```powershell
+npm run release:verify
+```
+
+Typecheck the Node tools and browser gallery:
+
+```powershell
+npm run typecheck
+```
+
+Validate themes and rebuild Bat's theme cache:
+
+```powershell
+npm run validate:bat
+```
+
+Run secret scanning locally:
+
+```powershell
+npm run lint:gitleaks
+```
+
+## Metadata
+
+Regenerate the consumer metadata manifest:
+
+```powershell
+npm run metadata:write
+```
+
+Check that the committed manifest still matches the theme files:
+
+```powershell
+npm run metadata:check
+```
+
+The manifest is deterministic. Changing a `.tmTheme` without regenerating metadata should fail the repo gate.
+
+## GitHub Pages Gallery
+
+Regenerate the gallery preview data:
+
+```powershell
+npm run pages:build
+```
+
+Check that the committed gallery data still matches the theme files:
+
+```powershell
+npm run pages:check
+```
+
+Typecheck and validate the gallery data:
+
+```powershell
+npm run pages:test
+```
+
+Serve the gallery locally:
+
+```powershell
+npm run pages:serve
+```
+
+Use a different port when needed:
+
+```powershell
+npm run pages:serve -- --port=5173
+```
+
+The browser app uses representative TextMate scopes so users can compare theme behavior online without installing Bat, Codex, or a TextMate parser.
+
+## Theme Import Rules
+
+All committed themes should parse as XML plist files.
+
+When importing themes from GitHub or another website, use raw file URLs. Do not save rendered HTML pages as `.tmTheme` files.
+
+Prefer creating a new numbered `converted-vscode-AmoledShinyBlack*.tmTheme` file over rewriting an older numbered AMOLED theme in place.
+
+## Sync Validation
+
+Before submitting sync-related changes, dry-run the local sync script:
+
+```powershell
+Sync-TerminalThemes.ps1 -WhatIf
+```
+
+Run the real sync only when you intend to update the local Codex and Bat theme folders:
+
+```powershell
+Sync-TerminalThemes.ps1
+```
+
+The sync script should skip invalid themes by default so Bat cache rebuilds are not broken by a bad local import. Use any invalid-theme override only for consumers that explicitly tolerate those files.
+
+## Pull Request Checklist
+
+Before opening or merging a change, run the checks that match the files touched.
+
+For theme or metadata changes:
+
+```powershell
+npm run metadata:write
+npm run pages:build
+npm run release:verify
+Sync-TerminalThemes.ps1 -WhatIf
+```
+
+For gallery-only changes:
+
+```powershell
+npm run pages:test
+npm run typecheck
+npm run lint
+npm run format:check
+```
+
+For workflow or repository maintenance changes:
+
+```powershell
+npm run release:verify
+```
