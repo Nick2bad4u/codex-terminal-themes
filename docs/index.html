@@ -7,37 +7,6 @@
             name="viewport"
         />
         <title>Codex Terminal Themes</title>
-        <script
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=G-18DR1S6R1T"
-        ></script>
-        <script>
-            (function (window, document, tagName, dataLayerName, containerId) {
-                window[dataLayerName] = window[dataLayerName] || [];
-                window[dataLayerName].push({
-                    "gtm.start": new Date().getTime(),
-                    event: "gtm.js",
-                });
-
-                const firstScript = document.getElementsByTagName(tagName)[0];
-                const script = document.createElement(tagName);
-                const dataLayerQuery =
-                    dataLayerName === "dataLayer" ? "" : `&l=${dataLayerName}`;
-
-                script.async = true;
-                script.src = `https://www.googletagmanager.com/gtm.js?id=${containerId}${dataLayerQuery}`;
-                firstScript.parentNode.insertBefore(script, firstScript);
-            })(window, document, "script", "dataLayer", "GTM-T8J6HPLF");
-        </script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-
-            gtag("js", new Date());
-            gtag("config", "G-18DR1S6R1T");
-        </script>
         <link
             href="styles.css"
             rel="stylesheet"
@@ -73,15 +42,6 @@
         />
     </head>
     <body>
-        <noscript>
-            <iframe
-                class="google-tag-manager-frame"
-                height="0"
-                src="https://www.googletagmanager.com/ns.html?id=GTM-T8J6HPLF"
-                title="Google Tag Manager"
-                width="0"
-            ></iframe>
-        </noscript>
         <header class="site-header">
             <div class="site-title">
                 <p class="eyebrow">TextMate theme gallery</p>
@@ -187,23 +147,18 @@
                             >
                                 rgb(105, 214, 198)
                             </output>
-                            <div
+                            <button
                                 id="color_wheel"
+                                type="button"
                                 class="color-wheel"
                                 aria-label="Color wheel"
-                                aria-valuemax="360"
-                                aria-valuemin="0"
-                                aria-valuenow="172"
-                                aria-valuetext="#69d6c6"
-                                role="slider"
-                                tabindex="0"
                             >
                                 <span
                                     id="color_wheel_marker"
                                     class="color-wheel-marker"
                                     aria-hidden="true"
                                 ></span>
-                            </div>
+                            </button>
                             <label
                                 class="lightness-control"
                                 for="color_lightness"
@@ -231,7 +186,6 @@
                 <div
                     id="theme_list"
                     class="theme-list"
-                    role="listbox"
                 ></div>
             </aside>
 

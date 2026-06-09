@@ -265,6 +265,13 @@ const state = {
 
 const colorRenderDelayMs = 140;
 
+/** @type {readonly ("background" | "fontStyle" | "foreground")[]} */
+const styleKeys = [
+    "background",
+    "fontStyle",
+    "foreground",
+];
+
 /** @type {ReturnType<typeof globalThis.setTimeout> | 0} */
 let colorRenderTimer = 0;
 
@@ -477,42 +484,43 @@ function hslToRgb(color) {
     const match = color.lightness - chroma / 2;
 
     /** @type {readonly [number, number, number]} */
-    const channels =
-        huePrime < 1
-            ? [
-                  chroma,
-                  secondary,
-                  0,
-              ]
-            : huePrime < 2
-              ? [
-                    secondary,
-                    chroma,
-                    0,
-                ]
-              : huePrime < 3
-                ? [
-                      0,
-                      chroma,
-                      secondary,
-                  ]
-                : huePrime < 4
-                  ? [
-                        0,
-                        secondary,
-                        chroma,
-                    ]
-                  : huePrime < 5
-                    ? [
-                          secondary,
-                          0,
-                          chroma,
-                      ]
-                    : [
-                          chroma,
-                          0,
-                          secondary,
-                      ];
+    let channels = [
+        chroma,
+        0,
+        secondary,
+    ];
+
+    if (huePrime < 1) {
+        channels = [
+            chroma,
+            secondary,
+            0,
+        ];
+    } else if (huePrime < 2) {
+        channels = [
+            secondary,
+            chroma,
+            0,
+        ];
+    } else if (huePrime < 3) {
+        channels = [
+            0,
+            chroma,
+            secondary,
+        ];
+    } else if (huePrime < 4) {
+        channels = [
+            0,
+            secondary,
+            chroma,
+        ];
+    } else if (huePrime < 5) {
+        channels = [
+            secondary,
+            0,
+            chroma,
+        ];
+    }
 
     return {
         b: Math.round((channels[2] + match) * 255),
@@ -776,6 +784,39 @@ function readThemes(data) {
 }
 
 /**
+ * @param {ThemeRule} rule
+ * @param {"background" | "fontStyle" | "foreground"} key
+ *
+ * @returns {string | undefined}
+ */
+function readRuleStyleValue(rule, key) {
+    if (key === "background") {
+        return rule.background;
+    }
+
+    if (key === "fontStyle") {
+        return rule.fontStyle;
+    }
+
+    return rule.foreground;
+}
+
+/**
+ * @param {MatchedStyle} style
+ * @param {"background" | "fontStyle" | "foreground"} key
+ * @param {string} value
+ */
+function writeMatchedStyle(style, key, value) {
+    if (key === "background") {
+        style.background = value;
+    } else if (key === "fontStyle") {
+        style.fontStyle = value;
+    } else {
+        style.foreground = value;
+    }
+}
+
+/**
  * @param {readonly ThemeRule[]} rules
  * @param {string} tokenScope
  *
@@ -800,31 +841,15 @@ function matchStyle(rules, tokenScope) {
             continue;
         }
 
-        for (const key of [
-            "background",
-            "fontStyle",
-            "foreground",
-        ]) {
-            const value =
-                key === "background"
-                    ? rule.background
-                    : key === "fontStyle"
-                      ? rule.fontStyle
-                      : rule.foreground;
+        for (const key of styleKeys) {
+            const value = readRuleStyleValue(rule, key);
 
             if (
                 typeof value === "string" &&
                 value.length > 0 &&
                 score >= (scores[key] ?? 0)
             ) {
-                if (key === "background") {
-                    style.background = value;
-                } else if (key === "fontStyle") {
-                    style.fontStyle = value;
-                } else {
-                    style.foreground = value;
-                }
-
+                writeMatchedStyle(style, key, value);
                 scores[key] = score;
             }
         }
@@ -862,9 +887,8 @@ function renderThemeList() {
         const button = document.createElement("button");
         button.className = "theme-option";
         button.type = "button";
-        button.setAttribute("role", "option");
         button.setAttribute(
-            "aria-selected",
+            "aria-pressed",
             String(theme.id === state.selectedId)
         );
         button.addEventListener("click", () => {
@@ -956,11 +980,13 @@ function render() {
             ? `${state.themes.length} themes`
             : `${filteredThemes.length}/${state.themes.length} themes`;
 
-    state.selectedId = selectedThemeVisible
-        ? state.selectedId
-        : filteredThemes.length > 0
-          ? filteredThemes[0].id
-          : "";
+    if (!selectedThemeVisible) {
+        state.selectedId = "";
+
+        if (filteredThemes.length > 0) {
+            state.selectedId = filteredThemes[0].id;
+        }
+    }
 
     renderThemeList();
 
@@ -1056,16 +1082,19 @@ function rgbToHsl(color) {
         };
     }
 
-    const saturation =
-        lightness > 0.5
-            ? delta / (2 - maximum - minimum)
-            : delta / (maximum + minimum);
-    const hue =
-        maximum === red
-            ? ((green - blue) / delta + (green < blue ? 6 : 0)) * 60
-            : maximum === green
-              ? ((blue - red) / delta + 2) * 60
-              : ((red - green) / delta + 4) * 60;
+    let saturation = delta / (maximum + minimum);
+
+    if (lightness > 0.5) {
+        saturation = delta / (2 - maximum - minimum);
+    }
+
+    let hue = ((red - green) / delta + 4) * 60;
+
+    if (maximum === red) {
+        hue = ((green - blue) / delta + (green < blue ? 6 : 0)) * 60;
+    } else if (maximum === green) {
+        hue = ((blue - red) / delta + 2) * 60;
+    }
 
     return {
         hue,
@@ -1099,27 +1128,14 @@ function setSelectedColor(hex, options = {}) {
     }
 }
 
-async function start() {
-    const response = await fetch("site-data.json");
-    const data = /** @type {unknown} */ (await response.json());
-    state.themes = readThemes(data);
-
-    const allScopes = new Set(
-        state.themes.flatMap((theme) => theme.rules.map((rule) => rule.scope))
-    );
-
-    elements.themeCount.textContent = `${state.themes.length} themes`;
-    elements.scopeCount.textContent = `${allScopes.size} styled scopes`;
-    render();
-}
-
 function syncColorControlUi() {
     const fallbackColor = /** @type {ColorRgb} */ ({
         b: 198,
         g: 214,
         r: 105,
     });
-    const color = parseHexColor(state.colorHex) ?? fallbackColor;
+    let color = parseHexColor(state.colorHex);
+    color ??= fallbackColor;
     const hsl = rgbToHsl(color);
     const hex = rgbToHex(color);
     const markerRadius = hsl.saturation * 46;
@@ -1134,11 +1150,6 @@ function syncColorControlUi() {
     elements.colorWheel.style.setProperty("--marker-top", `${markerTop}%`);
     elements.colorWheel.style.setProperty("--wheel-shade", String(shade));
     elements.colorWheelMarker.style.backgroundColor = hex;
-    elements.colorWheel.setAttribute(
-        "aria-valuenow",
-        String(Math.round(hsl.hue))
-    );
-    elements.colorWheel.setAttribute("aria-valuetext", hex);
     elements.colorLightness.value = String(Math.round(hsl.lightness * 100));
 }
 
@@ -1366,4 +1377,21 @@ document.addEventListener("keydown", (event) => {
 });
 
 syncColorControlUi();
-void start();
+
+void fetch("site-data.json")
+    .then((response) => response.json())
+    .then((data) => {
+        state.themes = readThemes(/** @type {unknown} */ (data));
+
+        const allScopes = new Set(
+            state.themes.flatMap((theme) =>
+                theme.rules.map((rule) => rule.scope)
+            )
+        );
+
+        elements.themeCount.textContent = `${state.themes.length} themes`;
+        elements.scopeCount.textContent = `${allScopes.size} styled scopes`;
+        render();
+
+        return undefined;
+    });
