@@ -1,6 +1,17 @@
+node_modules/
+dist/
+*.tgz
+
+.cache/
+.eslintcache
+.prettier-cache
+
+.env
+.env.*
+
 .DS_Store
 Thumbs.db
-desktop.ini
+[Dd]esktop.ini
 
 # Bat builds compiled caches under AppData\Local, not in this repo.
 *.bin

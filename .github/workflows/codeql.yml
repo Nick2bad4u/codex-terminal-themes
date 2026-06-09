@@ -1,0 +1,43 @@
+# yaml-language-server: $schema=https://www.schemastore.org/github-workflow.json
+name: "Codeql"
+
+run-name: "Codeql - ${{ github.ref_name }}"
+
+on:
+    merge_group:
+        types:
+            - "checks_requested"
+    pull_request:
+    push:
+        branches:
+            - "main"
+    schedule:
+        - cron: "0 6 * * 1"
+    workflow_dispatch:
+
+concurrency:
+    group: "codeql-${{ github.workflow }}-${{ github.ref }}"
+    cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+    analyze:
+        name: "Analyze"
+        runs-on: "ubuntu-latest"
+        timeout-minutes: 15
+        permissions:
+            actions: "read"
+            contents: "read"
+            security-events: "write"
+        steps:
+            - name: "Checkout"
+              uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd" # v6.0.2
+
+            - name: "Initialize CodeQL"
+              uses: "github/codeql-action/init@937e587b0d0d591c6070bf2e39e287dcb7785f4f" # v4.35.4
+              with:
+                  languages: "javascript-typescript"
+
+            - name: "Perform CodeQL analysis"
+              uses: "github/codeql-action/analyze@937e587b0d0d591c6070bf2e39e287dcb7785f4f" # v4.35.4

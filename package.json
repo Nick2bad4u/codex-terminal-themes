@@ -1,0 +1,73 @@
+{
+    "$schema": "https://www.schemastore.org/package.json",
+    "name": "codex-terminal-themes",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Source-of-truth TextMate themes for local Codex and bat terminal highlighting.",
+    "keywords": [
+        "bat",
+        "codex",
+        "syntax-highlighting",
+        "textmate",
+        "themes",
+        "tmtheme"
+    ],
+    "homepage": "https://github.com/Nick2bad4u/codex-terminal-themes#readme",
+    "bugs": {
+        "url": "https://github.com/Nick2bad4u/codex-terminal-themes/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Nick2bad4u/codex-terminal-themes.git"
+    },
+    "license": "Unlicense",
+    "author": "Nick2bad4u <20943337+Nick2bad4u@users.noreply.github.com> (https://github.com/Nick2bad4u)",
+    "contributors": [
+        {
+            "name": "Nick2bad4u",
+            "email": "20943337+Nick2bad4u@users.noreply.github.com",
+            "url": "https://github.com/Nick2bad4u"
+        }
+    ],
+    "type": "module",
+    "types": "./types/index.d.ts",
+    "files": [
+        "themes/",
+        "tools/",
+        "types/",
+        "CHANGELOG.md",
+        "CONTRIBUTING.md",
+        "LICENSE.txt",
+        "README.md",
+        "SECURITY.md",
+        "SUPPORT.md"
+    ],
+    "scripts": {
+        "format": "prettier . --write",
+        "format:check": "prettier . --check",
+        "lint": "npx eslint .",
+        "lint:gitleaks": "gitleaks dir --config .gitleaks.toml .",
+        "lint:package-json": "npmPkgJsonLint . --config .npmpackagejsonlintrc.json",
+        "lint:yamllint": "yamllint -c .yamllint .",
+        "release:verify": "npm run validate && npm run lint && npm run format:check && npm run lint:package-json && npm run lint:yamllint",
+        "validate": "node tools/validate-themes.mjs",
+        "validate:bat": "node tools/validate-themes.mjs --bat-cache"
+    },
+    "devDependencies": {
+        "@types/node": "^25.9.2",
+        "eslint-config-nick2bad4u": "^1.2.7",
+        "fast-xml-parser": "^5.3.2",
+        "fast-xml-validator": "^1.1.0",
+        "gitleaks-config-nick2bad4u": "^1.0.2",
+        "npm-package-json-lint": "^10.4.0",
+        "npm-package-json-lint-config-nick2bad4u": "^1.0.2",
+        "prettier": "^3.8.3",
+        "prettier-config-nick2bad4u": "^1.0.14",
+        "typescript": "^6.0.3",
+        "yamllint-config-nick2bad4u": "^1.0.1"
+    },
+    "packageManager": "npm@11.16.0",
+    "engines": {
+        "node": ">=24"
+    }
+}

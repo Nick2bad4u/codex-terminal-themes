@@ -1,0 +1,62 @@
+# eslint-disable json-schema-validator-2/no-invalid -- Keep reviewers for repo-compliance; the bundled Dependabot schema rejects this supported metadata.
+version: 2
+updates:
+    - package-ecosystem: "github-actions"
+      directory: "/"
+      schedule:
+          interval: "weekly"
+          day: "monday"
+          time: "06:00"
+          timezone: "America/New_York"
+      cooldown:
+          default-days: 3
+          include:
+              - "*"
+      assignees:
+          - "Nick2bad4u"
+      reviewers:
+          - "Nick2bad4u"
+      labels:
+          - "github-actions"
+          - "dependencies"
+      target-branch: "main"
+      commit-message:
+          prefix: "[dependabot][actions]"
+          prefix-development: "[dependabot][actions-dev]"
+          include: "scope"
+      rebase-strategy: "auto"
+      open-pull-requests-limit: 5
+      patterns:
+          - "*"
+
+    - package-ecosystem: "npm"
+      directory: "/"
+      schedule:
+          interval: "weekly"
+          day: "monday"
+          time: "06:00"
+          timezone: "America/New_York"
+      cooldown:
+          default-days: 3
+          include:
+              - "*"
+      assignees:
+          - "Nick2bad4u"
+      reviewers:
+          - "Nick2bad4u"
+      labels:
+          - "npm"
+          - "dependencies"
+      target-branch: "main"
+      commit-message:
+          prefix: "[dependabot][npm]"
+          prefix-development: "[dependabot][npm-dev]"
+          include: "scope"
+      rebase-strategy: "auto"
+      versioning-strategy: "increase"
+      open-pull-requests-limit: 5
+      groups:
+          npm-development-dependencies:
+              dependency-type: "development"
+              patterns:
+                  - "*"
