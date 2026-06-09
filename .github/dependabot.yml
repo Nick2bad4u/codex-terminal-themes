@@ -1,62 +1,67 @@
-# eslint-disable json-schema-validator-2/no-invalid -- Keep reviewers for repo-compliance; the bundled Dependabot schema rejects this supported metadata.
+# This is a Dependabot configuration file for automating dependency updates.
+# The configuration is set to version 2 of the Dependabot schema.
+# yaml-language-server: $schema=https://www.schemastore.org/dependabot-2.0.json
 version: 2
+
+multi-ecosystem-groups:
+    dependabot-all:
+        schedule:
+            interval: "monthly"
+            time: "05:30"
+            timezone: "America/Detroit"
+        assignees:
+            - "Nick2bad4u"
+        target-branch: "main"
+        commit-message:
+            prefix: "[dependabot][all]"
+            prefix-development: "[dependabot][dev][all]"
+            include: "scope"
+        labels:
+            - "dependabot"
+            - "dependencies"
+
 updates:
     - package-ecosystem: "github-actions"
-      directory: "/"
-      schedule:
-          interval: "weekly"
-          day: "monday"
-          time: "06:00"
-          timezone: "America/New_York"
       cooldown:
           default-days: 3
-          include:
-              - "*"
-      assignees:
-          - "Nick2bad4u"
-      reviewers:
-          - "Nick2bad4u"
+          include: ["*"]
+      directory: "/"
+      allow:
+          # Allow both direct and indirect updates for all packages
+          - dependency-type: "all"
       labels:
           - "github-actions"
-          - "dependencies"
-      target-branch: "main"
-      commit-message:
-          prefix: "[dependabot][actions]"
-          prefix-development: "[dependabot][actions-dev]"
-          include: "scope"
+      multi-ecosystem-group: "dependabot-all"
       rebase-strategy: "auto"
-      open-pull-requests-limit: 5
       patterns:
           - "*"
 
     - package-ecosystem: "npm"
-      directory: "/"
-      schedule:
-          interval: "weekly"
-          day: "monday"
-          time: "06:00"
-          timezone: "America/New_York"
       cooldown:
           default-days: 3
-          include:
-              - "*"
-      assignees:
-          - "Nick2bad4u"
-      reviewers:
-          - "Nick2bad4u"
-      labels:
-          - "npm"
-          - "dependencies"
-      target-branch: "main"
-      commit-message:
-          prefix: "[dependabot][npm]"
-          prefix-development: "[dependabot][npm-dev]"
-          include: "scope"
+          include: ["*"]
+      directory: "/"
       rebase-strategy: "auto"
       versioning-strategy: "increase"
-      open-pull-requests-limit: 5
-      groups:
-          npm-development-dependencies:
-              dependency-type: "development"
-              patterns:
-                  - "*"
+      allow:
+          # Allow both direct and indirect updates for all packages
+          - dependency-type: "all"
+      ignore:
+          - dependency-name: "electron-builder"
+            versions: ["< 26.0.18"]
+          - dependency-name: "electron-builder-squirrel-windows"
+            versions: ["< 26.0.18"]
+            # Ignore local workspace dependencies completely
+          - dependency-name: "@shared/*"
+          - dependency-name: "file:*"
+          # Dependabot has been returning `unknown_error` for these three
+          # packages for weeks (no actionable error details). Ignoring them
+          # prevents Dependabot runs from repeatedly failing on the same items.
+          - dependency-name: "form-data"
+          - dependency-name: "qs"
+          - dependency-name: "tough-cookie"
+      labels:
+          - "npm"
+      multi-ecosystem-group: "dependabot-all"
+      patterns:
+          - "*"
