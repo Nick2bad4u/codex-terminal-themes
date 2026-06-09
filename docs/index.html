@@ -7,14 +7,49 @@
             name="viewport"
         />
         <title>Codex Terminal Themes</title>
+        <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-18DR1S6R1T"
+        ></script>
+        <script>
+            (function (window, document, tagName, dataLayerName, containerId) {
+                window[dataLayerName] = window[dataLayerName] || [];
+                window[dataLayerName].push({
+                    "gtm.start": new Date().getTime(),
+                    event: "gtm.js",
+                });
+
+                const firstScript = document.getElementsByTagName(tagName)[0];
+                const script = document.createElement(tagName);
+                const dataLayerQuery =
+                    dataLayerName === "dataLayer" ? "" : `&l=${dataLayerName}`;
+
+                script.async = true;
+                script.src = `https://www.googletagmanager.com/gtm.js?id=${containerId}${dataLayerQuery}`;
+                firstScript.parentNode.insertBefore(script, firstScript);
+            })(window, document, "script", "dataLayer", "GTM-T8J6HPLF");
+        </script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+
+            gtag("js", new Date());
+            gtag("config", "G-18DR1S6R1T");
+        </script>
         <link
             href="styles.css"
             rel="stylesheet"
         />
         <link
             type="image/svg+xml"
-            href="preview.svg"
+            href="favicon.svg"
             rel="icon"
+        />
+        <meta
+            content="#0b0d10"
+            name="msapplication-TileColor"
         />
         <meta
             content="Codex Terminal Themes"
@@ -38,10 +73,30 @@
         />
     </head>
     <body>
+        <noscript>
+            <iframe
+                class="google-tag-manager-frame"
+                height="0"
+                src="https://www.googletagmanager.com/ns.html?id=GTM-T8J6HPLF"
+                title="Google Tag Manager"
+                width="0"
+            ></iframe>
+        </noscript>
         <header class="site-header">
             <div class="site-title">
                 <p class="eyebrow">TextMate theme gallery</p>
                 <h1>Codex Terminal Themes</h1>
+            </div>
+            <div
+                class="header-artwork"
+                aria-hidden="true"
+            >
+                <img
+                    alt=""
+                    height="819"
+                    src="assets/theme-gallery-header.png"
+                    width="1920"
+                />
             </div>
             <div
                 class="site-stats"
@@ -75,6 +130,102 @@
                         <option value="light">Light</option>
                         <option value="unknown">Unknown</option>
                     </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="hue_filter">Hue</label>
+                    <select id="hue_filter">
+                        <option value="all">All hues</option>
+                        <option value="red">Red</option>
+                        <option value="orange">Orange</option>
+                        <option value="yellow">Yellow</option>
+                        <option value="green">Green</option>
+                        <option value="cyan">Cyan</option>
+                        <option value="blue">Blue</option>
+                        <option value="purple">Purple</option>
+                        <option value="pink">Pink</option>
+                        <option value="neutral">Neutral</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="color_picker">Color</label>
+                    <div class="color-tool">
+                        <div class="color-entry">
+                            <input
+                                id="color_picker"
+                                type="text"
+                                autocomplete="off"
+                                inputmode="text"
+                                pattern="#?[0-9a-fA-F]{3,8}"
+                                placeholder="#69d6c6"
+                                value="#69d6c6"
+                            />
+                            <button
+                                id="color_wheel_button"
+                                type="button"
+                                class="color-wheel-button"
+                                aria-controls="color_wheel_popover"
+                                aria-expanded="false"
+                                aria-label="Open color wheel"
+                            >
+                                <span
+                                    id="color_preview"
+                                    aria-hidden="true"
+                                ></span>
+                            </button>
+                        </div>
+                        <div
+                            id="color_wheel_popover"
+                            class="color-popover"
+                            hidden
+                        >
+                            <output
+                                id="color_rgb"
+                                class="color-rgb"
+                                for="color_picker color_lightness"
+                            >
+                                rgb(105, 214, 198)
+                            </output>
+                            <div
+                                id="color_wheel"
+                                class="color-wheel"
+                                aria-label="Color wheel"
+                                aria-valuemax="360"
+                                aria-valuemin="0"
+                                aria-valuenow="172"
+                                aria-valuetext="#69d6c6"
+                                role="slider"
+                                tabindex="0"
+                            >
+                                <span
+                                    id="color_wheel_marker"
+                                    class="color-wheel-marker"
+                                    aria-hidden="true"
+                                ></span>
+                            </div>
+                            <label
+                                class="lightness-control"
+                                for="color_lightness"
+                            >
+                                <span>Lightness</span>
+                                <input
+                                    id="color_lightness"
+                                    type="range"
+                                    max="85"
+                                    min="15"
+                                    value="64"
+                                />
+                            </label>
+                        </div>
+                        <label class="color-toggle">
+                            <input
+                                id="color_enabled"
+                                type="checkbox"
+                            />
+                            Match color
+                        </label>
+                    </div>
                 </div>
 
                 <div

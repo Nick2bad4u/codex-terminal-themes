@@ -187,9 +187,16 @@ function getNumberRecord(record, key) {
         return {};
     }
 
-    return Object.fromEntries(
-        Object.entries(value).filter((entry) => typeof entry[1] === "number")
-    );
+    /** @type {Record<string, number>} */
+    const numberRecord = {};
+
+    for (const [entryKey, entryValue] of Object.entries(value)) {
+        if (typeof entryValue === "number") {
+            numberRecord[entryKey] = entryValue;
+        }
+    }
+
+    return numberRecord;
 }
 
 /**

@@ -25,6 +25,18 @@
  *     readonly uuid: string;
  * }} Theme
  *
+ * @typedef {{
+ *     readonly b: number;
+ *     readonly g: number;
+ *     readonly r: number;
+ * }} ColorRgb
+ *
+ * @typedef {{
+ *     readonly hue: number;
+ *     readonly lightness: number;
+ *     readonly saturation: number;
+ * }} ColorHsl
+ *
  * @typedef {Partial<
  *     Record<"background" | "fontStyle" | "foreground", string>
  * >} MatchedStyle
@@ -233,6 +245,9 @@ const samples = [
 /**
  * @type {{
  *     appearance: string;
+ *     colorEnabled: boolean;
+ *     colorHex: string;
+ *     hue: string;
  *     query: string;
  *     selectedId: string;
  *     themes: Theme[];
@@ -240,14 +255,32 @@ const samples = [
  */
 const state = {
     appearance: "all",
+    colorEnabled: false,
+    colorHex: "#69d6c6",
+    hue: "all",
     query: "",
     selectedId: "",
     themes: [],
 };
 
+const colorRenderDelayMs = 140;
+
+/** @type {ReturnType<typeof globalThis.setTimeout> | 0} */
+let colorRenderTimer = 0;
+
 const elements = {
     appearanceFilter: queryElement("#appearance_filter", HTMLSelectElement),
     codeGrid: queryElement("#code_grid", HTMLElement),
+    colorEnabled: queryElement("#color_enabled", HTMLInputElement),
+    colorLightness: queryElement("#color_lightness", HTMLInputElement),
+    colorPicker: queryElement("#color_picker", HTMLInputElement),
+    colorPreview: queryElement("#color_preview", HTMLElement),
+    colorRgb: queryElement("#color_rgb", HTMLOutputElement),
+    colorWheel: queryElement("#color_wheel", HTMLElement),
+    colorWheelButton: queryElement("#color_wheel_button", HTMLButtonElement),
+    colorWheelMarker: queryElement("#color_wheel_marker", HTMLElement),
+    colorWheelPopover: queryElement("#color_wheel_popover", HTMLElement),
+    hueFilter: queryElement("#hue_filter", HTMLSelectElement),
     metadataStrip: queryElement("#metadata_strip", HTMLElement),
     scopeCount: queryElement("#scope_count", HTMLElement),
     search: queryElement("#theme_search", HTMLInputElement),
@@ -284,6 +317,20 @@ function colorOrFallback(color, fallback) {
     return typeof color === "string" && color.length > 0 ? color : fallback;
 }
 
+function closeColorWheel() {
+    elements.colorWheelPopover.hidden = true;
+    elements.colorWheelButton.setAttribute("aria-expanded", "false");
+}
+
+function commitColorRender() {
+    if (colorRenderTimer !== 0) {
+        globalThis.clearTimeout(colorRenderTimer);
+        colorRenderTimer = 0;
+    }
+
+    render();
+}
+
 /**
  * @param {string} fontStyle
  *
@@ -300,6 +347,46 @@ function fontStyleClass(fontStyle) {
             ].includes(part)
         )
         .join(" ");
+}
+
+/**
+ * @param {ColorRgb} color
+ * @param {ColorRgb} target
+ *
+ * @returns {number}
+ */
+function getColorDistance(color, target) {
+    const redDelta = color.r - target.r;
+    const greenDelta = color.g - target.g;
+    const blueDelta = color.b - target.b;
+
+    return Math.hypot(redDelta, greenDelta, blueDelta);
+}
+
+/**
+ * @param {PointerEvent} event
+ *
+ * @returns {string}
+ */
+function getColorFromWheelPointer(event) {
+    const bounds = elements.colorWheel.getBoundingClientRect();
+    const centerX = bounds.left + bounds.width / 2;
+    const centerY = bounds.top + bounds.height / 2;
+    const radius = bounds.width / 2;
+    const x = event.clientX - centerX;
+    const y = event.clientY - centerY;
+    const hue = (Math.atan2(y, x) * 180) / Math.PI;
+    const normalizedHue = (hue + 360) % 360;
+    const saturation = Math.min(Math.hypot(x, y) / radius, 1);
+    const lightness = Number.parseInt(elements.colorLightness.value, 10) / 100;
+
+    return rgbToHex(
+        hslToRgb({
+            hue: normalizedHue,
+            lightness,
+            saturation,
+        })
+    );
 }
 
 /**
@@ -327,9 +414,111 @@ function getFilteredThemes() {
         const matchesQuery = queryParts.every((part) =>
             searchText.includes(part)
         );
+        const matchesHue =
+            state.hue === "all" || themeMatchesHue(theme, state.hue);
+        const matchesColor = themeMatchesPickedColor(theme);
 
-        return matchesAppearance && matchesQuery;
+        return matchesAppearance && matchesQuery && matchesHue && matchesColor;
     });
+}
+
+/**
+ * @param {ColorRgb} color
+ *
+ * @returns {string}
+ */
+function getHueCategory(color) {
+    const { hue, lightness, saturation } = rgbToHsl(color);
+
+    if (saturation < 0.16 || lightness < 0.08 || lightness > 0.94) {
+        return "neutral";
+    }
+
+    if (hue < 16 || hue >= 345) {
+        return "red";
+    }
+
+    if (hue < 45) {
+        return "orange";
+    }
+
+    if (hue < 71) {
+        return "yellow";
+    }
+
+    if (hue < 156) {
+        return "green";
+    }
+
+    if (hue < 196) {
+        return "cyan";
+    }
+
+    if (hue < 251) {
+        return "blue";
+    }
+
+    if (hue < 291) {
+        return "purple";
+    }
+
+    return "pink";
+}
+
+/**
+ * @param {ColorHsl} color
+ *
+ * @returns {ColorRgb}
+ */
+function hslToRgb(color) {
+    const chroma = (1 - Math.abs(2 * color.lightness - 1)) * color.saturation;
+    const huePrime = color.hue / 60;
+    const secondary = chroma * (1 - Math.abs((huePrime % 2) - 1));
+    const match = color.lightness - chroma / 2;
+
+    /** @type {readonly [number, number, number]} */
+    const channels =
+        huePrime < 1
+            ? [
+                  chroma,
+                  secondary,
+                  0,
+              ]
+            : huePrime < 2
+              ? [
+                    secondary,
+                    chroma,
+                    0,
+                ]
+              : huePrime < 3
+                ? [
+                      0,
+                      chroma,
+                      secondary,
+                  ]
+                : huePrime < 4
+                  ? [
+                        0,
+                        secondary,
+                        chroma,
+                    ]
+                  : huePrime < 5
+                    ? [
+                          secondary,
+                          0,
+                          chroma,
+                      ]
+                    : [
+                          chroma,
+                          0,
+                          secondary,
+                      ];
+
+    return {
+        b: Math.round((channels[2] + match) * 255),
+        g: Math.round((channels[1] + match) * 255),
+        r: Math.round((channels[0] + match) * 255),
+    };
 }
 
 /**
@@ -349,6 +538,29 @@ function getThemeColors(theme) {
 /**
  * @param {Theme} theme
  *
+ * @returns {readonly ColorRgb[]}
+ */
+function getThemeRgbColors(theme) {
+    return getThemeColorValues(theme)
+        .map((color) => parseHexColor(color))
+        .filter((color) => isColorRgb(color));
+}
+
+/**
+ * @param {Theme} theme
+ *
+ * @returns {readonly string[]}
+ */
+function getThemeColorValues(theme) {
+    return [
+        ...Object.values(theme.colors),
+        ...theme.rules.flatMap((rule) => [rule.background, rule.foreground]),
+    ].filter((color) => isNonEmptyString(color));
+}
+
+/**
+ * @param {Theme} theme
+ *
  * @returns {readonly ThemeRule[]}
  */
 function getThemeRules(theme) {
@@ -362,6 +574,64 @@ function getThemeRules(theme) {
  */
 function isRecord(value) {
     return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+/**
+ * @param {null | ColorRgb} value
+ *
+ * @returns {value is ColorRgb}
+ */
+function isColorRgb(value) {
+    return value !== null;
+}
+
+/**
+ * @param {unknown} value
+ *
+ * @returns {value is string}
+ */
+function isNonEmptyString(value) {
+    return typeof value === "string" && value.length > 0;
+}
+
+/**
+ * @param {string} value
+ *
+ * @returns {null | ColorRgb}
+ */
+function parseHexColor(value) {
+    const normalized = value.trim().replace(/^#/v, "").toLowerCase();
+
+    if (
+        ![
+            3,
+            6,
+            8,
+        ].includes(normalized.length) ||
+        !/^[\da-f]+$/v.test(normalized)
+    ) {
+        return null;
+    }
+
+    const rgb =
+        normalized.length === 3
+            ? `${normalized.charAt(0).repeat(2)}${normalized
+                  .charAt(1)
+                  .repeat(2)}${normalized.charAt(2).repeat(2)}`
+            : normalized.slice(0, 6);
+
+    return {
+        b: Number.parseInt(rgb.slice(4, 6), 16),
+        g: Number.parseInt(rgb.slice(2, 4), 16),
+        r: Number.parseInt(rgb.slice(0, 2), 16),
+    };
+}
+
+function openColorWheel() {
+    syncColorControlUi();
+    elements.colorWheelPopover.hidden = false;
+    elements.colorWheelButton.setAttribute("aria-expanded", "true");
+    elements.colorWheel.focus();
 }
 
 /**
@@ -547,7 +817,14 @@ function matchStyle(rules, tokenScope) {
                 value.length > 0 &&
                 score >= (scores[key] ?? 0)
             ) {
-                style[key] = value;
+                if (key === "background") {
+                    style.background = value;
+                } else if (key === "fontStyle") {
+                    style.fontStyle = value;
+                } else {
+                    style.foreground = value;
+                }
+
                 scores[key] = score;
             }
         }
@@ -670,14 +947,20 @@ function renderThemePreview(theme) {
 
 function render() {
     const filteredThemes = getFilteredThemes();
+    const selectedThemeVisible = filteredThemes.some(
+        (theme) => theme.id === state.selectedId
+    );
 
-    if (
-        state.selectedId.length === 0 ||
-        !filteredThemes.some((theme) => theme.id === state.selectedId)
-    ) {
-        state.selectedId =
-            filteredThemes.length > 0 ? filteredThemes[0].id : "";
-    }
+    elements.themeCount.textContent =
+        filteredThemes.length === state.themes.length
+            ? `${state.themes.length} themes`
+            : `${filteredThemes.length}/${state.themes.length} themes`;
+
+    state.selectedId = selectedThemeVisible
+        ? state.selectedId
+        : filteredThemes.length > 0
+          ? filteredThemes[0].id
+          : "";
 
     renderThemeList();
 
@@ -685,9 +968,43 @@ function render() {
         (theme) => theme.id === state.selectedId
     );
 
-    if (selectedTheme !== undefined) {
-        renderThemePreview(selectedTheme);
+    if (selectedTheme === undefined) {
+        renderEmptyPreview();
+        return;
     }
+
+    renderThemePreview(selectedTheme);
+}
+
+function renderEmptyPreview() {
+    elements.selectedName.textContent = "No matching themes";
+    elements.selectedAppearance.textContent = "Theme";
+    elements.themeDownload.href = "../themes/";
+    elements.metadataStrip.replaceChildren();
+    appendElement(elements.metadataStrip, "metadata-pill", "No color match");
+    elements.codeGrid.replaceChildren();
+}
+
+function scheduleColorRender() {
+    if (colorRenderTimer !== 0) {
+        globalThis.clearTimeout(colorRenderTimer);
+    }
+
+    colorRenderTimer = globalThis.setTimeout(() => {
+        colorRenderTimer = 0;
+        render();
+    }, colorRenderDelayMs);
+}
+
+/**
+ * @param {ColorRgb} color
+ *
+ * @returns {string}
+ */
+function rgbToHex(color) {
+    return `#${toHexChannel(color.r)}${toHexChannel(color.g)}${toHexChannel(
+        color.b
+    )}`;
 }
 
 /**
@@ -717,6 +1034,71 @@ function selectorScore(selector, tokenScope) {
     return matchesPrefix ? 100 + selectorTarget.length : 0;
 }
 
+/**
+ * @param {ColorRgb} color
+ *
+ * @returns {ColorHsl}
+ */
+function rgbToHsl(color) {
+    const red = color.r / 255;
+    const green = color.g / 255;
+    const blue = color.b / 255;
+    const maximum = Math.max(red, green, blue);
+    const minimum = Math.min(red, green, blue);
+    const lightness = (maximum + minimum) / 2;
+    const delta = maximum - minimum;
+
+    if (delta === 0) {
+        return {
+            hue: 0,
+            lightness,
+            saturation: 0,
+        };
+    }
+
+    const saturation =
+        lightness > 0.5
+            ? delta / (2 - maximum - minimum)
+            : delta / (maximum + minimum);
+    const hue =
+        maximum === red
+            ? ((green - blue) / delta + (green < blue ? 6 : 0)) * 60
+            : maximum === green
+              ? ((blue - red) / delta + 2) * 60
+              : ((red - green) / delta + 4) * 60;
+
+    return {
+        hue,
+        lightness,
+        saturation,
+    };
+}
+
+/**
+ * @param {string} hex
+ * @param {{ readonly renderMode?: "defer" | "none" | "now" }} [options]
+ */
+function setSelectedColor(hex, options = {}) {
+    const color = parseHexColor(hex);
+
+    if (color === null) {
+        return;
+    }
+
+    const normalizedHex = rgbToHex(color);
+    state.colorHex = normalizedHex;
+    elements.colorPicker.value = normalizedHex;
+    syncColorControlUi();
+
+    const renderMode = options.renderMode ?? "now";
+
+    if (renderMode === "defer") {
+        scheduleColorRender();
+    } else if (renderMode === "now") {
+        commitColorRender();
+    }
+}
+
 async function start() {
     const response = await fetch("site-data.json");
     const data = /** @type {unknown} */ (await response.json());
@@ -729,6 +1111,86 @@ async function start() {
     elements.themeCount.textContent = `${state.themes.length} themes`;
     elements.scopeCount.textContent = `${allScopes.size} styled scopes`;
     render();
+}
+
+function syncColorControlUi() {
+    const fallbackColor = /** @type {ColorRgb} */ ({
+        b: 198,
+        g: 214,
+        r: 105,
+    });
+    const color = parseHexColor(state.colorHex) ?? fallbackColor;
+    const hsl = rgbToHsl(color);
+    const hex = rgbToHex(color);
+    const markerRadius = hsl.saturation * 46;
+    const markerLeft = 50 + Math.cos((hsl.hue * Math.PI) / 180) * markerRadius;
+    const markerTop = 50 + Math.sin((hsl.hue * Math.PI) / 180) * markerRadius;
+    const shade = Math.max(0, (0.5 - hsl.lightness) * 1.7);
+
+    elements.colorPreview.style.backgroundColor = hex;
+    elements.colorRgb.textContent = `rgb(${color.r}, ${color.g}, ${color.b})`;
+    elements.colorWheel.style.setProperty("--selected-color", hex);
+    elements.colorWheel.style.setProperty("--marker-left", `${markerLeft}%`);
+    elements.colorWheel.style.setProperty("--marker-top", `${markerTop}%`);
+    elements.colorWheel.style.setProperty("--wheel-shade", String(shade));
+    elements.colorWheelMarker.style.backgroundColor = hex;
+    elements.colorWheel.setAttribute(
+        "aria-valuenow",
+        String(Math.round(hsl.hue))
+    );
+    elements.colorWheel.setAttribute("aria-valuetext", hex);
+    elements.colorLightness.value = String(Math.round(hsl.lightness * 100));
+}
+
+/**
+ * @param {Theme} theme
+ *
+ * @returns {boolean}
+ */
+function themeMatchesPickedColor(theme) {
+    if (state.colorEnabled) {
+        const target = parseHexColor(state.colorHex);
+
+        if (target === null) {
+            return true;
+        }
+
+        return getThemeRgbColors(theme).some(
+            (color) => getColorDistance(color, target) <= 84
+        );
+    }
+
+    return true;
+}
+
+/**
+ * @param {Theme} theme
+ * @param {string} hue
+ *
+ * @returns {boolean}
+ */
+function themeMatchesHue(theme, hue) {
+    return getThemeRgbColors(theme).some(
+        (color) => getHueCategory(color) === hue
+    );
+}
+
+/**
+ * @param {number} value
+ *
+ * @returns {string}
+ */
+function toHexChannel(value) {
+    return Math.min(255, Math.max(0, value)).toString(16).padStart(2, "0");
+}
+
+function toggleColorWheel() {
+    if (elements.colorWheelPopover.hidden === true) {
+        openColorWheel();
+        return;
+    }
+
+    closeColorWheel();
 }
 
 elements.search.addEventListener("input", (event) => {
@@ -744,4 +1206,164 @@ elements.appearanceFilter.addEventListener("change", (event) => {
     render();
 });
 
+elements.hueFilter.addEventListener("change", (event) => {
+    const target = event.target;
+    state.hue = target instanceof HTMLSelectElement ? target.value : "all";
+    render();
+});
+
+elements.colorPicker.addEventListener("input", (event) => {
+    const target = event.target;
+    if (target instanceof HTMLInputElement) {
+        state.colorHex = target.value;
+
+        if (parseHexColor(target.value) !== null) {
+            syncColorControlUi();
+            scheduleColorRender();
+        }
+    }
+});
+
+elements.colorEnabled.addEventListener("change", (event) => {
+    const target = event.target;
+    state.colorEnabled =
+        target instanceof HTMLInputElement ? target.checked : false;
+    render();
+});
+
+elements.colorLightness.addEventListener("input", () => {
+    const color = parseHexColor(state.colorHex);
+
+    if (color === null) {
+        return;
+    }
+
+    const hsl = rgbToHsl(color);
+    const lightness = Number.parseInt(elements.colorLightness.value, 10) / 100;
+    setSelectedColor(
+        rgbToHex(
+            hslToRgb({
+                ...hsl,
+                lightness,
+            })
+        ),
+        { renderMode: "defer" }
+    );
+});
+
+elements.colorWheel.addEventListener("keydown", (event) => {
+    const color = parseHexColor(state.colorHex);
+
+    if (color === null) {
+        return;
+    }
+
+    const hsl = rgbToHsl(color);
+
+    switch (event.key) {
+        case "ArrowDown": {
+            event.preventDefault();
+            setSelectedColor(
+                rgbToHex(
+                    hslToRgb({
+                        ...hsl,
+                        saturation: Math.max(0, hsl.saturation - 0.05),
+                    })
+                )
+            );
+            break;
+        }
+
+        case "ArrowLeft": {
+            event.preventDefault();
+            setSelectedColor(
+                rgbToHex(
+                    hslToRgb({
+                        ...hsl,
+                        hue: (hsl.hue + 354) % 360,
+                    })
+                )
+            );
+            break;
+        }
+
+        case "ArrowRight": {
+            event.preventDefault();
+            setSelectedColor(
+                rgbToHex(
+                    hslToRgb({
+                        ...hsl,
+                        hue: (hsl.hue + 6) % 360,
+                    })
+                )
+            );
+            break;
+        }
+
+        case "ArrowUp": {
+            event.preventDefault();
+            setSelectedColor(
+                rgbToHex(
+                    hslToRgb({
+                        ...hsl,
+                        saturation: Math.min(1, hsl.saturation + 0.05),
+                    })
+                )
+            );
+            break;
+        }
+
+        default: {
+            break;
+        }
+    }
+});
+
+elements.colorWheel.addEventListener("pointerdown", (event) => {
+    elements.colorWheel.setPointerCapture(event.pointerId);
+    setSelectedColor(getColorFromWheelPointer(event), { renderMode: "none" });
+});
+
+elements.colorWheel.addEventListener("pointermove", (event) => {
+    if (event.buttons > 0) {
+        setSelectedColor(getColorFromWheelPointer(event), {
+            renderMode: "none",
+        });
+    }
+});
+
+elements.colorWheel.addEventListener("pointerup", () => {
+    commitColorRender();
+});
+
+elements.colorWheel.addEventListener("pointercancel", () => {
+    commitColorRender();
+});
+
+elements.colorWheelButton.addEventListener("click", (event) => {
+    event.stopPropagation();
+    toggleColorWheel();
+});
+
+document.addEventListener("click", (event) => {
+    const target = event.target;
+
+    if (
+        target instanceof Node &&
+        (elements.colorWheelPopover.contains(target) ||
+            elements.colorWheelButton.contains(target))
+    ) {
+        return;
+    }
+
+    closeColorWheel();
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        closeColorWheel();
+    }
+});
+
+syncColorControlUi();
 void start();

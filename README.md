@@ -37,6 +37,12 @@ Run the full local gate:
 npm run release:verify
 ```
 
+Run TypeScript checking for the Node tools and browser gallery:
+
+```powershell
+npm run typecheck
+```
+
 Validate themes and rebuild Bat's theme cache:
 
 ```powershell
@@ -65,6 +71,24 @@ Check that the committed gallery data still matches the theme files:
 
 ```powershell
 npm run pages:check
+```
+
+Typecheck and validate the gallery locally:
+
+```powershell
+npm run pages:test
+```
+
+Serve the gallery locally:
+
+```powershell
+npm run pages:serve
+```
+
+Use a different port when needed:
+
+```powershell
+npm run pages:serve -- --port=5173
 ```
 
 ## Gallery
