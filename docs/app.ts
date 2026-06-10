@@ -284,8 +284,8 @@ const styleKeys = [
     "foreground",
 ];
 
-/** @type {ReturnType<typeof globalThis.setTimeout> | 0} */
-let colorRenderTimer: ReturnType<typeof globalThis.setTimeout> | 0 = 0;
+/** @type {ReturnType<typeof globalThis.setTimeout> | undefined} */
+let colorRenderTimer: ReturnType<typeof globalThis.setTimeout> | undefined;
 
 const elements = {
     appearanceFilter: queryElement("#appearance_filter", HTMLSelectElement),
@@ -342,9 +342,9 @@ function closeColorWheel() {
 }
 
 function commitColorRender() {
-    if (colorRenderTimer !== 0) {
+    if (colorRenderTimer !== undefined) {
         globalThis.clearTimeout(colorRenderTimer);
-        colorRenderTimer = 0;
+        colorRenderTimer = undefined;
     }
 
     render();
@@ -1023,12 +1023,12 @@ function renderEmptyPreview() {
 }
 
 function scheduleColorRender() {
-    if (colorRenderTimer !== 0) {
+    if (colorRenderTimer !== undefined) {
         globalThis.clearTimeout(colorRenderTimer);
     }
 
     colorRenderTimer = globalThis.setTimeout(() => {
-        colorRenderTimer = 0;
+        colorRenderTimer = undefined;
         render();
     }, colorRenderDelayMs);
 }
@@ -1387,16 +1387,20 @@ document.addEventListener("keydown", (event) => {
     }
 });
 
-syncColorControlUi();
+async function initialize() {
+    syncColorControlUi();
 
-const response = await fetch("site-data.json");
-const data = /** @type {unknown} */ await response.json();
-state.themes = readThemes(data);
+    const response = await fetch("site-data.json");
+    const data = /** @type {unknown} */ await response.json();
+    state.themes = readThemes(data);
 
-const allScopes = new Set(
-    state.themes.flatMap((theme) => theme.rules.map((rule) => rule.scope))
-);
+    const allScopes = new Set(
+        state.themes.flatMap((theme) => theme.rules.map((rule) => rule.scope))
+    );
 
-elements.themeCount.textContent = `${state.themes.length} themes`;
-elements.scopeCount.textContent = `${allScopes.size} styled scopes`;
-render();
+    elements.themeCount.textContent = `${state.themes.length} themes`;
+    elements.scopeCount.textContent = `${allScopes.size} styled scopes`;
+    render();
+}
+
+void initialize();

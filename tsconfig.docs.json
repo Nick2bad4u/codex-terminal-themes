@@ -5,6 +5,7 @@
             "DOM",
             "ES2024"
         ],
+        "moduleDetection": "legacy",
         "noEmit": false,
         "outDir": "docs",
         "rootDir": "docs",

@@ -1,3 +1,4 @@
+"use strict";
 /** @type {readonly Sample[]} */
 const samples = [
     {
@@ -218,8 +219,8 @@ const styleKeys = [
     "fontStyle",
     "foreground",
 ];
-/** @type {ReturnType<typeof globalThis.setTimeout> | 0} */
-let colorRenderTimer = 0;
+/** @type {ReturnType<typeof globalThis.setTimeout> | undefined} */
+let colorRenderTimer;
 const elements = {
     appearanceFilter: queryElement("#appearance_filter", HTMLSelectElement),
     codeGrid: queryElement("#code_grid", HTMLElement),
@@ -271,9 +272,9 @@ function closeColorWheel() {
     elements.colorWheelButton.setAttribute("aria-expanded", "false");
 }
 function commitColorRender() {
-    if (colorRenderTimer !== 0) {
+    if (colorRenderTimer !== undefined) {
         globalThis.clearTimeout(colorRenderTimer);
-        colorRenderTimer = 0;
+        colorRenderTimer = undefined;
     }
     render();
 }
@@ -843,11 +844,11 @@ function renderEmptyPreview() {
     elements.codeGrid.replaceChildren();
 }
 function scheduleColorRender() {
-    if (colorRenderTimer !== 0) {
+    if (colorRenderTimer !== undefined) {
         globalThis.clearTimeout(colorRenderTimer);
     }
     colorRenderTimer = globalThis.setTimeout(() => {
-        colorRenderTimer = 0;
+        colorRenderTimer = undefined;
         render();
     }, colorRenderDelayMs);
 }
@@ -1122,12 +1123,14 @@ document.addEventListener("keydown", (event) => {
         closeColorWheel();
     }
 });
-syncColorControlUi();
-const response = await fetch("site-data.json");
-const data = /** @type {unknown} */ await response.json();
-state.themes = readThemes(data);
-const allScopes = new Set(state.themes.flatMap((theme) => theme.rules.map((rule) => rule.scope)));
-elements.themeCount.textContent = `${state.themes.length} themes`;
-elements.scopeCount.textContent = `${allScopes.size} styled scopes`;
-render();
-export {};
+async function initialize() {
+    syncColorControlUi();
+    const response = await fetch("site-data.json");
+    const data = /** @type {unknown} */ await response.json();
+    state.themes = readThemes(data);
+    const allScopes = new Set(state.themes.flatMap((theme) => theme.rules.map((rule) => rule.scope)));
+    elements.themeCount.textContent = `${state.themes.length} themes`;
+    elements.scopeCount.textContent = `${allScopes.size} styled scopes`;
+    render();
+}
+void initialize();

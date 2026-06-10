@@ -411,11 +411,14 @@ async function handleInstall(parsedArgs, io) {
         );
     }
 
-    const themes = all
-        ? manifest.themes
-        : requestedThemes.length > 0
-          ? resolveThemes(manifest.themes, requestedThemes)
-          : [resolveTheme(manifest.themes, config.defaultTheme ?? "")];
+    let themes: readonly Theme[];
+    if (all) {
+        themes = manifest.themes;
+    } else if (requestedThemes.length > 0) {
+        themes = resolveThemes(manifest.themes, requestedThemes);
+    } else {
+        themes = [resolveTheme(manifest.themes, config.defaultTheme ?? "")];
+    }
     const targets = await resolveInstallTargets(parsedArgs, config, io);
     const dryRun = hasFlag(parsedArgs, "dry-run");
     const force = hasFlag(parsedArgs, "force");
@@ -680,7 +683,9 @@ function formatConfig(config) {
         return "No CLI config is set.\n";
     }
 
-    return `${entries.map(([key, value]) => `${key}: ${String(value)}`).join("\n")}\n`;
+    const lines = entries.map(([key, value]) => `${key}: ${String(value)}`);
+
+    return `${lines.join("\n")}\n`;
 }
 
 /**
@@ -756,7 +761,8 @@ function formatSwatches(colors) {
         .map(([name, color]) => {
             const swatch =
                 color === null ? "      " : colorBlock(color, "      ");
-            return `${name.padEnd(13)} ${swatch} ${color ?? "n/a"}`;
+            const swatchLabel = color === null ? "n/a" : color;
+            return `${name.padEnd(13)} ${swatch} ${swatchLabel}`;
         })
         .join("\n");
 }
@@ -809,7 +815,7 @@ function getNumberFlag(parsedArgs, name) {
 
     const parsedValue = Number.parseInt(value, 10);
     if (Number.isNaN(parsedValue)) {
-        throw new Error(`Expected --${name} to be a number.`);
+        throw new TypeError(`Expected --${name} to be a number.`);
     }
 
     return parsedValue;
@@ -871,18 +877,20 @@ async function loadManifest() {
     const manifest = /** @type {ThemeManifest} */ JSON.parse(manifestText);
 
     if (!Array.isArray(manifest.themes)) {
-        throw new Error("Invalid metadata/themes.json: missing themes array.");
+        throw new TypeError(
+            "Invalid metadata/themes.json: missing themes array."
+        );
     }
 
     return manifest;
 }
 
 /**
- * @param {string[]} args
+ * @param {readonly string[]} args
  *
  * @returns {ParsedArgs}
  */
-function parseArgs(args) {
+function parseArgs(args: readonly string[]) {
     /** @type {Map<string, string | true>} */
     const flags = new Map<string, string | true>();
     /** @type {string[]} */
@@ -897,23 +905,12 @@ function parseArgs(args) {
         }
 
         if (arg.startsWith("--")) {
-            const [rawName, inlineValue] = arg.slice(2).split("=", 2);
-            const nextArg = args[index + 1];
-            if (inlineValue !== undefined) {
-                flags.set(rawName, inlineValue);
-            } else if (nextArg !== undefined && !nextArg.startsWith("-")) {
-                flags.set(rawName, nextArg);
-                index += 1;
-            } else {
-                flags.set(rawName, true);
-            }
+            index = parseLongFlag(args, index, flags);
             continue;
         }
 
         if (arg.startsWith("-") && arg.length > 1) {
-            for (const flag of arg.slice(1)) {
-                flags.set(flag, true);
-            }
+            parseShortFlags(arg, flags);
             continue;
         }
 
@@ -921,6 +918,48 @@ function parseArgs(args) {
     }
 
     return { args, flags, positionals };
+}
+
+/**
+ * @param {readonly string[]} args
+ * @param {number} index
+ * @param {Map<string, string | true>} flags
+ *
+ * @returns {number}
+ */
+function parseLongFlag(
+    args: readonly string[],
+    index: number,
+    flags: Map<string, string | true>
+): number {
+    const arg = args[index];
+    const separatorIndex = arg.indexOf("=");
+
+    if (separatorIndex !== -1) {
+        flags.set(arg.slice(2, separatorIndex), arg.slice(separatorIndex + 1));
+        return index;
+    }
+
+    const rawName = arg.slice(2);
+
+    if (index + 1 < args.length && !args[index + 1].startsWith("-")) {
+        const nextArg = args[index + 1];
+        flags.set(rawName, nextArg);
+        return index + 1;
+    }
+
+    flags.set(rawName, true);
+    return index;
+}
+
+/**
+ * @param {string} arg
+ * @param {Map<string, string | true>} flags
+ */
+function parseShortFlags(arg: string, flags: Map<string, string | true>) {
+    for (const flag of arg.slice(1)) {
+        flags.set(flag, true);
+    }
 }
 
 /**
