@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://www.schemastore.org/github-workflow.json
-name: "Validate"
+name: "Ci"
 
-run-name: "Validate • ${{ github.ref_name }} @${{ github.actor }}"
+run-name: "Ci • ${{ github.ref_name }} @${{ github.actor }}"
 
 on:
     push:
@@ -14,7 +14,7 @@ on:
     workflow_dispatch:
 
 concurrency:
-    group: "validate-${{ github.workflow }}-${{ github.ref }}"
+    group: "ci-${{ github.workflow }}-${{ github.ref }}"
     cancel-in-progress: true
 
 permissions: {}
@@ -24,8 +24,8 @@ defaults:
         shell: "bash"
 
 jobs:
-    validate:
-        name: "Validate themes"
+    ci:
+        name: "Verify package"
         runs-on: "ubuntu-latest"
         timeout-minutes: 15
         permissions:
@@ -43,5 +43,5 @@ jobs:
             - name: "Install dependencies"
               run: "npm ci"
 
-            - name: "Validate"
+            - name: "Verify"
               run: "npm run release:verify"
