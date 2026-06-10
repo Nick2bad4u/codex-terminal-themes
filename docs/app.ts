@@ -1387,20 +1387,16 @@ document.addEventListener("keydown", (event) => {
     }
 });
 
-async function initialize() {
-    syncColorControlUi();
+syncColorControlUi();
 
-    const response = await fetch("site-data.json");
-    const data = /** @type {unknown} */ await response.json();
-    state.themes = readThemes(data);
+const response = await fetch("site-data.json");
+const data = /** @type {unknown} */ await response.json();
+state.themes = readThemes(data);
 
-    const allScopes = new Set(
-        state.themes.flatMap((theme) => theme.rules.map((rule) => rule.scope))
-    );
+const allScopes = new Set(
+    state.themes.flatMap((theme) => theme.rules.map((rule) => rule.scope))
+);
 
-    elements.themeCount.textContent = `${state.themes.length} themes`;
-    elements.scopeCount.textContent = `${allScopes.size} styled scopes`;
-    render();
-}
-
-void initialize();
+elements.themeCount.textContent = `${state.themes.length} themes`;
+elements.scopeCount.textContent = `${allScopes.size} styled scopes`;
+render();

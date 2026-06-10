@@ -761,7 +761,7 @@ function formatSwatches(colors) {
         .map(([name, color]) => {
             const swatch =
                 color === null ? "      " : colorBlock(color, "      ");
-            const swatchLabel = color === null ? "n/a" : color;
+            const swatchLabel = typeof color === "string" ? color : "n/a";
             return `${name.padEnd(13)} ${swatch} ${swatchLabel}`;
         })
         .join("\n");
@@ -896,7 +896,8 @@ function parseArgs(args: readonly string[]) {
     /** @type {string[]} */
     const positionals: string[] = [];
 
-    for (let index = 0; index < args.length; index += 1) {
+    let index = 0;
+    while (index < args.length) {
         const arg = args[index];
 
         if (arg === "--") {
@@ -905,16 +906,18 @@ function parseArgs(args: readonly string[]) {
         }
 
         if (arg.startsWith("--")) {
-            index = parseLongFlag(args, index, flags);
+            index = parseLongFlag(args, index, flags) + 1;
             continue;
         }
 
         if (arg.startsWith("-") && arg.length > 1) {
             parseShortFlags(arg, flags);
+            index += 1;
             continue;
         }
 
         positionals.push(arg);
+        index += 1;
     }
 
     return { args, flags, positionals };
