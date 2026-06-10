@@ -45,7 +45,7 @@
     },
     "types": "./types/index.d.ts",
     "bin": {
-        "codex-terminal-themes": "./dist/bin/codex-terminal-themes.js"
+        "codex-terminal-themes": "dist/bin/codex-terminal-themes.js"
     },
     "files": [
         "dist/",
@@ -74,7 +74,7 @@
         "clean": "node -e \"require('node:fs').rmSync('dist', { force: true, recursive: true })\"",
         "format": "prettier . --write",
         "format:check": "prettier . --check",
-        "lint": "npx eslint .",
+        "lint": "eslint --cache --cache-strategy content --cache-location .cache/.eslintcache",
         "lint:gitleaks": "gitleaks dir --config .gitleaks.toml .",
         "lint:package-json": "npmPkgJsonLint . --config .npmpackagejsonlintrc.json",
         "lint:yamllint": "yamllint -c .yamllint .",
@@ -87,25 +87,26 @@
         "release:verify": "npm run build && npm run validate:built && npm run typecheck && npm run test && npm run lint && npm run format:check && npm run lint:package-json && npm run lint:yamllint",
         "test": "vitest run",
         "typecheck": "tsc --project tsconfig.json --noEmit",
+        "update-deps": "npx ncu -i --install never && npm update --force && npm install --force",
         "validate": "npm run build && npm run validate:built",
         "validate:bat": "npm run build:runtime && node dist/tools/validate-themes.js --bat-cache",
         "validate:built": "node dist/tools/validate-themes.js && node dist/tools/generate-theme-metadata.js --check && node dist/tools/build-pages-site.js --check",
         "validate:themes": "npm run build:runtime && node dist/tools/validate-themes.js"
     },
     "dependencies": {
-        "fast-xml-parser": "^5.3.2",
-        "fast-xml-validator": "^1.1.0"
+        "fast-xml-parser": "^5.8.0",
+        "fast-xml-validator": "^1.1.1"
     },
     "devDependencies": {
         "@types/node": "^25.9.2",
-        "eslint-config-nick2bad4u": "^1.2.7",
+        "eslint-config-nick2bad4u": "^1.2.9",
         "gitleaks-config-nick2bad4u": "^1.0.2",
         "npm-package-json-lint": "^10.4.0",
         "npm-package-json-lint-config-nick2bad4u": "^1.0.2",
-        "prettier": "^3.8.3",
-        "prettier-config-nick2bad4u": "^1.0.14",
+        "prettier": "^3.8.4",
+        "prettier-config-nick2bad4u": "^1.0.16",
         "typescript": "^6.0.3",
-        "vitest": "^4.0.15",
+        "vitest": "^4.1.8",
         "yamllint-config-nick2bad4u": "^1.0.1"
     },
     "packageManager": "npm@11.16.0",
