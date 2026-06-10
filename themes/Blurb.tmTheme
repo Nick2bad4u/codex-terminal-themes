@@ -8,6 +8,12 @@
         <string>Anthony Long</string>
         <key>name</key>
         <string>Blurb</string>
+        <key>semanticClass</key>
+        <string>theme.dark.blurb</string>
+
+        <key>colorSpace</key>
+        <string>sRGB</string>
+
         <key>settings</key>
         <array>
             <dict>
@@ -35,7 +41,7 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#AAB5A5</string>
                 </dict>
@@ -48,7 +54,7 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#37E0F7</string>
                 </dict>
@@ -61,7 +67,7 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#94FF55</string>
                 </dict>
@@ -74,33 +80,33 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#6EC87E</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Entity Function</string>
+                <string>entity-function</string>
                 <key>scope</key>
                 <string>entity.name.function</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#6EC87E</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Entity Name</string>
+                <string>entity-name</string>
                 <key>scope</key>
                 <string>entity.name</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#5997EF</string>
                 </dict>
@@ -113,7 +119,7 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#298B95</string>
                 </dict>
@@ -126,7 +132,7 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#97F5FF</string>
                 </dict>
@@ -139,7 +145,7 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#298B95</string>
                 </dict>
@@ -152,20 +158,20 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#24C2B0</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Support Function</string>
+                <string>support-function</string>
                 <key>scope</key>
                 <string>support.function</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#58975D</string>
                 </dict>
@@ -178,7 +184,7 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#1F83C7</string>
                 </dict>
@@ -191,20 +197,20 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#94FF55</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>String constant</string>
+                <string>string-constant</string>
                 <key>scope</key>
                 <string>string constant</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#8ECF96</string>
                 </dict>
@@ -217,7 +223,7 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#298B95</string>
                 </dict>

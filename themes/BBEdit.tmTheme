@@ -6,6 +6,15 @@
         <string>www.Textmate-Themes.com</string>
         <key>name</key>
         <string>BBEdit</string>
+        <key>author</key>
+        <string>Unknown</string>
+
+        <key>semanticClass</key>
+        <string>theme.light.bbedit</string>
+
+        <key>colorSpace</key>
+        <string>sRGB</string>
+
         <key>settings</key>
         <array>
             <dict>
@@ -33,7 +42,7 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#804000</string>
                 </dict>
@@ -46,7 +55,7 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#0000FF</string>
                 </dict>
@@ -59,7 +68,7 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#FF0080</string>
                 </dict>
@@ -72,33 +81,33 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#FF0080</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>User-defined constant</string>
+                <string>user-defined-constant</string>
                 <key>scope</key>
                 <string>constant</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#C5060B</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Built-in constant</string>
+                <string>built-in-constant</string>
                 <key>scope</key>
                 <string>constant.language</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#004080</string>
                 </dict>
@@ -111,66 +120,66 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#006600</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>String interpolation</string>
+                <string>string-interpolation</string>
                 <key>scope</key>
                 <string>constant.character.escaped, constant.character.escape, string source</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#33CC33</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Preprocessor line</string>
+                <string>preprocessor-line</string>
                 <key>scope</key>
                 <string>other.preprocessor</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#1A921C</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Preprocessor directive</string>
+                <string>preprocessor-directive</string>
                 <key>scope</key>
                 <string>entity.name.preprocessor</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#0C450D</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Function name</string>
+                <string>function-name</string>
                 <key>scope</key>
                 <string>entity.name.function, keyword.other.name-of-parameter.objc</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#0000A2</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Class name</string>
+                <string>class-name</string>
                 <key>scope</key>
                 <string>entity.name.class</string>
                 <key>settings</key>
@@ -181,35 +190,35 @@
             </dict>
             <dict>
                 <key>name</key>
-                <string>Inherited class name</string>
+                <string>inherited-class-name</string>
                 <key>scope</key>
                 <string>entity.other.inherited-class</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Function parameter</string>
+                <string>function-parameter</string>
                 <key>scope</key>
                 <string>variable.parameter</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Function argument and result types</string>
+                <string>function-argument-and-result-types</string>
                 <key>scope</key>
                 <string>storage.type.method</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#70727E</string>
                 </dict>
@@ -222,64 +231,64 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Library function</string>
+                <string>library-function</string>
                 <key>scope</key>
                 <string>support.function</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#0000FF</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Library object</string>
+                <string>library-object</string>
                 <key>scope</key>
                 <string>support.class, support.type</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#6D79DE</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Library constant</string>
+                <string>library-constant</string>
                 <key>scope</key>
                 <string>support.constant</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#06960E</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Library variable</string>
+                <string>library-variable</string>
                 <key>scope</key>
                 <string>support.other.variable</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#21439C</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>JS: Operator</string>
+                <string>js-operator</string>
                 <key>scope</key>
                 <string>keyword.operator.js</string>
                 <key>settings</key>
@@ -303,7 +312,7 @@
             </dict>
             <dict>
                 <key>name</key>
-                <string>Invalid trailing whitespace</string>
+                <string>invalid-trailing-whitespace</string>
                 <key>scope</key>
                 <string>invalid.trailing-whitespace</string>
                 <key>settings</key>
@@ -314,7 +323,7 @@
             </dict>
             <dict>
                 <key>name</key>
-                <string>Embedded source</string>
+                <string>embedded-source</string>
                 <key>scope</key>
                 <string>text source, string.unquoted</string>
                 <key>settings</key>
@@ -325,105 +334,105 @@
             </dict>
             <dict>
                 <key>name</key>
-                <string>Markup XML declaration</string>
+                <string>markup-xml-declaration</string>
                 <key>scope</key>
                 <string>meta.xml-processing, declaration.xml-processing</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#68685B</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Markup DOCTYPE</string>
+                <string>markup-doctype</string>
                 <key>scope</key>
                 <string>meta.doctype, declaration.doctype</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#888888</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Markup DTD</string>
+                <string>markup-dtd</string>
                 <key>scope</key>
                 <string>meta.doctype.DTD, declaration.doctype.DTD</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Markup tag</string>
+                <string>markup-tag</string>
                 <key>scope</key>
                 <string>meta.tag, declaration.tag</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#1C02FF</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Markup name of tag</string>
+                <string>markup-name-of-tag</string>
                 <key>scope</key>
                 <string>entity.name.tag</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Markup tag attribute</string>
+                <string>markup-tag-attribute</string>
                 <key>scope</key>
                 <string>entity.other.attribute-name</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Markup: Heading</string>
+                <string>markup-heading</string>
                 <key>scope</key>
                 <string>markup.heading</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#0C07FF</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Markup: Quote</string>
+                <string>markup-quote</string>
                 <key>scope</key>
                 <string>markup.quote</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#000000</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Markup: List</string>
+                <string>markup-list</string>
                 <key>scope</key>
                 <string>markup.list</string>
                 <key>settings</key>

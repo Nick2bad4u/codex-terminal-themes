@@ -1,7 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
     <dict>
+        <key>author</key>
+        <string>Unknown</string>
+        <key>semanticClass</key>
+        <string>theme.light.zzz</string>
+        <key>colorSpace</key>
+        <string>sRGB</string>
         <key>settings</key>
         <array>
             <dict>
@@ -25,7 +31,7 @@
             </dict>
             <dict>
                 <key>name</key>
-                <string>PHP:Var</string>
+                <string>ZZZ</string>
                 <key>settings</key>
                 <dict>
                     <key>foreground</key>
@@ -113,7 +119,7 @@
             </dict>
             <dict>
                 <key>name</key>
-                <string>PHP:(_GET _POST ...)</string>
+                <string>php-get-post</string>
                 <key>settings</key>
                 <dict>
                     <key>foreground</key>
@@ -121,6 +127,50 @@
                 </dict>
                 <key>scope</key>
                 <string>variable.other.global.php</string>
+            </dict>
+            <dict>
+                <key>name</key>
+                <string>codex-enhanced-markup-and-diff</string>
+                <key>settings</key>
+                <dict>
+                    <key>foreground</key>
+                    <string>#9A4D00</string>
+                </dict>
+                <key>scope</key>
+                <string>markup.heading, markup.bold, markup.changed, markup.inserted.diff, markup.deleted.diff</string>
+            </dict>
+            <dict>
+                <key>name</key>
+                <string>codex-enhanced-json-yaml-keys</string>
+                <key>settings</key>
+                <dict>
+                    <key>foreground</key>
+                    <string>#006B6B</string>
+                </dict>
+                <key>scope</key>
+                <string>support.type.property-name.json, string.unquoted.plain.out.yaml, entity.name.tag.yaml</string>
+            </dict>
+            <dict>
+                <key>name</key>
+                <string>codex-enhanced-shell-and-cli</string>
+                <key>settings</key>
+                <dict>
+                    <key>foreground</key>
+                    <string>#006B35</string>
+                </dict>
+                <key>scope</key>
+                <string>support.function.builtin.shell, variable.other.normal.shell, string.interpolated.shell</string>
+            </dict>
+            <dict>
+                <key>name</key>
+                <string>codex-enhanced-diagnostics</string>
+                <key>settings</key>
+                <dict>
+                    <key>foreground</key>
+                    <string>#B00020</string>
+                </dict>
+                <key>scope</key>
+                <string>invalid.illegal, markup.deleted, message.error, markup.warning</string>
             </dict>
         </array>
         <key>name</key>

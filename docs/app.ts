@@ -124,7 +124,7 @@ const samples = [
             ["]", "punctuation.definition.attribute.end.powershell"],
             [" $Theme", "variable.other.readwrite.powershell"],
             [" = ", "keyword.operator.assignment.powershell"],
-            ['"AmoledShinyBlack6"', "string.quoted.double.powershell"],
+            ['"Nicks-Codex-Noir"', "string.quoted.double.powershell"],
             ["\n)\n\n", "punctuation.section.group.end.powershell"],
             ["$metadata", "variable.other.readwrite.powershell"],
             [" = ", "keyword.operator.assignment.powershell"],

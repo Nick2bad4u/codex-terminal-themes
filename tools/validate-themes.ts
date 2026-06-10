@@ -42,6 +42,60 @@ async function buildBatCache() {
 }
 
 /**
+ * @param {unknown} value
+ * @param {string} key
+ *
+ * @returns {string | undefined}
+ */
+function findStringValueWithWhitespaceForKey(value, key) {
+    if (isUnknownArray(value)) {
+        for (let index = 0; index < value.length; index += 1) {
+            const child = value[index];
+
+            if (
+                hasOwnRecordKey(child, "key") &&
+                getTextNodeValue(child.key) === key
+            ) {
+                const nextValueNode = value
+                    .slice(index + 1)
+                    .find((nextChild) => !hasOwnRecordKey(nextChild, "#text"));
+                const stringValue =
+                    isRecord(nextValueNode) &&
+                    hasOwnRecordKey(nextValueNode, "string")
+                        ? getTextNodeValue(nextValueNode.string)
+                        : undefined;
+
+                if (stringValue !== undefined && /\s/v.test(stringValue)) {
+                    return stringValue;
+                }
+            }
+
+            const nestedValue = findStringValueWithWhitespaceForKey(child, key);
+
+            if (nestedValue !== undefined) {
+                return nestedValue;
+            }
+        }
+
+        return undefined;
+    }
+
+    if (!isRecord(value)) {
+        return undefined;
+    }
+
+    for (const child of Object.values(value)) {
+        const nestedValue = findStringValueWithWhitespaceForKey(child, key);
+
+        if (nestedValue !== undefined) {
+            return nestedValue;
+        }
+    }
+
+    return undefined;
+}
+
+/**
  * @param {Record<string, unknown>} record
  * @param {string} key
  *
@@ -72,6 +126,12 @@ function getTextNodeValue(value) {
 }
 
 /**
+ * @param {unknown} value
+ * @param {string} key
+ *
+ * @returns {string | undefined}
+ */
+/**
  * @param {string} directory
  *
  * @returns {Promise<readonly string[]>}
@@ -94,11 +154,11 @@ async function getThemeFiles(directory) {
 /**
  * @param {unknown} parsedDocument
  *
- * @returns {readonly string[]}
+ * @returns {ReadonlyMap<string, unknown>}
  */
-function getTopLevelKeys(parsedDocument) {
+function getTopLevelDictionary(parsedDocument) {
     if (!isUnknownArray(parsedDocument)) {
-        return [];
+        return new Map();
     }
 
     const plistNode = parsedDocument.find((node) =>
@@ -106,12 +166,12 @@ function getTopLevelKeys(parsedDocument) {
     );
 
     if (plistNode === undefined) {
-        return [];
+        return new Map();
     }
 
     const plistChildren = getArrayProperty(plistNode, "plist");
     if (plistChildren === undefined) {
-        return [];
+        return new Map();
     }
 
     const dictNode = plistChildren.find((node) =>
@@ -119,22 +179,33 @@ function getTopLevelKeys(parsedDocument) {
     );
 
     if (dictNode === undefined) {
-        return [];
+        return new Map();
     }
 
     const dictChildren = getArrayProperty(dictNode, "dict");
     if (dictChildren === undefined) {
-        return [];
+        return new Map();
     }
 
-    return dictChildren.flatMap((node) => {
+    /** @type {Map<string, unknown>} */
+    const entries = new Map();
+    /** @type {string | undefined} */
+    let currentKey;
+
+    for (const node of dictChildren) {
         if (!hasOwnRecordKey(node, "key")) {
-            return [];
+            if (currentKey !== undefined && !hasOwnRecordKey(node, "#text")) {
+                entries.set(currentKey, node);
+                currentKey = undefined;
+            }
+
+            continue;
         }
 
-        const keyName = getTextNodeValue(node.key);
-        return keyName === undefined ? [] : [keyName];
-    });
+        currentKey = getTextNodeValue(node.key);
+    }
+
+    return entries;
 }
 
 /**
@@ -242,18 +313,66 @@ async function validateTheme(filePath) {
     }
 
     const parsedDocument = /** @type {unknown} */ parser.parse(text);
-    const keys = getTopLevelKeys(parsedDocument);
+    const fileName = path.basename(filePath);
+    const topLevelEntries = getTopLevelDictionary(parsedDocument);
+    const keys = new Set(topLevelEntries.keys());
     const missingKeys = [
+        "author",
+        "colorSpace",
         "name",
+        "semanticClass",
         "uuid",
         "settings",
-    ].filter((key) => !keys.includes(key));
+    ].filter((key) => !keys.has(key));
 
     if (missingKeys.length > 0) {
         return {
             filePath,
             ok: false,
             reason: `Missing top-level key(s): ${missingKeys.join(", ")}`,
+        };
+    }
+
+    if (keys.has("colorSpaceName")) {
+        return {
+            filePath,
+            ok: false,
+            reason: "Use top-level colorSpace metadata, not colorSpaceName.",
+        };
+    }
+
+    if (/\s/v.test(fileName)) {
+        return {
+            filePath,
+            ok: false,
+            reason: "Theme file names must not contain whitespace.",
+        };
+    }
+
+    const themeName = getTextNodeValue(
+        isRecord(topLevelEntries.get("name"))
+            ? topLevelEntries.get("name").string
+            : undefined
+    );
+
+    if (themeName === undefined || /\s/v.test(themeName)) {
+        return {
+            filePath,
+            ok: false,
+            reason: "Top-level theme name must exist and must not contain whitespace.",
+        };
+    }
+
+    const spacedNameValue = findStringValueWithWhitespaceForKey(
+        parsedDocument,
+        "name"
+    );
+
+    if (spacedNameValue !== undefined) {
+        return {
+            filePath,
+            ok: false,
+            reason: `All plist name values must not contain whitespace. Found: ${spacedNameValue}`,
         };
     }
 

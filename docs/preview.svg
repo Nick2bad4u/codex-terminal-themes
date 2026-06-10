@@ -11,7 +11,7 @@
     <text x="96" y="260" fill="#8fd3c7" font-family="Cascadia Code, Consolas, monospace" font-size="28">203 TextMate themes with online syntax previews</text>
     <text x="96" y="350" fill="#f3c969" font-family="Cascadia Code, Consolas, monospace" font-size="26">const</text>
     <text x="190" y="350" fill="#e8edf3" font-family="Cascadia Code, Consolas, monospace" font-size="26">theme = </text>
-    <text x="312" y="350" fill="#72d08b" font-family="Cascadia Code, Consolas, monospace" font-size="26">"AmoledShinyBlack6"</text>
+    <text x="312" y="350" fill="#72d08b" font-family="Cascadia Code, Consolas, monospace" font-size="26">"Nicks-Codex-Noir"</text>
     <text x="604" y="350" fill="#e8edf3" font-family="Cascadia Code, Consolas, monospace" font-size="26">;</text>
     <text x="96" y="404" fill="#6eb4ff" font-family="Cascadia Code, Consolas, monospace" font-size="26">preview</text>
     <text x="218" y="404" fill="#e8edf3" font-family="Cascadia Code, Consolas, monospace" font-size="26">.render(</text>

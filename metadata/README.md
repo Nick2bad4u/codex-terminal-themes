@@ -38,9 +38,9 @@ Top-level fields:
 Each entry in `themes` includes:
 
 - `id` - generated kebab-case identifier derived from the file name.
-- `name` - display name from the `.tmTheme` plist.
-- `fileName` - theme file name.
-- `path` - repository-relative path to the theme file.
+- `name` - whitespace-free compatibility name from the `.tmTheme` plist.
+- `fileName` - whitespace-free theme file name.
+- `path` - whitespace-free repository-relative path to the theme file.
 - `uuid` - UUID from the `.tmTheme` plist.
 - `author` - optional author from the plist.
 - `semanticClass` - optional semantic class from the plist.
@@ -68,4 +68,4 @@ TypeScript consumers can use the exported types from `types/index.d.ts`, especia
 
 ## Stability
 
-`schemaVersion` changes only when the manifest contract changes. Existing field values can still change when source themes change. Treat `id`, `path`, and `name` as the best user-facing lookup fields; treat duplicate UUIDs as imported upstream history, not as a validation failure.
+`schemaVersion` changes only when the manifest contract changes. Existing field values can still change when source themes change. Treat `id`, `path`, and `name` as the best compatibility-safe lookup fields; treat duplicate UUIDs as imported upstream history, not as a validation failure.

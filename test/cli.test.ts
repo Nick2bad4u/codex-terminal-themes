@@ -38,19 +38,19 @@ async function run(args, options: { readonly env?: NodeJS.ProcessEnv } = {}) {
     const stdin = {
         isTTY: false,
         off() {
-            return this;
+            return stdin;
         },
         on() {
-            return this;
+            return stdin;
         },
         resume() {
-            return this;
+            return stdin;
         },
         setEncoding() {
-            return this;
+            return stdin;
         },
         setRawMode() {
-            return this;
+            return stdin;
         },
     } as unknown as NodeJS.ReadStream & { readonly isTTY?: boolean };
     const stdoutStream = Object.assign(stdout.stream, {
@@ -79,28 +79,26 @@ test("list prints theme ids", async () => {
     const result = await run([
         "list",
         "--search",
-        "AmoledShinyBlack6",
+        "Nicks-Codex-Noir",
     ]);
 
     expect(result.exitCode).toBe(0);
-    expect(result.stdout).toMatch(/converted-vscode-amoledshinyblack6/v);
+    expect(result.stdout).toMatch(/nicks-codex-noir/v);
 });
 
 test("show prints details and preview", async () => {
-    const result = await run(["show", "converted-vscode-amoledshinyblack6"]);
+    const result = await run(["show", "nicks-codex-noir"]);
 
     expect(result.exitCode).toBe(0);
-    expect(result.stdout).toMatch(/AMOLED/v);
+    expect(result.stdout).toMatch(/Nicks-Codex-Noir/v);
     expect(result.stdout).toMatch(/Theme preview/v);
 });
 
 test("path prints an absolute theme path", async () => {
-    const result = await run(["path", "converted-vscode-amoledshinyblack6"]);
+    const result = await run(["path", "nicks-codex-noir"]);
 
     expect(result.exitCode).toBe(0);
-    expect(result.stdout.trim()).toMatch(
-        /converted-vscode-AmoledShinyBlack6\.tmTheme$/v
-    );
+    expect(result.stdout.trim()).toMatch(/Nicks-Codex-Noir\.tmTheme$/v);
     expect(path.isAbsolute(result.stdout.trim())).toBe(true);
 });
 
@@ -112,7 +110,7 @@ test("install supports dry-run codex target with custom directory", async () => 
     try {
         const result = await run([
             "install",
-            "converted-vscode-amoledshinyblack6",
+            "nicks-codex-noir",
             "--target",
             "codex",
             "--codex-dir",
@@ -137,25 +135,20 @@ test("install copies a selected theme", async () => {
     try {
         const result = await run([
             "install",
-            "converted-vscode-amoledshinyblack6",
+            "nicks-codex-noir",
             "--target",
             "codex",
             "--codex-dir",
             themeDirectory,
         ]);
         const copiedTheme = await readFile(
-            path.join(
-                themeDirectory,
-                "converted-vscode-AmoledShinyBlack6.tmTheme"
-            ),
+            path.join(themeDirectory, "Nicks-Codex-Noir.tmTheme"),
             "utf8"
         );
 
         expect(result.exitCode).toBe(0);
-        expect(result.stdout).toMatch(
-            /copied codex:converted-vscode-amoledshinyblack6/v
-        );
-        expect(copiedTheme).toMatch(/AMOLED/v);
+        expect(result.stdout).toMatch(/copied codex:nicks-codex-noir/v);
+        expect(copiedTheme).toMatch(/<string>Nicks-Codex-Noir<\/string>/v);
     } finally {
         await rm(tempDirectory, { force: true, recursive: true });
     }
@@ -172,7 +165,7 @@ test("config set and get use the requested config path", async () => {
             "config",
             "set",
             "defaultTheme",
-            "converted-vscode-amoledshinyblack6",
+            "nicks-codex-noir",
             "--config",
             configPath,
         ]);
@@ -186,9 +179,7 @@ test("config set and get use the requested config path", async () => {
 
         expect(setResult.exitCode).toBe(0);
         expect(getResult.exitCode).toBe(0);
-        expect(getResult.stdout.trim()).toBe(
-            "converted-vscode-amoledshinyblack6"
-        );
+        expect(getResult.stdout.trim()).toBe("nicks-codex-noir");
     } finally {
         await rm(tempDirectory, { force: true, recursive: true });
     }

@@ -21,7 +21,7 @@ Browse the theme gallery:
 For Codex terminal use, start with:
 
 ```text
-themes/converted-vscode-AmoledShinyBlack6.tmTheme
+themes/Nicks-Codex-Noir.tmTheme
 ```
 
 It is the most customized AMOLED variant in this repo and has the broadest scope coverage for terminal-heavy workflows.
@@ -31,9 +31,9 @@ It is the most customized AMOLED variant in this repo and has the broadest scope
 Use the CLI without a global install:
 
 ```powershell
-npx codex-terminal-themes list --search amoled
-npx codex-terminal-themes show converted-vscode-amoledshinyblack6
-npx codex-terminal-themes install converted-vscode-amoledshinyblack6 --target both
+npx codex-terminal-themes list --search noir
+npx codex-terminal-themes show nicks-codex-noir
+npx codex-terminal-themes install nicks-codex-noir --target both
 ```
 
 Open the interactive picker with an ANSI terminal preview:
@@ -57,7 +57,7 @@ npx codex-terminal-themes doctor
 CLI config is optional and only stores CLI defaults. It does not edit theme files or mutate Codex configuration:
 
 ```powershell
-npx codex-terminal-themes config set defaultTheme converted-vscode-amoledshinyblack6
+npx codex-terminal-themes config set defaultTheme nicks-codex-noir
 npx codex-terminal-themes config set defaultTarget both
 npx codex-terminal-themes install
 ```
@@ -65,9 +65,9 @@ npx codex-terminal-themes install
 Useful install overrides:
 
 ```powershell
-npx codex-terminal-themes install converted-vscode-amoledshinyblack6 --target codex --codex-dir "$env:USERPROFILE\.codex\themes"
-npx codex-terminal-themes install converted-vscode-amoledshinyblack6 --target bat --bat-dir "$((bat --config-dir).Trim())\themes"
-npx codex-terminal-themes install converted-vscode-amoledshinyblack6 --dry-run --json
+npx codex-terminal-themes install nicks-codex-noir --target codex --codex-dir "$env:USERPROFILE\.codex\themes"
+npx codex-terminal-themes install nicks-codex-noir --target bat --bat-dir "$((bat --config-dir).Trim())\themes"
+npx codex-terminal-themes install nicks-codex-noir --dry-run --json
 ```
 
 ## Use With Codex Manually
@@ -83,7 +83,7 @@ $env:USERPROFILE\.codex\themes
 Example:
 
 ```powershell
-Copy-Item ".\themes\converted-vscode-AmoledShinyBlack6.tmTheme" "$env:USERPROFILE\.codex\themes\"
+Copy-Item ".\themes\Nicks-Codex-Noir.tmTheme" "$env:USERPROFILE\.codex\themes\"
 ```
 
 ## Use With Bat Manually
@@ -99,20 +99,20 @@ Create a `themes` folder there if it does not exist, copy the `.tmTheme` files i
 ```powershell
 $batConfig = bat --config-dir
 New-Item -ItemType Directory -Force -Path "$batConfig\themes"
-Copy-Item ".\themes\converted-vscode-AmoledShinyBlack6.tmTheme" "$batConfig\themes\"
+Copy-Item ".\themes\Nicks-Codex-Noir.tmTheme" "$batConfig\themes\"
 bat cache --build
 ```
 
 Use a theme once:
 
 ```powershell
-bat --theme "AMOLED Dark Shiny - Codex Varied v6" README.md
+bat --theme "Nicks-Codex-Noir" README.md
 ```
 
 To make a Bat theme permanent, put the theme name in Bat's config file:
 
 ```text
---theme="AMOLED Dark Shiny - Codex Varied v6"
+--theme="Nicks-Codex-Noir"
 ```
 
 ## Sync Everything Locally
@@ -162,7 +162,7 @@ bat cache --build
 
 If a downloaded theme does not work, make sure it is a raw `.tmTheme` XML plist file. Saving a rendered GitHub webpage as `.tmTheme` creates an HTML file that Codex and Bat cannot consume.
 
-If a theme looks too flat, try a newer numbered AMOLED variant. The numbered `converted-vscode-AmoledShinyBlack*.tmTheme` files are intentional iterations, and the later versions usually have more language-specific scope coverage.
+If a theme looks too flat, try another `Nicks-Codex-Noir*.tmTheme` variant. `Nicks-Codex-Noir.tmTheme` is the flagship Codex terminal theme, while the suffixed variants preserve earlier AMOLED experiments with different contrast and color balance.
 
 ## Maintainers
 

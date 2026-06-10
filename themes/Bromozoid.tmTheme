@@ -6,6 +6,15 @@
         <string>Anthony Long - www.antlong.com</string>
         <key>name</key>
         <string>Bromozoid</string>
+        <key>author</key>
+        <string>Unknown</string>
+
+        <key>semanticClass</key>
+        <string>theme.light.bromozoid</string>
+
+        <key>colorSpace</key>
+        <string>sRGB</string>
+
         <key>settings</key>
         <array>
             <dict>
@@ -33,7 +42,7 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#89A255</string>
                 </dict>
@@ -46,7 +55,7 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#003D5B</string>
                 </dict>
@@ -59,7 +68,7 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#1181D6</string>
                 </dict>
@@ -72,33 +81,33 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#9E15FF</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Entity Function</string>
+                <string>entity-function</string>
                 <key>scope</key>
                 <string>entity.name.function</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#9E15FF</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Entity Name</string>
+                <string>entity-name</string>
                 <key>scope</key>
                 <string>entity.name</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#7B0045</string>
                 </dict>
@@ -111,7 +120,7 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#6860B0</string>
                 </dict>
@@ -124,7 +133,7 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#009671</string>
                 </dict>
@@ -137,7 +146,7 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#6860B0</string>
                 </dict>
@@ -150,20 +159,20 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#00C4C4</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Support Function</string>
+                <string>support-function</string>
                 <key>scope</key>
                 <string>support.function</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#8621CB</string>
                 </dict>
@@ -176,7 +185,7 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#002CFF</string>
                 </dict>
@@ -189,20 +198,20 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#1181D6</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>String constant</string>
+                <string>string-constant</string>
                 <key>scope</key>
                 <string>string constant</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#8B32B0</string>
                 </dict>
@@ -215,7 +224,7 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#6860B0</string>
                 </dict>

@@ -237,64 +237,77 @@ export async function runCli(
     io: CliIo
 ): Promise<number> {
     try {
-        const parsedArgs = parseArgs(args);
-        const command = parsedArgs.positionals[0] ?? "help";
+        return await runParsedCli(args, io);
+    } catch (error) {
+        io.stderr.write(`${getErrorMessage(error)}\n`);
+        return 1;
+    }
+}
 
-        if (parsedArgs.flags.has("help") || parsedArgs.flags.has("h")) {
+/**
+ * @param {readonly string[]} args
+ * @param {CliIo} io
+ *
+ * @returns {Promise<number>}
+ */
+async function runParsedCli(
+    args: readonly string[],
+    io: CliIo
+): Promise<number> {
+    const parsedArgs = parseArgs(args);
+    const command = parsedArgs.positionals[0] ?? "help";
+
+    if (parsedArgs.flags.has("help") || parsedArgs.flags.has("h")) {
+        writeHelp(io.stdout);
+        return 0;
+    }
+
+    if (parsedArgs.flags.has("version") || parsedArgs.flags.has("v")) {
+        const packageJson = await readPackageJson();
+        io.stdout.write(`${String(packageJson.version)}\n`);
+        return 0;
+    }
+
+    switch (command) {
+        case "config": {
+            return handleConfig(parsedArgs, io);
+        }
+
+        case "doctor": {
+            return handleDoctor(parsedArgs, io);
+        }
+
+        case "help": {
             writeHelp(io.stdout);
             return 0;
         }
 
-        if (parsedArgs.flags.has("version") || parsedArgs.flags.has("v")) {
-            const packageJson = await readPackageJson();
-            io.stdout.write(`${String(packageJson.version)}\n`);
-            return 0;
+        case "install": {
+            return handleInstall(parsedArgs, io);
         }
 
-        switch (command) {
-            case "config": {
-                return handleConfig(parsedArgs, io);
-            }
-
-            case "doctor": {
-                return handleDoctor(parsedArgs, io);
-            }
-
-            case "help": {
-                writeHelp(io.stdout);
-                return 0;
-            }
-
-            case "install": {
-                return handleInstall(parsedArgs, io);
-            }
-
-            case "list": {
-                return handleList(parsedArgs, io);
-            }
-
-            case "path": {
-                return handlePath(parsedArgs, io);
-            }
-
-            case "pick":
-            case "picker": {
-                return handlePicker(parsedArgs, io);
-            }
-
-            case "show": {
-                return handleShow(parsedArgs, io);
-            }
-
-            default: {
-                io.stderr.write(`Unknown command: ${command}\n\n`);
-                writeHelp(io.stderr);
-                return 1;
-            }
+        case "list": {
+            return handleList(parsedArgs, io);
         }
-    } catch (error) {
-        io.stderr.write(`${getErrorMessage(error)}\n`);
-        return 1;
+
+        case "path": {
+            return handlePath(parsedArgs, io);
+        }
+
+        case "pick":
+        case "picker": {
+            return handlePicker(parsedArgs, io);
+        }
+
+        case "show": {
+            return handleShow(parsedArgs, io);
+        }
+
+        default: {
+            io.stderr.write(`Unknown command: ${command}\n\n`);
+            writeHelp(io.stderr);
+            return 1;
+        }
     }
 }
 
@@ -760,7 +773,9 @@ function formatSwatches(colors) {
     return Object.entries(colors)
         .map(([name, color]) => {
             const swatch =
-                color === null ? "      " : colorBlock(color, "      ");
+                color === null
+                    ? " ".repeat(6)
+                    : colorBlock(color, " ".repeat(6));
             const swatchLabel = typeof color === "string" ? color : "n/a";
             return `${name.padEnd(13)} ${swatch} ${swatchLabel}`;
         })
@@ -1039,14 +1054,7 @@ async function readPackageJson() {
  */
 async function readConfig(configPath) {
     try {
-        const configText = await readFile(configPath, "utf8");
-        const config = /** @type {CliConfig} */ JSON.parse(configText);
-
-        if (!isRecord(config)) {
-            throw new Error(`Config file is not a JSON object: ${configPath}`);
-        }
-
-        return config;
+        return parseConfigText(await readFile(configPath, "utf8"), configPath);
     } catch (error) {
         if (isNodeError(error) && error.code === "ENOENT") {
             return {};
@@ -1054,6 +1062,22 @@ async function readConfig(configPath) {
 
         throw error;
     }
+}
+
+/**
+ * @param {string} configText
+ * @param {string} configPath
+ *
+ * @returns {CliConfig}
+ */
+function parseConfigText(configText, configPath) {
+    const config = /** @type {CliConfig} */ JSON.parse(configText);
+
+    if (!isRecord(config)) {
+        throw new Error(`Config file is not a JSON object: ${configPath}`);
+    }
+
+    return config;
 }
 
 /**
@@ -1517,7 +1541,13 @@ async function runPicker(themes, io): Promise<Theme | null> {
             const onData = (chunk) => {
                 const input = String(chunk);
 
-                if (input === "\u0003" || input === "\u001B" || input === "q") {
+                if (
+                    [
+                        "\u0003",
+                        "\u001B",
+                        "q",
+                    ].includes(input)
+                ) {
                     cleanup();
                     resolve(null);
                     return;
@@ -1716,21 +1746,30 @@ function isPickerSearchCharacter(input) {
  */
 async function validateThemeFile(filePath) {
     try {
-        const text = await readFile(filePath, "utf8");
-        const validation = SyntaxValidator.validate(text);
-
-        if (validation !== true) {
-            const { col, line, msg } = validation.err;
-            return {
-                ok: false,
-                reason: `XML parse error at ${line}:${col}: ${msg}`,
-            };
-        }
-
-        return { ok: true, reason: "" };
+        return validateThemeText(await readFile(filePath, "utf8"));
     } catch (error) {
         return { ok: false, reason: getErrorMessage(error) };
     }
+}
+
+/**
+ * @param {string} text
+ *
+ * @returns {{ readonly ok: true; readonly reason: "" }
+ *     | { readonly ok: false; readonly reason: string }}
+ */
+function validateThemeText(text) {
+    const validation = SyntaxValidator.validate(text);
+
+    if (validation !== true) {
+        const { col, line, msg } = validation.err;
+        return {
+            ok: false,
+            reason: `XML parse error at ${line}:${col}: ${msg}`,
+        };
+    }
+
+    return { ok: true, reason: "" };
 }
 
 /**
@@ -1782,16 +1821,26 @@ function writeHelp(stream) {
  */
 async function canCreateOrWriteDirectory(directory) {
     try {
-        if (await isDirectory(directory)) {
-            await access(directory, fsConstants.W_OK);
-            return true;
-        }
-
-        await access(path.dirname(directory), fsConstants.W_OK);
-        return true;
+        await assertCanCreateOrWriteDirectory(directory);
     } catch {
         return false;
     }
+
+    return true;
+}
+
+/**
+ * @param {string} directory
+ *
+ * @returns {Promise<void>}
+ */
+async function assertCanCreateOrWriteDirectory(directory) {
+    if (await isDirectory(directory)) {
+        await access(directory, fsConstants.W_OK);
+        return;
+    }
+
+    await access(path.dirname(directory), fsConstants.W_OK);
 }
 
 /**

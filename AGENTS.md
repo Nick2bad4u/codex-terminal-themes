@@ -7,7 +7,7 @@ This repository is the source of truth for TextMate `.tmTheme` files synced into
 - Keep source themes in `themes/` as flat `.tmTheme` files.
 - Do not commit Bat cache output; Bat compiles that under `AppData\Local\bat`.
 - Keep generated or imported third-party themes as source assets only when they parse as valid XML/plist.
-- Prefer creating a new numbered `converted-vscode-AmoledShinyBlack*.tmTheme` file over modifying an older numbered theme in place.
+- Prefer creating a new `Nicks-Codex-Noir*.tmTheme` variant over modifying an older Noir theme in place.
 
 ## Validation
 

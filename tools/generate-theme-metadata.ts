@@ -128,7 +128,7 @@ function calculateLuminance(color) {
         blue,
     ] = parsedColor.map((channel) => {
         const normalizedChannel = channel / 255;
-        return normalizedChannel <= 0.039_28
+        return normalizedChannel <= 0.03928
             ? normalizedChannel / 12.92
             : ((normalizedChannel + 0.055) / 1.055) ** 2.4;
     });

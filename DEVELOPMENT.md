@@ -138,10 +138,11 @@ The browser app uses representative TextMate scopes so users can compare theme b
 ## Theme Import Rules
 
 All committed themes should parse as XML plist files.
+Theme source file names and top-level plist `name` values must be whitespace-free for cross-tool compatibility. Every theme should also carry top-level `author`, `semanticClass`, and `colorSpace` metadata.
 
 When importing themes from GitHub or another website, use raw file URLs. Do not save rendered HTML pages as `.tmTheme` files.
 
-Prefer creating a new numbered `converted-vscode-AmoledShinyBlack*.tmTheme` file over rewriting an older numbered AMOLED theme in place.
+Prefer creating a new `Nicks-Codex-Noir*.tmTheme` variant over rewriting an older Noir theme in place.
 
 ## Sync Validation
 

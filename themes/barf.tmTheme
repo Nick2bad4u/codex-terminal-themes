@@ -6,6 +6,15 @@
         <string>www.Textmate-Themes.com</string>
         <key>name</key>
         <string>barf</string>
+        <key>author</key>
+        <string>Unknown</string>
+
+        <key>semanticClass</key>
+        <string>theme.dark.barf</string>
+
+        <key>colorSpace</key>
+        <string>sRGB</string>
+
         <key>settings</key>
         <array>
             <dict>
@@ -46,7 +55,7 @@
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#5C81B3</string>
                 </dict>
@@ -64,26 +73,26 @@
             </dict>
             <dict>
                 <key>name</key>
-                <string>Built-in constant</string>
+                <string>built-in-constant</string>
                 <key>scope</key>
                 <string>constant.language</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#53667D</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>User-defined constant</string>
+                <string>user-defined-constant</string>
                 <key>scope</key>
                 <string>constant.character, constant.other</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#53667D</string>
                 </dict>
@@ -127,42 +136,42 @@
             </dict>
             <dict>
                 <key>name</key>
-                <string>Class name</string>
+                <string>class-name</string>
                 <key>scope</key>
                 <string>entity.name.class</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Inherited class</string>
+                <string>inherited-class</string>
                 <key>scope</key>
                 <string>entity.other.inherited-class</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Tag name</string>
+                <string>tag-name</string>
                 <key>scope</key>
                 <string>entity.name.tag</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#A3D295</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>function name</string>
+                <string>function-name</string>
                 <key>scope</key>
                 <string>entity.name.function</string>
                 <key>settings</key>
@@ -170,25 +179,25 @@
                     <key>background</key>
                     <string>#282E36</string>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Tag attribute</string>
+                <string>tag-attribute</string>
                 <key>scope</key>
                 <string>entity.other.attribute-name</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#708E67</string>
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Library function</string>
+                <string>library-function</string>
                 <key>scope</key>
                 <string>support.function</string>
                 <key>settings</key>
@@ -201,35 +210,35 @@
             </dict>
             <dict>
                 <key>name</key>
-                <string>Library constant</string>
+                <string>library-constant</string>
                 <key>scope</key>
                 <string>support.constant</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Library class/type</string>
+                <string>library-class-type</string>
                 <key>scope</key>
                 <string>support.type, support.class</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                 </dict>
             </dict>
             <dict>
                 <key>name</key>
-                <string>Library variable</string>
+                <string>library-variable</string>
                 <key>scope</key>
                 <string>support.other.variable</string>
                 <key>settings</key>
                 <dict>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                 </dict>
             </dict>
             <dict>
@@ -242,7 +251,7 @@
                     <key>background</key>
                     <string>#FFFFFF99</string>
                     <key>fontStyle</key>
-                    <string/>
+                    <string />
                     <key>foreground</key>
                     <string>#FF0000</string>
                 </dict>
