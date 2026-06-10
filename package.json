@@ -2,7 +2,6 @@
     "$schema": "https://www.schemastore.org/package.json",
     "name": "codex-terminal-themes",
     "version": "1.0.0",
-    "private": true,
     "description": "Source-of-truth TextMate themes for local Codex and bat terminal highlighting.",
     "keywords": [
         "bat",
@@ -20,7 +19,7 @@
         "type": "git",
         "url": "git+https://github.com/Nick2bad4u/codex-terminal-themes.git"
     },
-    "license": "Unlicense",
+    "license": "MIT",
     "author": "Nick2bad4u <20943337+Nick2bad4u@users.noreply.github.com> (https://github.com/Nick2bad4u)",
     "contributors": [
         {
@@ -29,11 +28,30 @@
             "url": "https://github.com/Nick2bad4u"
         }
     ],
+    "sideEffects": false,
     "type": "module",
+    "exports": {
+        ".": {
+            "types": "./types/index.d.ts",
+            "default": "./metadata/themes.json"
+        },
+        "./metadata": {
+            "types": "./types/index.d.ts",
+            "default": "./metadata/themes.json"
+        },
+        "./metadata/themes.json": "./metadata/themes.json",
+        "./package.json": "./package.json",
+        "./themes/*": "./themes/*"
+    },
     "types": "./types/index.d.ts",
+    "bin": {
+        "codex-terminal-themes": "./bin/codex-terminal-themes.mjs"
+    },
     "files": [
+        "bin/",
         "docs/",
         "metadata/",
+        "src/",
         "themes/",
         "tools/",
         "types/",
@@ -58,27 +76,34 @@
         "pages:check": "node tools/build-pages-site.mjs --check",
         "pages:serve": "node tools/serve-pages-site.mjs",
         "pages:test": "npm run typecheck && npm run pages:check",
-        "release:verify": "npm run validate && npm run typecheck && npm run lint && npm run format:check && npm run lint:package-json && npm run lint:yamllint",
+        "release:verify": "npm run validate && npm run typecheck && npm run test && npm run lint && npm run format:check && npm run lint:package-json && npm run lint:yamllint",
+        "test": "vitest run",
         "typecheck": "tsc --noEmit",
         "validate": "npm run validate:themes && npm run metadata:check && npm run pages:check",
         "validate:bat": "node tools/validate-themes.mjs --bat-cache",
         "validate:themes": "node tools/validate-themes.mjs"
     },
+    "dependencies": {
+        "fast-xml-parser": "^5.3.2",
+        "fast-xml-validator": "^1.1.0"
+    },
     "devDependencies": {
         "@types/node": "^25.9.2",
         "eslint-config-nick2bad4u": "^1.2.7",
-        "fast-xml-parser": "^5.3.2",
-        "fast-xml-validator": "^1.1.0",
         "gitleaks-config-nick2bad4u": "^1.0.2",
         "npm-package-json-lint": "^10.4.0",
         "npm-package-json-lint-config-nick2bad4u": "^1.0.2",
         "prettier": "^3.8.3",
         "prettier-config-nick2bad4u": "^1.0.14",
         "typescript": "^6.0.3",
+        "vitest": "^4.0.15",
         "yamllint-config-nick2bad4u": "^1.0.1"
     },
     "packageManager": "npm@11.16.0",
     "engines": {
         "node": ">=24"
+    },
+    "publishConfig": {
+        "provenance": true
     }
 }

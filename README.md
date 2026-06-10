@@ -1,6 +1,6 @@
 # Codex Terminal Themes
 
-[![Validate](https://github.com/Nick2bad4u/codex-terminal-themes/actions/workflows/validate.yml/badge.svg)](https://github.com/Nick2bad4u/codex-terminal-themes/actions/workflows/validate.yml)
+[![NPM license.](https://flat.badgen.net/npm/license/codex-terminal-themes?color=purple)](https://github.com/Nick2bad4u/codex-terminal-themes/blob/main/LICENSE) [![NPM total downloads.](https://flat.badgen.net/npm/dt/codex-terminal-themes?color=pink)](https://www.npmjs.com/package/codex-terminal-themes) [![Latest GitHub release.](https://flat.badgen.net/github/release/Nick2bad4u/codex-terminal-themes?color=cyan)](https://github.com/Nick2bad4u/codex-terminal-themes/releases) [![GitHub stars.](https://flat.badgen.net/github/stars/Nick2bad4u/codex-terminal-themes?color=yellow)](https://github.com/Nick2bad4u/codex-terminal-themes/stargazers) [![GitHub forks.](https://flat.badgen.net/github/forks/Nick2bad4u/codex-terminal-themes?color=orange)](https://github.com/Nick2bad4u/codex-terminal-themes/forks) [![GitHub open issues.](https://flat.badgen.net/github/open-issues/Nick2bad4u/codex-terminal-themes?color=red)](https://github.com/Nick2bad4u/codex-terminal-themes/issues) [![Repo Checks.](https://flat.badgen.net/github/checks/nick2bad4u/codex-terminal-themes?color=green)](https://github.com/Nick2bad4u/codex-terminal-themes/actions)
 
 High-contrast TextMate `.tmTheme` files for Codex terminal sessions, `bat`, and other tools that can read TextMate themes.
 
@@ -13,7 +13,8 @@ Browse the theme gallery:
 - 203 TextMate themes in `themes/`.
 - A searchable online gallery with syntax previews, theme metadata, hue filtering, and color matching.
 - A generated metadata manifest at `metadata/themes.json` for scripts and theme pickers.
-- Themes that can be copied directly into Codex or Bat theme folders.
+- A dependency-light npm CLI for listing, previewing, installing, and diagnosing themes.
+- Themes that can still be copied directly into Codex or Bat theme folders.
 
 ## Recommended Theme
 
@@ -25,7 +26,51 @@ themes/converted-vscode-AmoledShinyBlack6.tmTheme
 
 It is the most customized AMOLED variant in this repo and has the broadest scope coverage for terminal-heavy workflows.
 
-## Use With Codex
+## Install With npm
+
+Use the CLI without a global install:
+
+```powershell
+npx codex-terminal-themes list --search amoled
+npx codex-terminal-themes show converted-vscode-amoledshinyblack6
+npx codex-terminal-themes install converted-vscode-amoledshinyblack6 --target both
+```
+
+Open the interactive picker with an ANSI terminal preview:
+
+```powershell
+npx codex-terminal-themes pick
+```
+
+Install directly from the picker:
+
+```powershell
+npx codex-terminal-themes pick --install --target codex
+```
+
+Run environment checks before installing:
+
+```powershell
+npx codex-terminal-themes doctor
+```
+
+CLI config is optional and only stores CLI defaults. It does not edit theme files or mutate Codex configuration:
+
+```powershell
+npx codex-terminal-themes config set defaultTheme converted-vscode-amoledshinyblack6
+npx codex-terminal-themes config set defaultTarget both
+npx codex-terminal-themes install
+```
+
+Useful install overrides:
+
+```powershell
+npx codex-terminal-themes install converted-vscode-amoledshinyblack6 --target codex --codex-dir "$env:USERPROFILE\.codex\themes"
+npx codex-terminal-themes install converted-vscode-amoledshinyblack6 --target bat --bat-dir "$((bat --config-dir).Trim())\themes"
+npx codex-terminal-themes install converted-vscode-amoledshinyblack6 --dry-run --json
+```
+
+## Use With Codex Manually
 
 Copy the `.tmTheme` file you want into your Codex themes directory, then select it from your Codex configuration.
 
@@ -41,7 +86,7 @@ Example:
 Copy-Item ".\themes\converted-vscode-AmoledShinyBlack6.tmTheme" "$env:USERPROFILE\.codex\themes\"
 ```
 
-## Use With Bat
+## Use With Bat Manually
 
 Find Bat's config directory:
 
@@ -70,9 +115,9 @@ To make a Bat theme permanent, put the theme name in Bat's config file:
 --theme="AMOLED Dark Shiny - Codex Varied v6"
 ```
 
-## Sync Everything
+## Sync Everything Locally
 
-This repo is intended to work with a drop-in PowerShell sync script named:
+For local source checkout workflows, this repo also works with a drop-in PowerShell sync script named:
 
 ```powershell
 Sync-TerminalThemes.ps1

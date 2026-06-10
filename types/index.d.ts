@@ -43,3 +43,7 @@ export interface ThemeStatistics {
     readonly settings: number;
     readonly uniqueScopes: number;
 }
+
+declare const manifest: ThemeMetadataManifest;
+
+export default manifest;

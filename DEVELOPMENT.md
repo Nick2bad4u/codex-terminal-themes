@@ -7,6 +7,9 @@ End-user installation notes live in [README.md](README.md).
 ## Repository Layout
 
 - `themes/` - flat source folder for committed `.tmTheme` files.
+- `bin/codex-terminal-themes.mjs` - published npm CLI entry point.
+- `src/cli.mjs` - CLI implementation for list, show, install, doctor, picker, and config commands.
+- `test/` - Node test runner coverage for the CLI behavior.
 - `metadata/themes.json` - generated consumer manifest for every valid theme.
 - `metadata/themes.schema.json` - JSON Schema for the generated manifest.
 - `metadata/README.md` - manifest field contract and consumption example.
@@ -41,6 +44,12 @@ Run the full local gate:
 npm run release:verify
 ```
 
+Run the CLI test suite:
+
+```powershell
+npm test
+```
+
 Typecheck the Node tools and browser gallery:
 
 ```powershell
@@ -58,6 +67,14 @@ Run secret scanning locally:
 ```powershell
 npm run lint:gitleaks
 ```
+
+Inspect the npm package contents before publishing:
+
+```powershell
+npm pack --dry-run --json
+```
+
+The published package includes the CLI, source implementation, metadata, themes, docs, and validation tools. Runtime XML parsing dependencies must remain in `dependencies` because the installed CLI uses them for validation and previews.
 
 ## Metadata
 
@@ -159,4 +176,14 @@ For workflow or repository maintenance changes:
 
 ```powershell
 npm run release:verify
+```
+
+For CLI or package-publishing changes:
+
+```powershell
+npm run typecheck
+npm test
+npm run lint
+npm run lint:package-json
+npm pack --dry-run --json
 ```
