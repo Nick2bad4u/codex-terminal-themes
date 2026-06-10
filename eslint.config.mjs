@@ -104,6 +104,7 @@ const config = [
             "@typescript-eslint/no-unsafe-argument": "off",
             "@typescript-eslint/no-unsafe-assignment": "off",
             "@typescript-eslint/no-unsafe-return": "off",
+            "@typescript-eslint/prefer-readonly-parameter-types": "off",
             "@typescript-eslint/return-await": "off",
             "de-morgan/no-negated-conjunction": "off",
             "jsdoc/no-undefined-types": "off",

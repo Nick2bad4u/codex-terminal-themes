@@ -227,12 +227,15 @@ const sampleTokens = [
  */
 
 /**
- * @param {string[]} args
+ * @param {readonly string[]} args
  * @param {CliIo} io
  *
  * @returns {Promise<number>}
  */
-export async function runCli(args: string[], io: CliIo): Promise<number> {
+export async function runCli(
+    args: readonly string[],
+    io: CliIo
+): Promise<number> {
     try {
         const parsedArgs = parseArgs(args);
         const command = parsedArgs.positionals[0] ?? "help";
