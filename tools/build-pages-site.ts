@@ -65,7 +65,7 @@ async function buildThemePreview(theme) {
     const absoluteThemePath = path.join(rootDirectory, themePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- Theme paths come from the committed metadata manifest.
     const text = await readFile(absoluteThemePath, "utf8");
-    const parsedDocument = /** @type {unknown} */ (parser.parse(text));
+    const parsedDocument = /** @type {unknown} */ parser.parse(text);
     const topLevelEntries = getTopLevelDictionary(parsedDocument);
     const settings = getThemeSettings(topLevelEntries);
 
@@ -445,7 +445,6 @@ async function readExistingSiteData() {
 async function readJson(filePath) {
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- JSON paths are fixed repo-local paths.
     const text = await readFile(filePath, "utf8");
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- This is the typed boundary for a generated repo-local JSON file.
     return JSON.parse(text);
 }
 

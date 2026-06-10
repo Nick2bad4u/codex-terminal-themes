@@ -1,28 +1,32 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
-        "allowJs": true,
-        "checkJs": true,
         "lib": [
             "DOM",
             "ES2024"
         ],
         "module": "NodeNext",
+        "moduleDetection": "force",
         "moduleResolution": "NodeNext",
         "noEmit": true,
+        "noImplicitAny": false,
         "strict": true,
         "target": "ES2024",
         "types": [
-            "node"
+            "node",
+            "vitest"
         ]
     },
     "exclude": [
-        "*.mjs"
+        "dist",
+        "node_modules"
     ],
     "include": [
-        "**/*.mjs",
-        "docs/**/*.js",
-        "types/**/*.d.ts",
-        "tools/**/*.mjs"
+        "bin/**/*.ts",
+        "docs/**/*.ts",
+        "src/**/*.ts",
+        "test/**/*.ts",
+        "tools/**/*.ts",
+        "types/**/*.d.ts"
     ]
 }

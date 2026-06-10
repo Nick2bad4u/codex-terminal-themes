@@ -1,3 +1,5 @@
 node_modules/
+dist/
+docs/app.js
 themes/**/*.tmTheme
 package-lock.json

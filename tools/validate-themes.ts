@@ -28,18 +28,14 @@ async function buildBatCache() {
         stdio: "inherit",
     });
 
-    const closeResult = /** @type {readonly unknown[]} */ (
-        await Promise.race([
-            once(childProcess, "close"),
-            once(childProcess, "error").then((errorResult) => {
-                const errorValues = /** @type {readonly unknown[]} */ (
-                    errorResult
-                );
-                const error = errorValues[0];
-                throw error;
-            }),
-        ])
-    );
+    const closeResult = /** @type {readonly unknown[]} */ await Promise.race([
+        once(childProcess, "close"),
+        once(childProcess, "error").then((errorResult) => {
+            const errorValues = /** @type {readonly unknown[]} */ errorResult;
+            const error = errorValues[0];
+            throw error;
+        }),
+    ]);
     const [exitCode] = closeResult;
 
     return typeof exitCode === "number" ? exitCode : 1;
@@ -245,7 +241,7 @@ async function validateTheme(filePath) {
         };
     }
 
-    const parsedDocument = /** @type {unknown} */ (parser.parse(text));
+    const parsedDocument = /** @type {unknown} */ parser.parse(text);
     const keys = getTopLevelKeys(parsedDocument);
     const missingKeys = [
         "name",

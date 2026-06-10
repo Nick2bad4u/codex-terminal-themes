@@ -219,6 +219,9 @@ jobs:
               if: "${{ github.event_name == 'workflow_dispatch' && !inputs.skip_verify }}"
               run: "npm run release:verify"
 
+            - name: "Build package"
+              run: "npm run build"
+
             - name: "Check whether version is already published"
               id: "npm_check"
               env:

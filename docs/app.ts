@@ -1,3 +1,65 @@
+type ThemeStatistics = {
+    readonly colorReferences?: number;
+    readonly settings?: number;
+    readonly uniqueScopes?: number;
+};
+
+type ThemeRule = {
+    readonly background?: string;
+    readonly fontStyle?: string;
+    readonly foreground?: string;
+    readonly scope: string;
+};
+
+type Theme = {
+    readonly appearance: string;
+    readonly author: null | string;
+    readonly colors: Record<string, null | string>;
+    readonly fileName: string;
+    readonly id: string;
+    readonly name: string;
+    readonly path: string;
+    readonly rules: readonly ThemeRule[];
+    readonly statistics: ThemeStatistics;
+    readonly uuid: string;
+};
+
+type ColorRgb = {
+    readonly b: number;
+    readonly g: number;
+    readonly r: number;
+};
+
+type ColorHsl = {
+    readonly hue: number;
+    readonly lightness: number;
+    readonly saturation: number;
+};
+
+type MatchedStyle = Partial<
+    Record<"background" | "fontStyle" | "foreground", string>
+>;
+
+type Sample = {
+    readonly extension: string;
+    readonly name: string;
+    readonly tokens: readonly (readonly [string, string])[];
+};
+
+type GalleryState = {
+    appearance: string;
+    colorEnabled: boolean;
+    colorHex: string;
+    hue: string;
+    query: string;
+    selectedId: string;
+    themes: Theme[];
+};
+
+type ColorRenderOptions = {
+    readonly renderMode?: "defer" | "none" | "now";
+};
+
 /** @type {readonly Sample[]} */
 const samples = [
     {
@@ -191,6 +253,7 @@ const samples = [
         ],
     },
 ];
+
 /**
  * @type {{
  *     appearance: string;
@@ -202,7 +265,7 @@ const samples = [
  *     themes: Theme[];
  * }}
  */
-const state = {
+const state: GalleryState = {
     appearance: "all",
     colorEnabled: false,
     colorHex: "#69d6c6",
@@ -211,15 +274,19 @@ const state = {
     selectedId: "",
     themes: [],
 };
+
 const colorRenderDelayMs = 140;
+
 /** @type {readonly ("background" | "fontStyle" | "foreground")[]} */
 const styleKeys = [
     "background",
     "fontStyle",
     "foreground",
 ];
+
 /** @type {ReturnType<typeof globalThis.setTimeout> | 0} */
-let colorRenderTimer = 0;
+let colorRenderTimer: ReturnType<typeof globalThis.setTimeout> | 0 = 0;
+
 const elements = {
     appearanceFilter: queryElement("#appearance_filter", HTMLSelectElement),
     codeGrid: queryElement("#code_grid", HTMLElement),
@@ -243,6 +310,7 @@ const elements = {
     themeDownload: queryElement("#theme_download", HTMLAnchorElement),
     themeList: queryElement("#theme_list", HTMLElement),
 };
+
 /**
  * @param {HTMLElement} parent
  * @param {string} className
@@ -257,6 +325,7 @@ function appendElement(parent, className, text) {
     parent.append(element);
     return element;
 }
+
 /**
  * @param {unknown} color
  * @param {string} fallback
@@ -266,17 +335,21 @@ function appendElement(parent, className, text) {
 function colorOrFallback(color, fallback) {
     return typeof color === "string" && color.length > 0 ? color : fallback;
 }
+
 function closeColorWheel() {
     elements.colorWheelPopover.hidden = true;
     elements.colorWheelButton.setAttribute("aria-expanded", "false");
 }
+
 function commitColorRender() {
     if (colorRenderTimer !== 0) {
         globalThis.clearTimeout(colorRenderTimer);
         colorRenderTimer = 0;
     }
+
     render();
 }
+
 /**
  * @param {string} fontStyle
  *
@@ -285,13 +358,16 @@ function commitColorRender() {
 function fontStyleClass(fontStyle) {
     return fontStyle
         .split(" ")
-        .filter((part) => [
-        "bold",
-        "italic",
-        "underline",
-    ].includes(part))
+        .filter((part) =>
+            [
+                "bold",
+                "italic",
+                "underline",
+            ].includes(part)
+        )
         .join(" ");
 }
+
 /**
  * @param {ColorRgb} color
  * @param {ColorRgb} target
@@ -302,8 +378,10 @@ function getColorDistance(color, target) {
     const redDelta = color.r - target.r;
     const greenDelta = color.g - target.g;
     const blueDelta = color.b - target.b;
+
     return Math.hypot(redDelta, greenDelta, blueDelta);
 }
+
 /**
  * @param {PointerEvent} event
  *
@@ -320,12 +398,16 @@ function getColorFromWheelPointer(event) {
     const normalizedHue = (hue + 360) % 360;
     const saturation = Math.min(Math.hypot(x, y) / radius, 1);
     const lightness = Number.parseInt(elements.colorLightness.value, 10) / 100;
-    return rgbToHex(hslToRgb({
-        hue: normalizedHue,
-        lightness,
-        saturation,
-    }));
+
+    return rgbToHex(
+        hslToRgb({
+            hue: normalizedHue,
+            lightness,
+            saturation,
+        })
+    );
 }
+
 /**
  * @returns {readonly Theme[]}
  */
@@ -334,8 +416,10 @@ function getFilteredThemes() {
         .toLowerCase()
         .split(/\s+/v)
         .filter((part) => part.length > 0);
+
     return state.themes.filter((theme) => {
-        const matchesAppearance = state.appearance === "all" || theme.appearance === state.appearance;
+        const matchesAppearance =
+            state.appearance === "all" || theme.appearance === state.appearance;
         const searchText = [
             theme.name,
             theme.fileName,
@@ -346,12 +430,17 @@ function getFilteredThemes() {
         ]
             .join(" ")
             .toLowerCase();
-        const matchesQuery = queryParts.every((part) => searchText.includes(part));
-        const matchesHue = state.hue === "all" || themeMatchesHue(theme, state.hue);
+        const matchesQuery = queryParts.every((part) =>
+            searchText.includes(part)
+        );
+        const matchesHue =
+            state.hue === "all" || themeMatchesHue(theme, state.hue);
         const matchesColor = themeMatchesPickedColor(theme);
+
         return matchesAppearance && matchesQuery && matchesHue && matchesColor;
     });
 }
+
 /**
  * @param {ColorRgb} color
  *
@@ -359,32 +448,42 @@ function getFilteredThemes() {
  */
 function getHueCategory(color) {
     const { hue, lightness, saturation } = rgbToHsl(color);
+
     if (saturation < 0.16 || lightness < 0.08 || lightness > 0.94) {
         return "neutral";
     }
+
     if (hue < 16 || hue >= 345) {
         return "red";
     }
+
     if (hue < 45) {
         return "orange";
     }
+
     if (hue < 71) {
         return "yellow";
     }
+
     if (hue < 156) {
         return "green";
     }
+
     if (hue < 196) {
         return "cyan";
     }
+
     if (hue < 251) {
         return "blue";
     }
+
     if (hue < 291) {
         return "purple";
     }
+
     return "pink";
 }
+
 /**
  * @param {ColorHsl} color
  *
@@ -395,53 +494,53 @@ function hslToRgb(color) {
     const huePrime = color.hue / 60;
     const secondary = chroma * (1 - Math.abs((huePrime % 2) - 1));
     const match = color.lightness - chroma / 2;
+
     /** @type {readonly [number, number, number]} */
     let channels = [
         chroma,
         0,
         secondary,
     ];
+
     if (huePrime < 1) {
         channels = [
             chroma,
             secondary,
             0,
         ];
-    }
-    else if (huePrime < 2) {
+    } else if (huePrime < 2) {
         channels = [
             secondary,
             chroma,
             0,
         ];
-    }
-    else if (huePrime < 3) {
+    } else if (huePrime < 3) {
         channels = [
             0,
             chroma,
             secondary,
         ];
-    }
-    else if (huePrime < 4) {
+    } else if (huePrime < 4) {
         channels = [
             0,
             secondary,
             chroma,
         ];
-    }
-    else if (huePrime < 5) {
+    } else if (huePrime < 5) {
         channels = [
             secondary,
             0,
             chroma,
         ];
     }
+
     return {
         b: Math.round((channels[2] + match) * 255),
         g: Math.round((channels[1] + match) * 255),
         r: Math.round((channels[0] + match) * 255),
     };
 }
+
 /**
  * @param {Theme} theme
  *
@@ -455,6 +554,7 @@ function getThemeColors(theme) {
         selection: colorOrFallback(theme.colors.selection, "#8fd3c766"),
     };
 }
+
 /**
  * @param {Theme} theme
  *
@@ -465,6 +565,7 @@ function getThemeRgbColors(theme) {
         .map((color) => parseHexColor(color))
         .filter((color) => isColorRgb(color));
 }
+
 /**
  * @param {Theme} theme
  *
@@ -476,6 +577,7 @@ function getThemeColorValues(theme) {
         ...theme.rules.flatMap((rule) => [rule.background, rule.foreground]),
     ].filter((color) => isNonEmptyString(color));
 }
+
 /**
  * @param {Theme} theme
  *
@@ -484,6 +586,7 @@ function getThemeColorValues(theme) {
 function getThemeRules(theme) {
     return theme.rules;
 }
+
 /**
  * @param {unknown} value
  *
@@ -492,6 +595,7 @@ function getThemeRules(theme) {
 function isRecord(value) {
     return typeof value === "object" && value !== null && !Array.isArray(value);
 }
+
 /**
  * @param {null | ColorRgb} value
  *
@@ -500,6 +604,7 @@ function isRecord(value) {
 function isColorRgb(value) {
     return value !== null;
 }
+
 /**
  * @param {unknown} value
  *
@@ -508,6 +613,7 @@ function isColorRgb(value) {
 function isNonEmptyString(value) {
     return typeof value === "string" && value.length > 0;
 }
+
 /**
  * @param {string} value
  *
@@ -515,31 +621,39 @@ function isNonEmptyString(value) {
  */
 function parseHexColor(value) {
     const normalized = value.trim().replace(/^#/v, "").toLowerCase();
-    if (![
-        3,
-        6,
-        8,
-    ].includes(normalized.length) ||
-        !/^[\da-f]+$/v.test(normalized)) {
+
+    if (
+        ![
+            3,
+            6,
+            8,
+        ].includes(normalized.length) ||
+        !/^[\da-f]+$/v.test(normalized)
+    ) {
         return null;
     }
-    const rgb = normalized.length === 3
-        ? `${normalized.charAt(0).repeat(2)}${normalized
-            .charAt(1)
-            .repeat(2)}${normalized.charAt(2).repeat(2)}`
-        : normalized.slice(0, 6);
+
+    const rgb =
+        normalized.length === 3
+            ? `${normalized.charAt(0).repeat(2)}${normalized
+                  .charAt(1)
+                  .repeat(2)}${normalized.charAt(2).repeat(2)}`
+            : normalized.slice(0, 6);
+
     return {
         b: Number.parseInt(rgb.slice(4, 6), 16),
         g: Number.parseInt(rgb.slice(2, 4), 16),
         r: Number.parseInt(rgb.slice(0, 2), 16),
     };
 }
+
 function openColorWheel() {
     syncColorControlUi();
     elements.colorWheelPopover.hidden = false;
     elements.colorWheelButton.setAttribute("aria-expanded", "true");
     elements.colorWheel.focus();
 }
+
 /**
  * @template {Element} T
  *
@@ -550,11 +664,14 @@ function openColorWheel() {
  */
 function queryElement(selector, constructor) {
     const element = document.querySelector(selector);
+
     if (element instanceof constructor) {
         return element;
     }
+
     throw new TypeError(`Missing required element: ${selector}`);
 }
+
 /**
  * @param {unknown} value
  *
@@ -564,11 +681,15 @@ function readColors(value) {
     if (!isRecord(value)) {
         return {};
     }
-    return Object.fromEntries(Object.entries(value).map(([key, entryValue]) => [
-        key,
-        typeof entryValue === "string" ? entryValue : null,
-    ]));
+
+    return Object.fromEntries(
+        Object.entries(value).map(([key, entryValue]) => [
+            key,
+            typeof entryValue === "string" ? entryValue : null,
+        ])
+    );
 }
+
 /**
  * @param {Record<string, unknown>} record
  * @param {string} key
@@ -579,6 +700,7 @@ function readNullableString(record, key) {
     const value = record[key];
     return typeof value === "string" ? value : null;
 }
+
 /**
  * @param {unknown} value
  *
@@ -588,29 +710,33 @@ function readRules(value) {
     if (!Array.isArray(value)) {
         return [];
     }
+
     return value
         .filter((entry) => isRecord(entry))
         .flatMap((entry) => {
-        const scope = readString(entry, "scope");
-        if (scope.length === 0) {
-            return [];
-        }
-        return [
-            {
-                ...(readString(entry, "background").length === 0
-                    ? {}
-                    : { background: readString(entry, "background") }),
-                ...(readString(entry, "fontStyle").length === 0
-                    ? {}
-                    : { fontStyle: readString(entry, "fontStyle") }),
-                ...(readString(entry, "foreground").length === 0
-                    ? {}
-                    : { foreground: readString(entry, "foreground") }),
-                scope,
-            },
-        ];
-    });
+            const scope = readString(entry, "scope");
+
+            if (scope.length === 0) {
+                return [];
+            }
+
+            return [
+                {
+                    ...(readString(entry, "background").length === 0
+                        ? {}
+                        : { background: readString(entry, "background") }),
+                    ...(readString(entry, "fontStyle").length === 0
+                        ? {}
+                        : { fontStyle: readString(entry, "fontStyle") }),
+                    ...(readString(entry, "foreground").length === 0
+                        ? {}
+                        : { foreground: readString(entry, "foreground") }),
+                    scope,
+                },
+            ];
+        });
 }
+
 /**
  * @param {Record<string, unknown>} record
  * @param {string} key
@@ -621,6 +747,7 @@ function readString(record, key) {
     const value = record[key];
     return typeof value === "string" ? value : "";
 }
+
 /**
  * @param {unknown} value
  *
@@ -630,14 +757,18 @@ function readStatistics(value) {
     if (!isRecord(value)) {
         return {};
     }
+
     return {
-        colorReferences: typeof value.colorReferences === "number"
-            ? value.colorReferences
-            : 0,
+        colorReferences:
+            typeof value.colorReferences === "number"
+                ? value.colorReferences
+                : 0,
         settings: typeof value.settings === "number" ? value.settings : 0,
-        uniqueScopes: typeof value.uniqueScopes === "number" ? value.uniqueScopes : 0,
+        uniqueScopes:
+            typeof value.uniqueScopes === "number" ? value.uniqueScopes : 0,
     };
 }
+
 /**
  * @param {unknown} data
  *
@@ -647,21 +778,23 @@ function readThemes(data) {
     if (!isRecord(data) || !Array.isArray(data.themes)) {
         return [];
     }
+
     return data.themes
         .filter((entry) => isRecord(entry))
         .map((entry) => ({
-        appearance: readString(entry, "appearance"),
-        author: readNullableString(entry, "author"),
-        colors: readColors(entry.colors),
-        fileName: readString(entry, "fileName"),
-        id: readString(entry, "id"),
-        name: readString(entry, "name"),
-        path: readString(entry, "path"),
-        rules: readRules(entry.rules),
-        statistics: readStatistics(entry.statistics),
-        uuid: readString(entry, "uuid"),
-    }));
+            appearance: readString(entry, "appearance"),
+            author: readNullableString(entry, "author"),
+            colors: readColors(entry.colors),
+            fileName: readString(entry, "fileName"),
+            id: readString(entry, "id"),
+            name: readString(entry, "name"),
+            path: readString(entry, "path"),
+            rules: readRules(entry.rules),
+            statistics: readStatistics(entry.statistics),
+            uuid: readString(entry, "uuid"),
+        }));
 }
+
 /**
  * @param {ThemeRule} rule
  * @param {"background" | "fontStyle" | "foreground"} key
@@ -672,11 +805,14 @@ function readRuleStyleValue(rule, key) {
     if (key === "background") {
         return rule.background;
     }
+
     if (key === "fontStyle") {
         return rule.fontStyle;
     }
+
     return rule.foreground;
 }
+
 /**
  * @param {MatchedStyle} style
  * @param {"background" | "fontStyle" | "foreground"} key
@@ -685,14 +821,13 @@ function readRuleStyleValue(rule, key) {
 function writeMatchedStyle(style, key, value) {
     if (key === "background") {
         style.background = value;
-    }
-    else if (key === "fontStyle") {
+    } else if (key === "fontStyle") {
         style.fontStyle = value;
-    }
-    else {
+    } else {
         style.foreground = value;
     }
 }
+
 /**
  * @param {readonly ThemeRule[]} rules
  * @param {string} tokenScope
@@ -701,29 +836,39 @@ function writeMatchedStyle(style, key, value) {
  */
 function matchStyle(rules, tokenScope) {
     /** @type {MatchedStyle} */
-    const style = {};
-    const scores = {};
+    const style: MatchedStyle = {};
+    const scores: Record<string, number> = {};
+
     for (const rule of rules) {
         const selector = rule.scope;
+
         if (typeof selector !== "string") {
             continue;
         }
+
         const score = selectorScore(selector, tokenScope);
+
         if (score <= 0) {
             continue;
         }
+
         for (const key of styleKeys) {
             const value = readRuleStyleValue(rule, key);
-            if (typeof value === "string" &&
+
+            if (
+                typeof value === "string" &&
                 value.length > 0 &&
-                score >= (scores[key] ?? 0)) {
+                score >= (scores[key] ?? 0)
+            ) {
                 writeMatchedStyle(style, key, value);
                 scores[key] = score;
             }
         }
     }
+
     return style;
 }
+
 /**
  * @param {Theme} theme
  */
@@ -736,57 +881,72 @@ function renderMetadata(theme) {
         `${statistics.colorReferences ?? 0} colors`,
         theme.author ?? "unknown author",
     ];
+
     elements.metadataStrip.replaceChildren();
+
     for (const item of metadata) {
         appendElement(elements.metadataStrip, "metadata-pill", item);
     }
 }
+
 function renderThemeList() {
     const filteredThemes = getFilteredThemes();
     elements.themeList.replaceChildren();
+
     for (const theme of filteredThemes) {
         const colors = getThemeColors(theme);
         const button = document.createElement("button");
         button.className = "theme-option";
         button.type = "button";
-        button.setAttribute("aria-pressed", String(theme.id === state.selectedId));
+        button.setAttribute(
+            "aria-pressed",
+            String(theme.id === state.selectedId)
+        );
         button.addEventListener("click", () => {
             state.selectedId = theme.id;
             render();
         });
+
         const swatch = document.createElement("span");
         swatch.className = "swatch";
         swatch.style.background = `linear-gradient(135deg, ${colors.background}, ${colors.selection})`;
+
         const text = document.createElement("span");
         const name = document.createElement("strong");
         name.textContent = theme.name;
         const meta = document.createElement("span");
         meta.textContent = `${theme.appearance} / ${theme.fileName}`;
+
         text.append(name, meta);
         button.append(swatch, text);
         elements.themeList.append(button);
     }
+
     if (filteredThemes.length === 0) {
         appendElement(elements.themeList, "metadata-pill", "No themes match");
     }
 }
+
 /**
  * @param {Theme} theme
  */
 function renderThemePreview(theme) {
     const colors = getThemeColors(theme);
     const rules = getThemeRules(theme);
+
     elements.selectedName.textContent = theme.name;
     elements.selectedAppearance.textContent = `${theme.appearance} theme`;
     elements.themeDownload.href = `../${theme.path}`;
     elements.terminalFrame.style.backgroundColor = colors.background;
     renderMetadata(theme);
     elements.codeGrid.replaceChildren();
+
     for (const sample of samples) {
         const sampleElement = document.createElement("section");
         sampleElement.className = "code-sample";
         sampleElement.style.backgroundColor = colors.background;
         sampleElement.style.color = colors.foreground;
+
         const title = document.createElement("div");
         title.className = "sample-title";
         const sampleName = document.createElement("span");
@@ -794,46 +954,65 @@ function renderThemePreview(theme) {
         const sampleExtension = document.createElement("span");
         sampleExtension.textContent = sample.extension;
         title.append(sampleName, sampleExtension);
+
         const pre = document.createElement("pre");
         pre.style.color = colors.foreground;
+
         for (const [text, scope] of sample.tokens) {
             const token = document.createElement("span");
             const style = matchStyle(rules, scope);
             token.className = `token ${fontStyleClass(style.fontStyle ?? "")}`;
             token.textContent = text;
+
             if (style.foreground !== undefined) {
                 token.style.color = style.foreground;
             }
+
             if (style.background !== undefined) {
                 token.style.backgroundColor = style.background;
             }
+
             pre.append(token);
         }
+
         sampleElement.append(title, pre);
         elements.codeGrid.append(sampleElement);
     }
 }
+
 function render() {
     const filteredThemes = getFilteredThemes();
-    const selectedThemeVisible = filteredThemes.some((theme) => theme.id === state.selectedId);
+    const selectedThemeVisible = filteredThemes.some(
+        (theme) => theme.id === state.selectedId
+    );
+
     elements.themeCount.textContent =
         filteredThemes.length === state.themes.length
             ? `${state.themes.length} themes`
             : `${filteredThemes.length}/${state.themes.length} themes`;
+
     if (!selectedThemeVisible) {
         state.selectedId = "";
+
         if (filteredThemes.length > 0) {
             state.selectedId = filteredThemes[0].id;
         }
     }
+
     renderThemeList();
-    const selectedTheme = state.themes.find((theme) => theme.id === state.selectedId);
+
+    const selectedTheme = state.themes.find(
+        (theme) => theme.id === state.selectedId
+    );
+
     if (selectedTheme === undefined) {
         renderEmptyPreview();
         return;
     }
+
     renderThemePreview(selectedTheme);
 }
+
 function renderEmptyPreview() {
     elements.selectedName.textContent = "No matching themes";
     elements.selectedAppearance.textContent = "Theme";
@@ -842,23 +1021,29 @@ function renderEmptyPreview() {
     appendElement(elements.metadataStrip, "metadata-pill", "No color match");
     elements.codeGrid.replaceChildren();
 }
+
 function scheduleColorRender() {
     if (colorRenderTimer !== 0) {
         globalThis.clearTimeout(colorRenderTimer);
     }
+
     colorRenderTimer = globalThis.setTimeout(() => {
         colorRenderTimer = 0;
         render();
     }, colorRenderDelayMs);
 }
+
 /**
  * @param {ColorRgb} color
  *
  * @returns {string}
  */
 function rgbToHex(color) {
-    return `#${toHexChannel(color.r)}${toHexChannel(color.g)}${toHexChannel(color.b)}`;
+    return `#${toHexChannel(color.r)}${toHexChannel(color.g)}${toHexChannel(
+        color.b
+    )}`;
 }
+
 /**
  * @param {string} selector
  * @param {string} tokenScope
@@ -868,17 +1053,24 @@ function rgbToHex(color) {
 function selectorScore(selector, tokenScope) {
     const selectorParts = selector.split(/\s+/v);
     const selectorTarget = selectorParts.at(-1) ?? selector;
+
     if (tokenScope === selectorTarget) {
         return 1000 + selectorTarget.length;
     }
+
     if (tokenScope.startsWith(`${selectorTarget}.`)) {
         return 500 + selectorTarget.length;
     }
+
     const scopeParts = tokenScope.split(".");
     const selectorSegments = selectorTarget.split(".");
-    const matchesPrefix = selectorSegments.every((segment, index) => scopeParts[index] === segment);
+    const matchesPrefix = selectorSegments.every(
+        (segment, index) => scopeParts[index] === segment
+    );
+
     return matchesPrefix ? 100 + selectorTarget.length : 0;
 }
+
 /**
  * @param {ColorRgb} color
  *
@@ -892,6 +1084,7 @@ function rgbToHsl(color) {
     const minimum = Math.min(red, green, blue);
     const lightness = (maximum + minimum) / 2;
     const delta = maximum - minimum;
+
     if (delta === 0) {
         return {
             hue: 0,
@@ -899,44 +1092,53 @@ function rgbToHsl(color) {
             saturation: 0,
         };
     }
+
     let saturation = delta / (maximum + minimum);
+
     if (lightness > 0.5) {
         saturation = delta / (2 - maximum - minimum);
     }
+
     let hue = ((red - green) / delta + 4) * 60;
+
     if (maximum === red) {
         hue = ((green - blue) / delta + (green < blue ? 6 : 0)) * 60;
-    }
-    else if (maximum === green) {
+    } else if (maximum === green) {
         hue = ((blue - red) / delta + 2) * 60;
     }
+
     return {
         hue,
         lightness,
         saturation,
     };
 }
+
 /**
  * @param {string} hex
  * @param {{ readonly renderMode?: "defer" | "none" | "now" }} [options]
  */
-function setSelectedColor(hex, options = {}) {
+function setSelectedColor(hex, options: ColorRenderOptions = {}) {
     const color = parseHexColor(hex);
+
     if (color === null) {
         return;
     }
+
     const normalizedHex = rgbToHex(color);
     state.colorHex = normalizedHex;
     elements.colorPicker.value = normalizedHex;
     syncColorControlUi();
+
     const renderMode = options.renderMode ?? "now";
+
     if (renderMode === "defer") {
         scheduleColorRender();
-    }
-    else if (renderMode === "now") {
+    } else if (renderMode === "now") {
         commitColorRender();
     }
 }
+
 function syncColorControlUi() {
     const fallbackColor = /** @type {ColorRgb} */ {
         b: 198,
@@ -951,6 +1153,7 @@ function syncColorControlUi() {
     const markerLeft = 50 + Math.cos((hsl.hue * Math.PI) / 180) * markerRadius;
     const markerTop = 50 + Math.sin((hsl.hue * Math.PI) / 180) * markerRadius;
     const shade = Math.max(0, (0.5 - hsl.lightness) * 1.7);
+
     elements.colorPreview.style.backgroundColor = hex;
     elements.colorRgb.textContent = `rgb(${color.r}, ${color.g}, ${color.b})`;
     elements.colorWheel.style.setProperty("--selected-color", hex);
@@ -960,6 +1163,7 @@ function syncColorControlUi() {
     elements.colorWheelMarker.style.backgroundColor = hex;
     elements.colorLightness.value = String(Math.round(hsl.lightness * 100));
 }
+
 /**
  * @param {Theme} theme
  *
@@ -968,13 +1172,19 @@ function syncColorControlUi() {
 function themeMatchesPickedColor(theme) {
     if (state.colorEnabled) {
         const target = parseHexColor(state.colorHex);
+
         if (target === null) {
             return true;
         }
-        return getThemeRgbColors(theme).some((color) => getColorDistance(color, target) <= 84);
+
+        return getThemeRgbColors(theme).some(
+            (color) => getColorDistance(color, target) <= 84
+        );
     }
+
     return true;
 }
+
 /**
  * @param {Theme} theme
  * @param {string} hue
@@ -982,8 +1192,11 @@ function themeMatchesPickedColor(theme) {
  * @returns {boolean}
  */
 function themeMatchesHue(theme, hue) {
-    return getThemeRgbColors(theme).some((color) => getHueCategory(color) === hue);
+    return getThemeRgbColors(theme).some(
+        (color) => getHueCategory(color) === hue
+    );
 }
+
 /**
  * @param {number} value
  *
@@ -992,105 +1205,147 @@ function themeMatchesHue(theme, hue) {
 function toHexChannel(value) {
     return Math.min(255, Math.max(0, value)).toString(16).padStart(2, "0");
 }
+
 function toggleColorWheel() {
     if (elements.colorWheelPopover.hidden === true) {
         openColorWheel();
         return;
     }
+
     closeColorWheel();
 }
+
 elements.search.addEventListener("input", (event) => {
     const target = event.target;
     state.query = target instanceof HTMLInputElement ? target.value : "";
     render();
 });
+
 elements.appearanceFilter.addEventListener("change", (event) => {
     const target = event.target;
     state.appearance =
         target instanceof HTMLSelectElement ? target.value : "all";
     render();
 });
+
 elements.hueFilter.addEventListener("change", (event) => {
     const target = event.target;
     state.hue = target instanceof HTMLSelectElement ? target.value : "all";
     render();
 });
+
 elements.colorPicker.addEventListener("input", (event) => {
     const target = event.target;
     if (target instanceof HTMLInputElement) {
         state.colorHex = target.value;
+
         if (parseHexColor(target.value) !== null) {
             syncColorControlUi();
             scheduleColorRender();
         }
     }
 });
+
 elements.colorEnabled.addEventListener("change", (event) => {
     const target = event.target;
     state.colorEnabled =
         target instanceof HTMLInputElement ? target.checked : false;
     render();
 });
+
 elements.colorLightness.addEventListener("input", () => {
     const color = parseHexColor(state.colorHex);
+
     if (color === null) {
         return;
     }
+
     const hsl = rgbToHsl(color);
     const lightness = Number.parseInt(elements.colorLightness.value, 10) / 100;
-    setSelectedColor(rgbToHex(hslToRgb({
-        ...hsl,
-        lightness,
-    })), { renderMode: "defer" });
+    setSelectedColor(
+        rgbToHex(
+            hslToRgb({
+                ...hsl,
+                lightness,
+            })
+        ),
+        { renderMode: "defer" }
+    );
 });
+
 elements.colorWheel.addEventListener("keydown", (event) => {
     const color = parseHexColor(state.colorHex);
+
     if (color === null) {
         return;
     }
+
     const hsl = rgbToHsl(color);
+
     switch (event.key) {
         case "ArrowDown": {
             event.preventDefault();
-            setSelectedColor(rgbToHex(hslToRgb({
-                ...hsl,
-                saturation: Math.max(0, hsl.saturation - 0.05),
-            })));
+            setSelectedColor(
+                rgbToHex(
+                    hslToRgb({
+                        ...hsl,
+                        saturation: Math.max(0, hsl.saturation - 0.05),
+                    })
+                )
+            );
             break;
         }
+
         case "ArrowLeft": {
             event.preventDefault();
-            setSelectedColor(rgbToHex(hslToRgb({
-                ...hsl,
-                hue: (hsl.hue + 354) % 360,
-            })));
+            setSelectedColor(
+                rgbToHex(
+                    hslToRgb({
+                        ...hsl,
+                        hue: (hsl.hue + 354) % 360,
+                    })
+                )
+            );
             break;
         }
+
         case "ArrowRight": {
             event.preventDefault();
-            setSelectedColor(rgbToHex(hslToRgb({
-                ...hsl,
-                hue: (hsl.hue + 6) % 360,
-            })));
+            setSelectedColor(
+                rgbToHex(
+                    hslToRgb({
+                        ...hsl,
+                        hue: (hsl.hue + 6) % 360,
+                    })
+                )
+            );
             break;
         }
+
         case "ArrowUp": {
             event.preventDefault();
-            setSelectedColor(rgbToHex(hslToRgb({
-                ...hsl,
-                saturation: Math.min(1, hsl.saturation + 0.05),
-            })));
+            setSelectedColor(
+                rgbToHex(
+                    hslToRgb({
+                        ...hsl,
+                        saturation: Math.min(1, hsl.saturation + 0.05),
+                    })
+                )
+            );
             break;
         }
+
         default: {
             break;
         }
     }
 });
+
 elements.colorWheel.addEventListener("pointerdown", (event) => {
     elements.colorWheel.setPointerCapture(event.pointerId);
     setSelectedColor(getColorFromWheelPointer(event), { renderMode: "none" });
 });
+
 elements.colorWheel.addEventListener("pointermove", (event) => {
     if (event.buttons > 0) {
         setSelectedColor(getColorFromWheelPointer(event), {
@@ -1098,36 +1353,50 @@ elements.colorWheel.addEventListener("pointermove", (event) => {
         });
     }
 });
+
 elements.colorWheel.addEventListener("pointerup", () => {
     commitColorRender();
 });
+
 elements.colorWheel.addEventListener("pointercancel", () => {
     commitColorRender();
 });
+
 elements.colorWheelButton.addEventListener("click", (event) => {
     event.stopPropagation();
     toggleColorWheel();
 });
+
 document.addEventListener("click", (event) => {
     const target = event.target;
-    if (target instanceof Node &&
+
+    if (
+        target instanceof Node &&
         (elements.colorWheelPopover.contains(target) ||
-            elements.colorWheelButton.contains(target))) {
+            elements.colorWheelButton.contains(target))
+    ) {
         return;
     }
+
     closeColorWheel();
 });
+
 document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
         closeColorWheel();
     }
 });
+
 syncColorControlUi();
+
 const response = await fetch("site-data.json");
 const data = /** @type {unknown} */ await response.json();
 state.themes = readThemes(data);
-const allScopes = new Set(state.themes.flatMap((theme) => theme.rules.map((rule) => rule.scope)));
+
+const allScopes = new Set(
+    state.themes.flatMap((theme) => theme.rules.map((rule) => rule.scope))
+);
+
 elements.themeCount.textContent = `${state.themes.length} themes`;
 elements.scopeCount.textContent = `${allScopes.size} styled scopes`;
 render();
-export {};

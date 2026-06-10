@@ -14,9 +14,111 @@ import {
 } from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
-import { fileURLToPath } from "node:url";
 
-const packageRoot = path.resolve(fileURLToPath(new URL("..", import.meta.url)));
+type ThemeColors = {
+    readonly background: null | string;
+    readonly caret: null | string;
+    readonly foreground: null | string;
+    readonly invisibles: null | string;
+    readonly lineHighlight: null | string;
+    readonly selection: null | string;
+};
+
+type ThemeStatistics = {
+    readonly colorReferences: number;
+    readonly scopedSettings: number;
+    readonly settings: number;
+    readonly uniqueScopes: number;
+};
+
+type Theme = {
+    readonly appearance: "dark" | "light" | "unknown";
+    readonly author: null | string;
+    readonly colors: ThemeColors;
+    readonly colorSpace: null | string;
+    readonly fileName: string;
+    readonly id: string;
+    readonly name: string;
+    readonly path: string;
+    readonly scopes: readonly string[];
+    readonly semanticClass: null | string;
+    readonly statistics: ThemeStatistics;
+    readonly uuid: string;
+};
+
+type ThemeManifest = {
+    readonly schemaVersion: number;
+    readonly themeCount: number;
+    readonly themes: readonly Theme[];
+};
+
+type CliConfig = {
+    readonly batDir?: string;
+    readonly codexDir?: string;
+    readonly defaultTarget?: string;
+    readonly defaultTheme?: string;
+    readonly skipBatCache?: boolean;
+};
+
+type CliConfigKey = keyof CliConfig;
+
+type ParsedArgs = {
+    readonly args: readonly string[];
+    readonly flags: Map<string, string | true>;
+    readonly positionals: readonly string[];
+};
+
+type CliIo = {
+    readonly cwd: string;
+    readonly env: NodeJS.ProcessEnv;
+    readonly stderr: NodeJS.WritableStream;
+    readonly stdin: NodeJS.ReadStream & { readonly isTTY?: boolean };
+    readonly stdout: NodeJS.WritableStream & {
+        readonly columns?: number;
+        readonly isTTY?: boolean;
+        readonly rows?: number;
+    };
+};
+
+type ThemeStyle = {
+    readonly background?: string;
+    readonly fontStyle?: string;
+    readonly foreground?: string;
+    readonly scopeParts?: readonly string[];
+};
+
+type DoctorCheck = {
+    readonly detail: string;
+    readonly name: string;
+    readonly ok: boolean;
+};
+
+type InstallResult = {
+    readonly destination: string;
+    readonly reason?: string;
+    readonly source: string;
+    readonly status: "copied" | "dry-run" | "failed" | "rebuilt" | "unchanged";
+    readonly target: string;
+    readonly theme: string;
+};
+
+type InstallTarget = {
+    readonly directory: string;
+    readonly name: "bat" | "codex";
+};
+
+type SpawnTextResult = {
+    readonly exitCode: number;
+    readonly stderr: string;
+    readonly stdout: string;
+};
+
+const moduleDirectory = import.meta.dirname;
+const packageRoot =
+    path.basename(moduleDirectory) === "src" &&
+    path.basename(path.dirname(moduleDirectory)) === "dist"
+        ? path.dirname(path.dirname(moduleDirectory))
+        : path.dirname(moduleDirectory);
 const manifestPath = path.join(packageRoot, "metadata", "themes.json");
 const themeRoot = path.join(packageRoot, "themes");
 const reset = "\u001B[0m";
@@ -130,7 +232,7 @@ const sampleTokens = [
  *
  * @returns {Promise<number>}
  */
-export async function runCli(args, io) {
+export async function runCli(args: string[], io: CliIo): Promise<number> {
     try {
         const parsedArgs = parseArgs(args);
         const command = parsedArgs.positionals[0] ?? "help";
@@ -221,7 +323,7 @@ async function handleConfig(parsedArgs, io) {
             `Expected one of these config keys: ${[...configKeys].join(", ")}`
         );
     }
-    const key = /** @type {keyof CliConfig} */ (rawKey);
+    const key = rawKey as CliConfigKey;
 
     if (subcommand === "get") {
         const value = config[key];
@@ -316,7 +418,7 @@ async function handleInstall(parsedArgs, io) {
     const force = hasFlag(parsedArgs, "force");
     const skipBatCache =
         hasFlag(parsedArgs, "skip-bat-cache") || config.skipBatCache === true;
-    const results = [];
+    const results: InstallResult[] = [];
 
     for (const target of targets) {
         await ensureTargetDirectory(target.directory, dryRun);
@@ -467,7 +569,7 @@ async function handleShow(parsedArgs, io) {
  *
  * @returns {Promise<Record<string, string>>}
  */
-async function copyTheme(options) {
+async function copyTheme(options): Promise<InstallResult> {
     const validation = await validateThemeFile(options.source);
 
     if (!validation.ok) {
@@ -763,7 +865,7 @@ function isRecord(value) {
  */
 async function loadManifest() {
     const manifestText = await readFile(manifestPath, "utf8");
-    const manifest = /** @type {ThemeManifest} */ (JSON.parse(manifestText));
+    const manifest = /** @type {ThemeManifest} */ JSON.parse(manifestText);
 
     if (!Array.isArray(manifest.themes)) {
         throw new Error("Invalid metadata/themes.json: missing themes array.");
@@ -779,9 +881,9 @@ async function loadManifest() {
  */
 function parseArgs(args) {
     /** @type {Map<string, string | true>} */
-    const flags = new Map();
+    const flags = new Map<string, string | true>();
     /** @type {string[]} */
-    const positionals = [];
+    const positionals: string[] = [];
 
     for (let index = 0; index < args.length; index += 1) {
         const arg = args[index];
@@ -880,10 +982,8 @@ function parseTargets(value) {
  * @returns {Promise<Record<string, unknown>>}
  */
 async function readPackageJson() {
-    return /** @type {Record<string, unknown>} */ (
-        JSON.parse(
-            await readFile(path.join(packageRoot, "package.json"), "utf8")
-        )
+    return /** @type {Record<string, unknown>} */ JSON.parse(
+        await readFile(path.join(packageRoot, "package.json"), "utf8")
     );
 }
 
@@ -895,7 +995,7 @@ async function readPackageJson() {
 async function readConfig(configPath) {
     try {
         const configText = await readFile(configPath, "utf8");
-        const config = /** @type {CliConfig} */ (JSON.parse(configText));
+        const config = /** @type {CliConfig} */ JSON.parse(configText);
 
         if (!isRecord(config)) {
             throw new Error(`Config file is not a JSON object: ${configPath}`);
@@ -997,7 +1097,7 @@ async function readThemeStyles(theme) {
     const source = getThemeFilePath(theme);
 
     const text = await readFile(source, "utf8");
-    const parsedDocument = /** @type {unknown} */ (parser.parse(text));
+    const parsedDocument = /** @type {unknown} */ parser.parse(text);
     const topLevelEntries = getTopLevelDictionary(parsedDocument);
     const settingsNode = topLevelEntries.get("settings");
     const settingsArray =
@@ -1145,7 +1245,7 @@ async function resolveInstallTargets(parsedArgs, config, io) {
     const targetValue =
         getStringFlag(parsedArgs, "target") ?? config.defaultTarget ?? "both";
     const targetNames = parseTargets(targetValue);
-    const targets = [];
+    const targets: InstallTarget[] = [];
 
     if (targetNames.includes("codex")) {
         targets.push({
@@ -1264,7 +1364,7 @@ async function runDoctorChecks(manifest, config, parsedArgs, io) {
             io.env.CODEX_HOME ?? path.join(os.homedir(), ".codex"),
             "themes"
         );
-    const checks = [
+    const checks: DoctorCheck[] = [
         {
             detail: `${manifest.themeCount} themes in metadata`,
             name: "manifest",
@@ -1313,7 +1413,7 @@ async function runDoctorChecks(manifest, config, parsedArgs, io) {
  *
  * @returns {Promise<Theme | null>}
  */
-async function runPicker(themes, io) {
+async function runPicker(themes, io): Promise<Theme | null> {
     let index = 0;
     let query = "";
     let filteredThemes = themes;
@@ -1430,7 +1530,7 @@ async function runPicker(themes, io) {
  *
  * @returns {Promise<Record<string, string>>}
  */
-async function runBatCache(io) {
+async function runBatCache(io): Promise<InstallResult> {
     const result = await spawnText("bat", ["cache", "--build"], io);
     return {
         destination: "bat cache",
@@ -1512,8 +1612,8 @@ async function hashFile(filePath) {
  *     readonly stdout: string;
  * }>}
  */
-async function spawnText(command, args, io) {
-    return new Promise((resolve) => {
+async function spawnText(command, args, io): Promise<SpawnTextResult> {
+    return new Promise<SpawnTextResult>((resolve) => {
         const childProcess = spawn(command, args, {
             cwd: io.cwd,
             env: io.env,
@@ -1525,9 +1625,9 @@ async function spawnText(command, args, io) {
             ],
         });
         /** @type {Buffer[]} */
-        const stdout = [];
+        const stdout: Buffer[] = [];
         /** @type {Buffer[]} */
-        const stderr = [];
+        const stderr: Buffer[] = [];
 
         childProcess.stdout.on("data", (chunk) => {
             stdout.push(Buffer.from(chunk));
@@ -1709,7 +1809,7 @@ function colorBlock(color, text) {
 function colorText(text, style) {
     const foreground = parseHexColor(style.foreground);
     const background = parseHexColor(style.background);
-    const codes = [];
+    const codes: string[] = [];
 
     if (foreground !== null) {
         codes.push(

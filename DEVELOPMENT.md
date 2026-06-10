@@ -7,18 +7,21 @@ End-user installation notes live in [README.md](README.md).
 ## Repository Layout
 
 - `themes/` - flat source folder for committed `.tmTheme` files.
-- `bin/codex-terminal-themes.mjs` - published npm CLI entry point.
-- `src/cli.mjs` - CLI implementation for list, show, install, doctor, picker, and config commands.
+- `bin/codex-terminal-themes.ts` - npm CLI executable source.
+- `src/cli.ts` - CLI implementation for list, show, install, doctor, picker, and config commands.
 - `test/` - Node test runner coverage for the CLI behavior.
 - `metadata/themes.json` - generated consumer manifest for every valid theme.
 - `metadata/themes.schema.json` - JSON Schema for the generated manifest.
 - `metadata/README.md` - manifest field contract and consumption example.
 - `docs/` - GitHub Pages gallery source and generated preview data.
+- `docs/app.ts` - browser gallery source.
+- `docs/app.js` - generated browser module emitted by `npm run build`.
 - `docs/site-data.json` - generated gallery data derived from `metadata/themes.json`.
-- `tools/validate-themes.mjs` - validates `.tmTheme` XML/plist structure.
-- `tools/generate-theme-metadata.mjs` - regenerates and checks metadata.
-- `tools/build-pages-site.mjs` - regenerates and checks gallery preview data.
-- `tools/serve-pages-site.mjs` - serves `docs/` locally for browser testing.
+- `tools/validate-themes.ts` - validates `.tmTheme` XML/plist structure.
+- `tools/generate-theme-metadata.ts` - regenerates and checks metadata.
+- `tools/build-pages-site.ts` - regenerates and checks gallery preview data.
+- `tools/serve-pages-site.ts` - serves `docs/` locally for browser testing.
+- `dist/` - ignored runtime build output used by npm packaging.
 
 ## Setup
 
@@ -56,6 +59,12 @@ Typecheck the Node tools and browser gallery:
 npm run typecheck
 ```
 
+Build the CLI, tools, and browser gallery module:
+
+```powershell
+npm run build
+```
+
 Validate themes and rebuild Bat's theme cache:
 
 ```powershell
@@ -74,7 +83,7 @@ Inspect the npm package contents before publishing:
 npm pack --dry-run --json
 ```
 
-The published package includes the CLI, source implementation, metadata, themes, docs, and validation tools. Runtime XML parsing dependencies must remain in `dependencies` because the installed CLI uses them for validation and previews.
+The published package includes the built CLI/tools in `dist/`, metadata, themes, docs, and public type declarations. Runtime XML parsing dependencies must remain in `dependencies` because the installed CLI uses them for validation and previews.
 
 ## Metadata
 

@@ -1,0 +1,17 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "lib": [
+            "DOM",
+            "ES2024"
+        ],
+        "noEmit": false,
+        "outDir": "docs",
+        "rootDir": "docs",
+        "types": []
+    },
+    "extends": "./tsconfig.json",
+    "include": [
+        "docs/app.ts"
+    ]
+}

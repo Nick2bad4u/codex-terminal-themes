@@ -4,11 +4,10 @@ import * as path from "node:path";
 import { Writable } from "node:stream";
 import { expect, test } from "vitest";
 
-import { runCli } from "../src/cli.mjs";
+import { runCli } from "../src/cli.js";
 
 function createBufferStream() {
-    /** @type {Buffer[]} */
-    const chunks = [];
+    const chunks: Buffer[] = [];
     const stream = new Writable({
         write(chunk, _encoding, callback) {
             chunks.push(Buffer.from(chunk));
@@ -32,31 +31,31 @@ function createBufferStream() {
  *     readonly stdout: string;
  * }>}
  */
-async function run(args, options = {}) {
+async function run(args, options: { readonly env?: NodeJS.ProcessEnv } = {}) {
     const stdout = createBufferStream();
     const stderr = createBufferStream();
 
-    const stdin =
-        /** @type {NodeJS.ReadStream & { readonly isTTY?: boolean }} */ (
-            /** @type {unknown} */ ({
-                isTTY: false,
-                resume() {
-                    return this;
-                },
-                setEncoding() {
-                    return this;
-                },
-                setRawMode() {
-                    return this;
-                },
-            })
-        );
-    const stdoutStream =
-        /** @type {NodeJS.WritableStream & { readonly isTTY?: boolean }} */ (
-            Object.assign(stdout.stream, {
-                isTTY: false,
-            })
-        );
+    const stdin = {
+        isTTY: false,
+        off() {
+            return this;
+        },
+        on() {
+            return this;
+        },
+        resume() {
+            return this;
+        },
+        setEncoding() {
+            return this;
+        },
+        setRawMode() {
+            return this;
+        },
+    } as unknown as NodeJS.ReadStream & { readonly isTTY?: boolean };
+    const stdoutStream = Object.assign(stdout.stream, {
+        isTTY: false,
+    }) as NodeJS.WritableStream & { readonly isTTY?: boolean };
 
     const exitCode = await runCli(args, {
         cwd: process.cwd(),

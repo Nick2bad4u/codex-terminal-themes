@@ -578,7 +578,7 @@ async function parseThemeFile(filePath) {
         );
     }
 
-    const parsedDocument = /** @type {unknown} */ (parser.parse(text));
+    const parsedDocument = /** @type {unknown} */ parser.parse(text);
     const topLevelEntries = getTopLevelDictionary(parsedDocument);
     const name = getStringValue(topLevelEntries.get("name"));
     const uuid = getStringValue(topLevelEntries.get("uuid"));
