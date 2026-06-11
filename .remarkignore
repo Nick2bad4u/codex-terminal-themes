@@ -1,0 +1,9 @@
+dist/
+node_modules/
+
+.cache/
+.playwright-cli/
+
+docs/app.js
+docs/site-data.json
+metadata/themes.json

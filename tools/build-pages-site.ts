@@ -1,13 +1,28 @@
 import { XMLParser } from "fast-xml-parser";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import {
+    copyFile,
+    cp,
+    mkdir,
+    readFile,
+    stat,
+    writeFile,
+} from "node:fs/promises";
 import * as path from "node:path";
 
 const rootDirectory = process.cwd();
 const docsDirectory = path.join(rootDirectory, "docs");
 const metadataPath = path.join(rootDirectory, "metadata", "themes.json");
-const siteDataPath = path.join(docsDirectory, "site-data.json");
+const pagesDirectory = path.join(rootDirectory, "dist", "pages");
+const siteDataPath = path.join(pagesDirectory, "site-data.json");
 const shouldCheck = process.argv.includes("--check");
 const shouldWrite = process.argv.includes("--write");
+const staticSiteEntries = [
+    "assets",
+    "favicon.svg",
+    "index.html",
+    "preview.svg",
+    "styles.css",
+];
 
 const parser = new XMLParser({
     ignoreAttributes: false,
@@ -84,6 +99,30 @@ async function buildThemePreview(theme) {
 }
 
 /**
+ * @returns {Promise<void>}
+ */
+async function copyStaticSiteAssets() {
+    await mkdir(pagesDirectory, { recursive: true });
+
+    await Promise.all(
+        staticSiteEntries.map(async (entry) => {
+            const sourcePath = path.join(docsDirectory, entry);
+            const targetPath = path.join(pagesDirectory, entry);
+
+            if (entry === "assets") {
+                await cp(sourcePath, targetPath, {
+                    force: true,
+                    recursive: true,
+                });
+                return;
+            }
+
+            await copyFile(sourcePath, targetPath);
+        })
+    );
+}
+
+/**
  * @param {Record<string, unknown>} record
  * @param {string} key
  *
@@ -100,15 +139,24 @@ function getArrayProperty(record, key) {
  * @returns {Promise<number>}
  */
 async function getCheckExitCode(siteDataJson) {
+    const missingFiles = await getMissingSiteFiles();
+
+    if (missingFiles.length > 0) {
+        process.stderr.write(
+            `GitHub Pages build output is missing: ${missingFiles.join(", ")}. Run \`npm run pages:build\`.\n`
+        );
+        return 1;
+    }
+
     const existingSiteData = await readExistingSiteData();
 
     if (existingSiteData === siteDataJson) {
-        process.stdout.write("GitHub Pages site data is up to date.\n");
+        process.stdout.write("GitHub Pages build output is up to date.\n");
         return 0;
     }
 
     process.stderr.write(
-        "GitHub Pages site data is stale. Run `npm run pages:build`.\n"
+        "GitHub Pages build output is stale. Run `npm run pages:build`.\n"
     );
     return 1;
 }
@@ -156,6 +204,24 @@ function getDictionaryValue(entries, key) {
     return dictChildren === undefined
         ? new Map()
         : getDictionaryEntries(dictChildren);
+}
+
+/**
+ * @returns {Promise<readonly string[]>}
+ */
+async function getMissingSiteFiles() {
+    const requiredEntries = [
+        ...staticSiteEntries,
+        "app.js",
+        "site-data.json",
+    ];
+    const missingFiles = await Promise.all(
+        requiredEntries.map(async (entry) =>
+            (await pathExists(path.join(pagesDirectory, entry))) ? "" : entry
+        )
+    );
+
+    return missingFiles.filter((entry) => entry.length > 0);
 }
 
 /**
@@ -420,10 +486,25 @@ async function main() {
         return getCheckExitCode(siteDataJson);
     }
 
-    await mkdir(docsDirectory, { recursive: true });
+    await copyStaticSiteAssets();
     await writeFile(siteDataPath, siteDataJson, "utf8");
-    process.stdout.write("Wrote docs/site-data.json.\n");
+    process.stdout.write("Wrote dist/pages site output.\n");
     return 0;
+}
+
+/**
+ * @param {string} filePath
+ *
+ * @returns {Promise<boolean>}
+ */
+async function pathExists(filePath) {
+    try {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- Paths are constrained to required files in the repo-local dist/pages artifact.
+        await stat(filePath);
+        return true;
+    } catch {
+        return false;
+    }
 }
 
 /**

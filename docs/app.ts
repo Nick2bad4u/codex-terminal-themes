@@ -60,6 +60,12 @@ type ColorRenderOptions = {
     readonly renderMode?: "defer" | "none" | "now";
 };
 
+type RenderOptions = {
+    readonly focusSelectedTheme?: boolean;
+    readonly preserveThemeListScroll?: boolean;
+    readonly scrollSelectedThemeIntoView?: boolean;
+};
+
 /** @type {readonly Sample[]} */
 const samples = [
     {
@@ -439,6 +445,22 @@ function getFilteredThemes() {
 
         return matchesAppearance && matchesQuery && matchesHue && matchesColor;
     });
+}
+
+/**
+ * @returns {HTMLButtonElement | null}
+ */
+function getSelectedThemeButton() {
+    for (const child of elements.themeList.children) {
+        if (
+            child instanceof HTMLButtonElement &&
+            child.dataset.themeId === state.selectedId
+        ) {
+            return child;
+        }
+    }
+
+    return null;
 }
 
 /**
@@ -889,22 +911,26 @@ function renderMetadata(theme) {
     }
 }
 
-function renderThemeList() {
+/**
+ * @param {RenderOptions} options
+ */
+function renderThemeList(options: RenderOptions = {}) {
     const filteredThemes = getFilteredThemes();
+    const themeListScrollTop = elements.themeList.scrollTop;
     elements.themeList.replaceChildren();
 
     for (const theme of filteredThemes) {
         const colors = getThemeColors(theme);
         const button = document.createElement("button");
         button.className = "theme-option";
+        button.dataset.themeId = theme.id;
         button.type = "button";
         button.setAttribute(
             "aria-pressed",
             String(theme.id === state.selectedId)
         );
         button.addEventListener("click", () => {
-            state.selectedId = theme.id;
-            render();
+            selectTheme(theme.id, { preserveThemeListScroll: true });
         });
 
         const swatch = document.createElement("span");
@@ -924,6 +950,21 @@ function renderThemeList() {
 
     if (filteredThemes.length === 0) {
         appendElement(elements.themeList, "metadata-pill", "No themes match");
+    }
+
+    const selectedThemeButton = getSelectedThemeButton();
+
+    if (options.preserveThemeListScroll === true) {
+        elements.themeList.scrollTop = themeListScrollTop;
+    } else if (
+        options.scrollSelectedThemeIntoView === true &&
+        selectedThemeButton !== null
+    ) {
+        selectedThemeButton.scrollIntoView({ block: "nearest" });
+    }
+
+    if (options.focusSelectedTheme === true && selectedThemeButton !== null) {
+        selectedThemeButton.focus({ preventScroll: true });
     }
 }
 
@@ -980,7 +1021,10 @@ function renderThemePreview(theme) {
     }
 }
 
-function render() {
+/**
+ * @param {RenderOptions} options
+ */
+function render(options: RenderOptions = {}) {
     const filteredThemes = getFilteredThemes();
     const selectedThemeVisible = filteredThemes.some(
         (theme) => theme.id === state.selectedId
@@ -999,7 +1043,7 @@ function render() {
         }
     }
 
-    renderThemeList();
+    renderThemeList(options);
 
     const selectedTheme = state.themes.find(
         (theme) => theme.id === state.selectedId
@@ -1020,6 +1064,48 @@ function renderEmptyPreview() {
     elements.metadataStrip.replaceChildren();
     appendElement(elements.metadataStrip, "metadata-pill", "No color match");
     elements.codeGrid.replaceChildren();
+}
+
+/**
+ * @param {number} direction
+ */
+function selectAdjacentTheme(direction: number) {
+    const filteredThemes = getFilteredThemes();
+
+    if (filteredThemes.length === 0) {
+        return;
+    }
+
+    const selectedIndex = filteredThemes.findIndex(
+        (theme) => theme.id === state.selectedId
+    );
+    const nextIndex =
+        selectedIndex === -1
+            ? 0
+            : Math.min(
+                  filteredThemes.length - 1,
+                  Math.max(0, selectedIndex + direction)
+              );
+
+    const nextTheme = filteredThemes[nextIndex];
+
+    selectTheme(nextTheme.id, {
+        focusSelectedTheme: true,
+        scrollSelectedThemeIntoView: true,
+    });
+}
+
+/**
+ * @param {string} themeId
+ * @param {RenderOptions} options
+ */
+function selectTheme(themeId: string, options: RenderOptions = {}) {
+    if (state.selectedId === themeId) {
+        return;
+    }
+
+    state.selectedId = themeId;
+    render(options);
 }
 
 function scheduleColorRender() {
@@ -1162,6 +1248,26 @@ function syncColorControlUi() {
     elements.colorWheel.style.setProperty("--wheel-shade", String(shade));
     elements.colorWheelMarker.style.backgroundColor = hex;
     elements.colorLightness.value = String(Math.round(hsl.lightness * 100));
+}
+
+/**
+ * @param {EventTarget | null} target
+ *
+ * @returns {boolean}
+ */
+function shouldIgnoreThemeNavigationKey(target) {
+    if (!(target instanceof HTMLElement)) {
+        return false;
+    }
+
+    return (
+        target.isContentEditable ||
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLSelectElement ||
+        target instanceof HTMLTextAreaElement ||
+        elements.colorWheel.contains(target) ||
+        elements.colorWheelPopover.contains(target)
+    );
 }
 
 /**
@@ -1384,19 +1490,41 @@ document.addEventListener("click", (event) => {
 document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
         closeColorWheel();
+        return;
+    }
+
+    if (
+        event.altKey ||
+        event.ctrlKey ||
+        event.metaKey ||
+        shouldIgnoreThemeNavigationKey(event.target)
+    ) {
+        return;
+    }
+
+    if (event.key === "ArrowDown") {
+        event.preventDefault();
+        selectAdjacentTheme(1);
+    } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        selectAdjacentTheme(-1);
     }
 });
 
-syncColorControlUi();
+async function main() {
+    syncColorControlUi();
 
-const response = await fetch("site-data.json");
-const data = /** @type {unknown} */ await response.json();
-state.themes = readThemes(data);
+    const response = await fetch("site-data.json");
+    const data = /** @type {unknown} */ await response.json();
+    state.themes = readThemes(data);
 
-const allScopes = new Set(
-    state.themes.flatMap((theme) => theme.rules.map((rule) => rule.scope))
-);
+    const allScopes = new Set(
+        state.themes.flatMap((theme) => theme.rules.map((rule) => rule.scope))
+    );
 
-elements.themeCount.textContent = `${state.themes.length} themes`;
-elements.scopeCount.textContent = `${allScopes.size} styled scopes`;
-render();
+    elements.themeCount.textContent = `${state.themes.length} themes`;
+    elements.scopeCount.textContent = `${allScopes.size} styled scopes`;
+    render();
+}
+
+void main();

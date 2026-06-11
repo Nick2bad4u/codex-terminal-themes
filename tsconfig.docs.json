@@ -5,8 +5,12 @@
             "DOM",
             "ES2024"
         ],
+        "module": "ES2022",
+        "moduleDetection": "auto",
+        "moduleResolution": "Bundler",
         "noEmit": false,
-        "outDir": "docs",
+        "outDir": "dist/pages",
+        "removeComments": true,
         "rootDir": "docs",
         "types": []
     },

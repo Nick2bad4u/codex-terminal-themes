@@ -1,6 +1,6 @@
 # Docs Guidance
 
-- Treat `docs/app.ts` as the browser gallery source and `docs/app.js` as generated build output.
-- Keep `docs/site-data.json` deterministic and regenerated through `npm run pages:build`.
-- `docs/index.html` loads `app.js`, so run `npm run build` after editing `docs/app.ts`.
+- Treat `docs/app.ts` as the browser gallery source and `dist/pages/app.js` as generated build output.
+- Keep generated Pages output in `dist/pages/`; do not commit generated `docs/app.js` or `docs/site-data.json`.
+- `docs/index.html` loads `app.js` after the site is copied to `dist/pages`, so run `npm run build` after editing `docs/app.ts`.
 - Run `npm run pages:check` or `npm run validate` after gallery changes.

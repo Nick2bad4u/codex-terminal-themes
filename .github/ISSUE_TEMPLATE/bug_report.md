@@ -6,7 +6,7 @@ labels: "bug"
 assignees: ""
 ---
 
-## Problem
+# Problem
 
 Describe the theme, command, or workflow that exposed the problem.
 

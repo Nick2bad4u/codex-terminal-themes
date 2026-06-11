@@ -13,15 +13,13 @@ End-user installation notes live in [README.md](README.md).
 - `metadata/themes.json` - generated consumer manifest for every valid theme.
 - `metadata/themes.schema.json` - JSON Schema for the generated manifest.
 - `metadata/README.md` - manifest field contract and consumption example.
-- `docs/` - GitHub Pages gallery source and generated preview data.
+- `docs/` - GitHub Pages gallery source and static assets.
 - `docs/app.ts` - browser gallery source.
-- `docs/app.js` - generated browser module emitted by `npm run build`.
-- `docs/site-data.json` - generated gallery data derived from `metadata/themes.json`.
 - `tools/validate-themes.ts` - validates `.tmTheme` XML/plist structure.
 - `tools/generate-theme-metadata.ts` - regenerates and checks metadata.
-- `tools/build-pages-site.ts` - regenerates and checks gallery preview data.
-- `tools/serve-pages-site.ts` - serves `docs/` locally for browser testing.
-- `dist/` - ignored runtime build output used by npm packaging.
+- `tools/build-pages-site.ts` - builds and checks the gallery output.
+- `tools/serve-pages-site.ts` - serves `dist/pages/` locally for browser testing.
+- `dist/` - ignored runtime, package, and Pages build output.
 
 ## Setup
 
@@ -59,7 +57,7 @@ Typecheck the Node tools and browser gallery:
 npm run typecheck
 ```
 
-Build the CLI, tools, and browser gallery module:
+Build the CLI, tools, and deployable Pages gallery:
 
 ```powershell
 npm run build
@@ -103,19 +101,19 @@ The manifest is deterministic. Changing a `.tmTheme` without regenerating metada
 
 ## GitHub Pages Gallery
 
-Regenerate the gallery preview data:
+Build the deployable gallery in `dist/pages/`:
 
 ```powershell
 npm run pages:build
 ```
 
-Check that the committed gallery data still matches the theme files:
+Check that the built gallery output still matches the theme files:
 
 ```powershell
 npm run pages:check
 ```
 
-Typecheck and validate the gallery data:
+Typecheck and validate the gallery output:
 
 ```powershell
 npm run pages:test
@@ -133,7 +131,7 @@ Use a different port when needed:
 npm run pages:serve -- --port=5173
 ```
 
-The browser app uses representative TextMate scopes so users can compare theme behavior online without installing Bat, Codex, or a TextMate parser.
+The browser app uses representative TextMate scopes, so users can compare theme behavior online without installing Bat, Codex, or a TextMate parser.
 
 ## Theme Import Rules
 
@@ -158,7 +156,7 @@ Run the real sync only when you intend to update the local Codex and Bat theme f
 Sync-TerminalThemes.ps1
 ```
 
-The sync script should skip invalid themes by default so Bat cache rebuilds are not broken by a bad local import. Use any invalid-theme override only for consumers that explicitly tolerate those files.
+The sync script should skip invalid themes by default, so Bat cache rebuilds are not broken by a bad local import. Use any invalid-theme override only for consumers that explicitly tolerate those files.
 
 ## Pull Request Checklist
 

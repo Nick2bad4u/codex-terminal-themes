@@ -5,7 +5,7 @@ import * as path from "node:path";
 const defaultHost = "127.0.0.1";
 const defaultPort = 4173;
 const rootDirectory = process.cwd();
-const docsDirectory = path.join(rootDirectory, "docs");
+const pagesDirectory = path.join(rootDirectory, "dist", "pages");
 
 /**
  * @param {string} docsRoot
@@ -138,14 +138,14 @@ function isPathInside(rootPath, candidatePath) {
  */
 function main() {
     const { host, port } = getServerOptions();
-    const requestHandler = createRequestHandler(docsDirectory);
+    const requestHandler = createRequestHandler(pagesDirectory);
     const server = createServer((request, response) => {
         void requestHandler(request, response);
     });
 
     server.listen(port, host, () => {
         process.stdout.write(
-            `Serving docs at http://${host}:${String(port)}/\n`
+            `Serving dist/pages at http://${host}:${String(port)}/\n`
         );
     });
 }
