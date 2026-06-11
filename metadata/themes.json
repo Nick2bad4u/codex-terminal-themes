@@ -9880,7 +9880,7 @@
         },
         {
             "appearance": "dark",
-            "author": "Converted from VS Code color theme JSONC",
+            "author": "Nick's personal theme - modeled after VSCode's Shiny Black AMOLED but customized for personal preference",
             "colors": {
                 "background": "#000000",
                 "caret": "#FFC400",
