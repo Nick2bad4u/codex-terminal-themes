@@ -8,6 +8,10 @@
 	<string>6360C65E-FF9D-4421-8E85-D65B508AA6BB</string>
 	<key>author</key>
 	<string>Converted from VS Code color theme JSONC</string>
+	<key>legacyName</key>
+	<string>AMOLED Dark Shiny - Codex Varied v4</string>
+	<key>legacyFileName</key>
+	<string>converted-vscode-AmoledShinyBlack4.tmTheme</string>
 
 	<key>semanticClass</key>
 	<string>theme.dark.nicks-codex-noir-midnight</string>

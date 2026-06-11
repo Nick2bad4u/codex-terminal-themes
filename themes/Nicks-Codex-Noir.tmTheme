@@ -7,7 +7,11 @@
 	<key>uuid</key>
 	<string>2376DE06-243A-4005-983E-408BBD7114FC</string>
 	<key>author</key>
-	<string>Converted from VS Code color theme JSONC</string>
+	<string>Nick's personal theme - modeled after VSCode's Shiny Black AMOLED but customized for personal preference</string>
+	<key>legacyName</key>
+	<string>AMOLED Dark Shiny - Codex Varied v6</string>
+	<key>legacyFileName</key>
+	<string>converted-vscode-AmoledShinyBlack6.tmTheme</string>
 
 	<key>semanticClass</key>
 	<string>theme.dark.nicks-codex-noir</string>

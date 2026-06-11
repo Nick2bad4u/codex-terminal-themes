@@ -8,6 +8,10 @@
 	<string>7B82D9B7-8A32-4F24-9F7E-8A61DB5E4B27</string>
 	<key>author</key>
 	<string>Converted from VS Code color theme JSONC</string>
+	<key>legacyName</key>
+	<string>Codex Token Colors Only</string>
+	<key>legacyFileName</key>
+	<string>converted-vscode-AmoledShinyBlack2.tmTheme</string>
 
 	<key>semanticClass</key>
 	<string>theme.dark.nicks-codex-noir-glow</string>

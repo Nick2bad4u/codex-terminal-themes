@@ -6,6 +6,10 @@
 	<string>Nicks-Codex-Noir-Classic</string>
 	<key>author</key>
 	<string>Converted from VS Code color theme JSONC</string>
+	<key>legacyName</key>
+	<string>Converted VS Code Theme for Codex CLI</string>
+	<key>legacyFileName</key>
+	<string>converted-vscode-AmoledShinyBlack.tmTheme</string>
 	<key>uuid</key>
 	<string>C1184C33-F71C-45DB-AEE1-EDC584FEE944</string>
 	<key>semanticClass</key>

@@ -1,121 +1,126 @@
 {
-    "$schema": "https://www.schemastore.org/package.json",
-    "name": "codex-terminal-themes",
-    "version": "1.0.1",
-    "description": "Source-of-truth TextMate themes for local Codex and bat terminal highlighting.",
-    "keywords": [
-        "bat",
-        "codex",
-        "syntax-highlighting",
-        "textmate",
-        "themes",
-        "tmtheme"
-    ],
-    "homepage": "https://github.com/Nick2bad4u/codex-terminal-themes#readme",
-    "bugs": {
-        "url": "https://github.com/Nick2bad4u/codex-terminal-themes/issues"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/Nick2bad4u/codex-terminal-themes.git"
-    },
-    "license": "MIT",
-    "author": "Nick2bad4u <20943337+Nick2bad4u@users.noreply.github.com> (https://github.com/Nick2bad4u)",
-    "contributors": [
-        {
-            "name": "Nick2bad4u",
-            "email": "20943337+Nick2bad4u@users.noreply.github.com",
-            "url": "https://github.com/Nick2bad4u"
-        }
-    ],
-    "sideEffects": false,
-    "type": "module",
-    "exports": {
-        ".": {
-            "types": "./types/index.d.ts",
-            "default": "./metadata/themes.json"
-        },
-        "./metadata": {
-            "types": "./types/index.d.ts",
-            "default": "./metadata/themes.json"
-        },
-        "./metadata/themes.json": "./metadata/themes.json",
-        "./package.json": "./package.json",
-        "./themes/*": "./themes/*"
-    },
-    "types": "./types/index.d.ts",
-    "bin": {
-        "codex-terminal-themes": "dist/bin/codex-terminal-themes.js"
-    },
-    "files": [
-        "dist/",
-        "docs/app.js",
-        "docs/assets/",
-        "docs/favicon.svg",
-        "docs/index.html",
-        "docs/preview.svg",
-        "docs/site-data.json",
-        "docs/styles.css",
-        "metadata/",
-        "themes/",
-        "types/",
-        "CHANGELOG.md",
-        "CONTRIBUTING.md",
-        "LICENSE.txt",
-        "README.md",
-        "SECURITY.md",
-        "stylelint.config.mjs",
-        "SUPPORT.md"
-    ],
-    "scripts": {
-        "build": "npm run clean && npm run build:runtime && npm run build:docs",
-        "build:docs": "tsc --project tsconfig.docs.json",
-        "build:runtime": "tsc --project tsconfig.build.json",
-        "clean": "node -e \"require('node:fs').rmSync('dist', { force: true, recursive: true })\"",
-        "format": "prettier . --write",
-        "format:check": "prettier . --check",
-        "lint": "eslint --cache --cache-strategy content --cache-location .cache/.eslintcache",
-        "lint:gitleaks": "gitleaks dir --config .gitleaks.toml .",
-        "lint:package-json": "npmPkgJsonLint . --config .npmpackagejsonlintrc.json",
-        "lint:yamllint": "yamllint -c .yamllint .",
-        "metadata:check": "npm run build:runtime && node dist/tools/generate-theme-metadata.js --check",
-        "metadata:write": "npm run build:runtime && node dist/tools/generate-theme-metadata.js --write",
-        "pages:build": "npm run build && node dist/tools/build-pages-site.js --write",
-        "pages:check": "npm run build && node dist/tools/build-pages-site.js --check",
-        "pages:serve": "npm run build && node dist/tools/serve-pages-site.js",
-        "pages:test": "npm run typecheck && npm run pages:check",
-        "release:verify": "npm run build && npm run validate:built && npm run typecheck && npm run test && npm run lint && npm run format:check && npm run lint:package-json && npm run lint:yamllint",
-        "test": "vitest run",
-        "typecheck": "tsc --project tsconfig.json --noEmit",
-        "update-actions": "npx actions-up --yes --style sha",
-        "update-deps": "npx ncu -i --install never && npm update --force && npm install --force",
-        "validate": "npm run build && npm run validate:built",
-        "validate:bat": "npm run build:runtime && node dist/tools/validate-themes.js --bat-cache",
-        "validate:built": "node dist/tools/validate-themes.js && node dist/tools/generate-theme-metadata.js --check && node dist/tools/build-pages-site.js --check",
-        "validate:themes": "npm run build:runtime && node dist/tools/validate-themes.js"
-    },
-    "dependencies": {
-        "fast-xml-parser": "^5.8.0",
-        "fast-xml-validator": "^1.1.1"
-    },
-    "devDependencies": {
-        "@types/node": "^25.9.3",
-        "actions-up": "^1.14.2",
-        "eslint-config-nick2bad4u": "^1.2.10",
-        "gitleaks-config-nick2bad4u": "^1.0.2",
-        "npm-package-json-lint": "^10.4.0",
-        "npm-package-json-lint-config-nick2bad4u": "^1.0.2",
-        "prettier": "^3.8.4",
-        "prettier-config-nick2bad4u": "^1.0.16",
-        "typescript": "^6.0.3",
-        "vitest": "^4.1.8",
-        "yamllint-config-nick2bad4u": "^1.0.1"
-    },
-    "packageManager": "npm@11.16.0",
-    "engines": {
-        "node": ">=24"
-    },
-    "publishConfig": {
-        "provenance": true
+  "$schema": "https://www.schemastore.org/package.json",
+  "name": "codex-terminal-themes",
+  "version": "1.0.1",
+  "description": "Source-of-truth TextMate themes for local Codex and bat terminal highlighting.",
+  "keywords": [
+    "bat",
+    "codex",
+    "syntax-highlighting",
+    "textmate",
+    "themes",
+    "tmtheme"
+  ],
+  "homepage": "https://github.com/Nick2bad4u/codex-terminal-themes#readme",
+  "bugs": {
+    "url": "https://github.com/Nick2bad4u/codex-terminal-themes/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nick2bad4u/codex-terminal-themes.git"
+  },
+  "license": "MIT",
+  "author": "Nick2bad4u <20943337+Nick2bad4u@users.noreply.github.com> (https://github.com/Nick2bad4u)",
+  "contributors": [
+    {
+      "name": "Nick2bad4u",
+      "email": "20943337+Nick2bad4u@users.noreply.github.com",
+      "url": "https://github.com/Nick2bad4u"
     }
+  ],
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "default": "./metadata/themes.json"
+    },
+    "./metadata": {
+      "types": "./types/index.d.ts",
+      "default": "./metadata/themes.json"
+    },
+    "./metadata/themes.json": "./metadata/themes.json",
+    "./package.json": "./package.json",
+    "./themes/*": "./themes/*"
+  },
+  "types": "./types/index.d.ts",
+  "bin": {
+    "codex-terminal-themes": "dist/bin/codex-terminal-themes.js"
+  },
+  "files": [
+    "dist/",
+    "docs/app.js",
+    "docs/assets/",
+    "docs/favicon.svg",
+    "docs/index.html",
+    "docs/preview.svg",
+    "docs/site-data.json",
+    "docs/styles.css",
+    "metadata/",
+    "themes/",
+    "types/",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "LICENSE.txt",
+    "README.md",
+    "SECURITY.md",
+    "stylelint.config.mjs",
+    "SUPPORT.md"
+  ],
+  "scripts": {
+    "build": "npm run clean && npm run build:runtime && npm run build:docs",
+    "build:docs": "tsc --project tsconfig.docs.json",
+    "build:runtime": "tsc --project tsconfig.build.json",
+    "clean": "node -e \"require('node:fs').rmSync('dist', { force: true, recursive: true })\"",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "lint": "eslint --cache --cache-strategy content --cache-location .cache/.eslintcache",
+    "lint:gitleaks": "gitleaks dir --config .gitleaks.toml .",
+    "lint:package-json": "npmPkgJsonLint . --config .npmpackagejsonlintrc.json",
+    "lint:yamllint": "yamllint -c .yamllint .",
+    "metadata:check": "npm run build:runtime && node dist/tools/generate-theme-metadata.js --check",
+    "metadata:write": "npm run build:runtime && node dist/tools/generate-theme-metadata.js --write",
+    "pages:build": "npm run build && node dist/tools/build-pages-site.js --write",
+    "pages:check": "npm run build && node dist/tools/build-pages-site.js --check",
+    "pages:serve": "npm run build && node dist/tools/serve-pages-site.js",
+    "pages:test": "npm run typecheck && npm run pages:check",
+    "release:verify": "npm run build && npm run validate:built && npm run typecheck && npm run test && npm run lint && npm run format:check && npm run lint:package-json && npm run lint:yamllint",
+    "test": "vitest run",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "update-actions": "npx actions-up --yes --style sha",
+    "update-deps": "npx ncu -i --install never && npm update --force && npm install --force",
+    "validate": "npm run build && npm run validate:built",
+    "validate:bat": "npm run build:runtime && node dist/tools/validate-themes.js --bat-cache",
+    "validate:built": "node dist/tools/validate-themes.js && node dist/tools/generate-theme-metadata.js --check && node dist/tools/build-pages-site.js --check",
+    "validate:themes": "npm run build:runtime && node dist/tools/validate-themes.js",
+    "lint:remark": "remark . --frail --ignore-path .remarkignore",
+    "lint:remark:fix": "remark . --ignore-path .remarkignore --output"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^5.8.0",
+    "fast-xml-validator": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.3",
+    "actions-up": "^1.14.2",
+    "eslint-config-nick2bad4u": "^1.2.10",
+    "gitleaks-config-nick2bad4u": "^1.0.2",
+    "npm-package-json-lint": "^10.4.0",
+    "npm-package-json-lint-config-nick2bad4u": "^1.0.2",
+    "prettier": "^3.8.4",
+    "prettier-config-nick2bad4u": "^1.0.16",
+    "remark": "^15.0.1",
+    "remark-cli": "^12.0.1",
+    "remark-config-nick2bad4u": "^1.0.5",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.8",
+    "yamllint-config-nick2bad4u": "^1.0.1"
+  },
+  "packageManager": "npm@11.16.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "publishConfig": {
+    "provenance": true
+  }
 }
