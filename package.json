@@ -87,6 +87,7 @@
         "release:verify": "npm run build && npm run validate:built && npm run typecheck && npm run test && npm run lint && npm run format:check && npm run lint:package-json && npm run lint:yamllint",
         "test": "vitest run",
         "typecheck": "tsc --project tsconfig.json --noEmit",
+        "update-actions": "npx actions-up --yes --style sha",
         "update-deps": "npx ncu -i --install never && npm update --force && npm install --force",
         "validate": "npm run build && npm run validate:built",
         "validate:bat": "npm run build:runtime && node dist/tools/validate-themes.js --bat-cache",
@@ -98,8 +99,9 @@
         "fast-xml-validator": "^1.1.1"
     },
     "devDependencies": {
-        "@types/node": "^25.9.2",
-        "eslint-config-nick2bad4u": "^1.2.9",
+        "@types/node": "^25.9.3",
+        "actions-up": "^1.14.2",
+        "eslint-config-nick2bad4u": "^1.2.10",
         "gitleaks-config-nick2bad4u": "^1.0.2",
         "npm-package-json-lint": "^10.4.0",
         "npm-package-json-lint-config-nick2bad4u": "^1.0.2",
