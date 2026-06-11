@@ -1,7 +1,7 @@
 {
     "$schema": "https://www.schemastore.org/package.json",
     "name": "codex-terminal-themes",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Source-of-truth TextMate themes for local Codex and bat terminal highlighting.",
     "keywords": [
         "bat",
