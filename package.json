@@ -39,6 +39,7 @@
             "types": "./types/index.d.ts",
             "default": "./metadata/themes.json"
         },
+        "./glow/styles/*": "./glow/styles/*",
         "./metadata/themes.json": "./metadata/themes.json",
         "./package.json": "./package.json",
         "./themes/*": "./themes/*"
@@ -54,6 +55,7 @@
         "docs/index.html",
         "docs/preview.svg",
         "docs/styles.css",
+        "glow/",
         "metadata/",
         "themes/",
         "types/",

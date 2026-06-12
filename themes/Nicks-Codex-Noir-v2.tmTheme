@@ -3,18 +3,18 @@
 <plist version="1.0">
 <dict>
 	<key>name</key>
-	<string>Nicks-Codex-Noir</string>
+	<string>Nicks-Codex-Noir-v2</string>
 	<key>uuid</key>
-	<string>2376DE06-243A-4005-983E-408BBD7114FC</string>
+	<string>8AF73F07-297A-4AB5-84DC-18268A3504EC</string>
 	<key>author</key>
-	<string>Nick's personal theme - modeled after VSCode's Shiny Black AMOLED but customized for personal preference</string>
+	<string>Nick's personal theme - Codex Noir v2 readability test for config, docs, scripts, and JS/TS files</string>
 	<key>legacyName</key>
-	<string>AMOLED Dark Shiny - Codex Varied v6</string>
+	<string>Nicks-Codex-Noir</string>
 	<key>legacyFileName</key>
-	<string>converted-vscode-AmoledShinyBlack6.tmTheme</string>
+	<string>Nicks-Codex-Noir.tmTheme</string>
 
 	<key>semanticClass</key>
-	<string>theme.dark.nicks-codex-noir</string>
+	<string>theme.dark.nicks-codex-noir-v2</string>
 
 	<key>colorSpace</key>
 	<string>sRGB</string>
@@ -2090,31 +2090,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>windows-paths-inside-strings</string>
+			<string>codex-v2-json-keys</string>
 			<key>scope</key>
-			<string>string.quoted constant.character.escape, string.quoted constant.character.escaped, string.quoted invalid.illegal.unrecognized-string-escape, string.quoted invalid.illegal.bad-escape, string.template constant.character.escape, string.template constant.character.escaped, string.template invalid.illegal.unrecognized-string-escape, string.template invalid.illegal.bad-escape, string.unquoted constant.character.escape, string.unquoted constant.character.escaped, string.unquoted invalid.illegal.unrecognized-string-escape, string.unquoted invalid.illegal.bad-escape, string punctuation.separator.path, string punctuation.separator.directory, string punctuation.separator.file-path, string punctuation.separator.folder</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#00D86A</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>codex-noir-common-json-string-values</string>
-			<key>scope</key>
-			<string>source.json meta.structure.dictionary.value.json string.quoted.double.json, source.json meta.structure.array.json string.quoted.double.json</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#00D86A</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>codex-noir-common-json-keys</string>
-			<key>scope</key>
-			<string>support.type.property-name.json, meta.structure.dictionary.json string.quoted.double, meta.mapping.key string, meta.mapping.key.json, source.json support.type.property-name.json, source.json meta.structure.dictionary.json string.quoted.double.json, source.json meta.structure.dictionary.key.json string.quoted.double.json, punctuation.support.type.property-name.begin.json, punctuation.support.type.property-name.end.json, source.json punctuation.support.type.property-name.begin.json, source.json punctuation.support.type.property-name.end.json</string>
+			<string>source.json support.type.property-name.json, source.json meta.structure.dictionary.json string.quoted.double.json, source.json meta.mapping.key.json, source.json meta.structure.dictionary.key.json string.quoted.double.json, source.json meta.structure.dictionary.key.json punctuation.definition.string.begin.json, source.json meta.structure.dictionary.key.json punctuation.definition.string.end.json, source.json punctuation.support.type.property-name.begin.json, source.json punctuation.support.type.property-name.end.json</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -2125,7 +2103,18 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>codex-noir-common-json-primitives</string>
+			<string>codex-v2-json-string-values</string>
+			<key>scope</key>
+			<string>source.json meta.structure.dictionary.value.json string.quoted.double.json, source.json meta.structure.array.json string.quoted.double.json</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#7EE0B2</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>codex-v2-json-primitives</string>
 			<key>scope</key>
 			<string>source.json constant.language.json, source.json constant.numeric.json, source.json constant.language.boolean.json, source.json constant.language.null.json, source.json meta.structure.dictionary.value.json constant, source.json meta.structure.array.json constant</string>
 			<key>settings</key>
@@ -2138,68 +2127,151 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>codex-noir-common-json-punctuation</string>
+			<string>codex-v2-json-punctuation</string>
 			<key>scope</key>
 			<string>source.json punctuation.separator.dictionary.key-value.json, source.json punctuation.separator.dictionary.pair.json, source.json punctuation.separator.array.json, source.json punctuation.definition.dictionary.begin.json, source.json punctuation.definition.dictionary.end.json, source.json punctuation.definition.array.begin.json, source.json punctuation.definition.array.end.json</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#716BC4</string>
+				<string>#7A7AA6</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>codex-noir-common-markdown-structure</string>
+			<string>codex-v2-markdown-headings</string>
 			<key>scope</key>
-			<string>text.html.markdown markup.heading.markdown, text.html.markdown entity.name.section.markdown, text.html.markdown punctuation.definition.heading.markdown, text.html.markdown markup.underline.link.markdown, text.html.markdown constant.other.reference.link.markdown, text.html.markdown markup.raw.inline.markdown, text.html.markdown markup.fenced_code.block.markdown, text.html.markdown markup.table.markdown, text.html.markdown punctuation.definition.table.markdown, text.html.markdown markup.quote.markdown</string>
+			<string>text.html.markdown markup.heading.markdown, text.html.markdown entity.name.section.markdown, text.html.markdown punctuation.definition.heading.markdown, text.html.markdown markup.heading.setext</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
 				<string>#00E7FF</string>
+				<key>fontStyle</key>
+				<string>bold</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>codex-noir-common-config-keys-and-values</string>
+			<string>codex-v2-markdown-links-and-references</string>
 			<key>scope</key>
-			<string>source.toml entity.name.section.toml, source.toml keyword.key.toml, source.toml support.type.property-name.toml, support.type.property-name.yaml, entity.name.tag.yaml, source.yaml support.type.property-name.yaml, source.yaml entity.name.tag.yaml, string.unquoted.yaml, string.quoted.yaml, source.properties support.type.property-name, source.properties keyword.other.definition, source.java-props support.type.property-name, source.ini keyword.other.definition.ini, source.ini entity.name.section.group-title.ini, source.env variable.other.env, source.env support.type.property-name.env, source.git-config entity.name.section.git-config, source.git-config variable.other.git-config</string>
+			<string>text.html.markdown markup.underline.link.markdown, text.html.markdown string.other.link.title.markdown, text.html.markdown constant.other.reference.link.markdown, text.html.markdown meta.link.inline.markdown, text.html.markdown meta.link.reference.markdown</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#00D86A</string>
+				<key>fontStyle</key>
+				<string>underline</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>codex-v2-markdown-code-tables-and-callouts</string>
+			<key>scope</key>
+			<string>text.html.markdown markup.raw.inline.markdown, text.html.markdown markup.raw.block.markdown, text.html.markdown markup.fenced_code.block.markdown, text.html.markdown punctuation.definition.raw.markdown, text.html.markdown markup.table.markdown, text.html.markdown punctuation.definition.table.markdown, text.html.markdown markup.quote.markdown, text.html.markdown support.type.property-name.markdown</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#FFB000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>codex-v2-markdown-emphasis-tasklist-and-frontmatter</string>
+			<key>scope</key>
+			<string>text.html.markdown markup.bold.markdown, text.html.markdown markup.italic.markdown, text.html.markdown markup.strikethrough.markdown, text.html.markdown markup.list.unnumbered.markdown, text.html.markdown markup.list.numbered.markdown, text.html.markdown markup.frontmatter.markdown, text.html.markdown markup.raw.yaml.frontmatter.markdown, text.html.markdown punctuation.definition.list.begin.markdown</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#C154FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>codex-v2-toml-tables-and-keys</string>
+			<key>scope</key>
+			<string>source.toml entity.name.section.toml, source.toml meta.table.toml, source.toml keyword.key.toml, source.toml support.type.property-name.toml, source.toml punctuation.definition.table.toml, source.toml punctuation.separator.key-value.toml</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#FFB000</string>
+				<key>fontStyle</key>
+				<string>bold</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>codex-v2-toml-values</string>
+			<key>scope</key>
+			<string>source.toml string.quoted.toml, source.toml constant.language.boolean.toml, source.toml constant.numeric.toml, source.toml constant.other.time.datetime.toml, source.toml constant.other.time.date.toml, source.toml constant.other.time.time.toml</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#00D86A</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>codex-v2-powershell-cmdlets-pipeline-and-parameters</string>
+			<key>scope</key>
+			<string>source.powershell support.function.command.powershell, source.powershell support.function.powershell, source.powershell entity.name.function.powershell, source.powershell support.function.verb.powershell, source.powerShell support.function.command.powerShell, source.powershell variable.parameter.powershell, source.powershell punctuation.definition.parameter.powershell, source.powershell keyword.operator.pipe.powershell, source.powershell punctuation.separator.pipe.powershell</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#00E7FF</string>
+				<key>fontStyle</key>
+				<string>bold</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>codex-v2-powershell-variables-hashtables-and-splatting</string>
+			<key>scope</key>
+			<string>source.powershell variable.other.readwrite.powershell, source.powershell variable.other.member.powershell, source.powershell variable.language.powershell, source.powershell support.variable.drive.powershell, source.powershell punctuation.definition.variable.powershell, source.powershell meta.hashtable.powershell, source.powershell punctuation.definition.hashtable.begin.powershell, source.powershell punctuation.definition.hashtable.end.powershell, source.powershell variable.other.splatting.powershell</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#FF2D95</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>codex-v2-powershell-types-strings-and-operators</string>
+			<key>scope</key>
+			<string>source.powershell support.type.powershell, source.powershell entity.name.type.powershell, source.powershell storage.type.powershell, source.powershell meta.type.powershell, source.powershell support.type.attribute.powershell, source.powershell string.quoted.single.powershell, source.powershell string.quoted.double.powershell, source.powershell string.quoted.here.powershell, source.powershell keyword.operator.comparison.powershell, source.powershell keyword.operator.logical.powershell</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
 				<string>#D7FF00</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>codex-v2-mjs-imports-exports-and-module-paths</string>
+			<key>scope</key>
+			<string>keyword.control.import.js, keyword.control.export.js, keyword.control.from.js, keyword.control.import-export.js, keyword.control.module.js, meta.import.js keyword.control, meta.export.js keyword.control, source.js keyword.control.import.js, source.js keyword.control.export.js, source.js keyword.control.from.js, source.js keyword.control.import-export.js, source.js keyword.control.module.js, source.js meta.import.js, source.js meta.export.js, source.js meta.import string.quoted.js, source.js meta.export string.quoted.js, source.js support.type.object.module.js, source.js variable.other.constant.js, source.js meta.require.js string.quoted.js</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#FFB000</string>
 				<key>fontStyle</key>
 				<string>bold</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>codex-noir-common-powershell</string>
+			<string>codex-v2-javascript-functions-objects-and-templates</string>
 			<key>scope</key>
-			<string>source.powershell support.function.command.powershell, source.powershell support.function.powershell, source.powershell entity.name.function.powershell, source.powershell variable.parameter.powershell, source.powershell punctuation.definition.parameter.powershell, source.powershell keyword.operator.pipe.powershell, source.powershell variable.other.readwrite.powershell, source.powershell variable.language.powershell, source.powershell support.type.powershell, source.powershell entity.name.type.powershell, source.powerShell support.function.command.powerShell, source.powerShell variable.parameter.powerShell</string>
+			<string>source.js entity.name.function.js, source.js meta.function-call.js, source.js support.function.js, source.js variable.function.js, source.js meta.object-literal.key.js, source.js variable.other.property.js, source.js meta.property.object.js, source.js string.template.js, source.js punctuation.definition.template-expression.js, source.js meta.template.expression.js</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
 				<string>#00D6D6</string>
-				<key>fontStyle</key>
-				<string>bold</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>codex-noir-common-javascript-typescript</string>
+			<string>codex-v2-javascript-object-keys-and-config-names</string>
 			<key>scope</key>
-			<string>keyword.control.import.js, keyword.control.export.js, keyword.control.from.js, keyword.control.import-export.js, keyword.control.module.js, meta.import.js keyword.control, meta.export.js keyword.control, source.js keyword.control.import.js, source.js keyword.control.export.js, source.js keyword.control.from.js, source.js keyword.control.import-export.js, source.js keyword.control.module.js, source.js meta.import string.quoted.js, source.js meta.export string.quoted.js, source.js entity.name.function.js, source.js variable.other.property.js, keyword.control.import.ts, keyword.control.export.ts, source.ts keyword.control.import.ts, source.ts keyword.control.export.ts, source.ts entity.name.type.ts, source.ts entity.name.type.interface.ts, source.ts support.type.primitive.ts, source.ts meta.type.annotation.ts, source.ts entity.name.function.ts, source.ts variable.parameter.ts, source.ts variable.other.property.ts</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key>
-				<string>#FFC400</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>codex-noir-common-javascript-typescript-object-keys</string>
-			<key>scope</key>
-			<string>meta.mapping.key.js, meta.mapping.key.ts, meta.mapping.key string, meta.mapping.key string.quoted.double, meta.mapping.key string.quoted.double.js, meta.mapping.key string.quoted.double.ts, meta.mapping.key.js string.quoted.double.js, meta.mapping.key.ts string.quoted.double.ts, meta.mapping.key string.unquoted, meta.mapping.key string.unquoted.js, meta.mapping.key string.unquoted.ts, meta.mapping.key.js string.unquoted.js, meta.mapping.key.ts string.unquoted.ts, string.unquoted.label.js, string.unquoted.label.ts, meta.object-literal.key.js, meta.object-literal.key.ts, meta.object-literal.key string, meta.object-literal.key string.quoted.double, meta.object-literal.key string.quoted.double.js, meta.object-literal.key string.quoted.double.ts, meta.object-literal.key.js string.quoted.double.js, meta.object-literal.key.ts string.quoted.double.ts, meta.object-literal.key string.unquoted, meta.object-literal.key string.unquoted.js, meta.object-literal.key string.unquoted.ts, meta.object-literal.key.js string.unquoted.js, meta.object-literal.key.ts string.unquoted.ts, meta.object-literal.key variable.other.property.js, meta.object-literal.key variable.other.property.ts, meta.object-literal.key.js variable.other.property.js, meta.object-literal.key.ts variable.other.property.ts, meta.object-literal.key variable.other.readwrite.js, meta.object-literal.key variable.other.readwrite.ts, source.js meta.mapping.key.js, source.ts meta.mapping.key.ts, source.js meta.object-literal.key.js, source.ts meta.object-literal.key.ts, source.js support.type.property-name.js, source.ts support.type.property-name.ts</string>
+			<string>meta.mapping.key.js, meta.mapping.key string, meta.mapping.key string.quoted.double, meta.mapping.key string.quoted.double.js, meta.mapping.key.js string.quoted.double.js, meta.mapping.key string.unquoted, meta.mapping.key string.unquoted.js, meta.mapping.key.js string.unquoted.js, string.unquoted.label.js, meta.object-literal.key.js, meta.object-literal.key string, meta.object-literal.key string.quoted.double, meta.object-literal.key string.quoted.double.js, meta.object-literal.key.js string.quoted.double.js, meta.object-literal.key string.unquoted, meta.object-literal.key string.unquoted.js, meta.object-literal.key.js string.unquoted.js, meta.object-literal.key variable.other.property.js, meta.object-literal.key.js variable.other.property.js, meta.object-literal.key variable.other.readwrite.js, meta.object-literal.key.js variable.other.readwrite.js, source.js meta.mapping.key.js, source.js meta.object-literal.key.js, source.js meta.object-literal.key.js string.quoted.double.js, source.js support.type.property-name.js, source.js variable.other.property.js meta.object-literal.key.js</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -2210,7 +2282,88 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>codex-noir-common-windows-paths-inside-strings</string>
+			<string>codex-v2-properties-keys-separators-and-values</string>
+			<key>scope</key>
+			<string>source.properties support.type.property-name, source.properties meta.key-pair, source.properties keyword.other.definition, source.properties punctuation.separator.key-value, source.java-props support.type.property-name, source.java-props keyword.other.definition, source.ini keyword.other.definition.ini, source.ini entity.name.section.group-title.ini, source.ini punctuation.separator.key-value.ini</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#00A6FF</string>
+				<key>fontStyle</key>
+				<string>bold</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>codex-v2-properties-values-escapes-and-interpolation</string>
+			<key>scope</key>
+			<string>source.properties string.unquoted, source.properties string.quoted, source.properties constant.character.escape, source.properties variable.other, source.java-props string.unquoted, source.java-props string.quoted, source.java-props constant.character.escape, source.ini string.unquoted.ini, source.ini string.quoted.ini, source.ini variable.other.property.ini</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#00D86A</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>codex-v2-typescript-types-generics-and-decorators</string>
+			<key>scope</key>
+			<string>source.ts entity.name.type.ts, source.ts entity.name.type.interface.ts, source.ts entity.name.type.alias.ts, source.ts support.type.primitive.ts, source.ts meta.type.parameters.ts, source.ts meta.type.annotation.ts, source.ts storage.type.interface.ts, source.ts storage.type.type.ts, source.ts storage.modifier.readonly.ts, source.ts meta.decorator.ts, source.ts punctuation.decorator.ts, source.ts entity.name.function.decorator.ts</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#9348FF</string>
+				<key>fontStyle</key>
+				<string>bold</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>codex-v2-typescript-functions-params-and-members</string>
+			<key>scope</key>
+			<string>source.ts entity.name.function.ts, source.ts meta.function-call.ts, source.ts meta.method-call.ts, source.ts support.function.ts, source.ts variable.parameter.ts, source.ts meta.function.parameters.ts, source.ts meta.object-literal.key.ts, source.ts variable.other.property.ts, source.ts meta.property.object.ts, source.ts meta.object-binding-pattern-variable.ts</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#00D6D6</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>codex-v2-typescript-imports-exports-and-control</string>
+			<key>scope</key>
+			<string>source.ts keyword.control.import.ts, source.ts keyword.control.export.ts, source.ts meta.import.ts, source.ts meta.export.ts, source.ts meta.import string.quoted.ts, source.ts meta.export string.quoted.ts, source.ts keyword.control.flow.ts, source.ts keyword.control.conditional.ts, source.ts keyword.control.loop.ts, source.ts storage.modifier.async.ts</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#FFC400</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>codex-v2-yaml-github-actions-and-workflows</string>
+			<key>scope</key>
+			<string>support.type.property-name.yaml, entity.name.tag.yaml, string.unquoted.yaml, string.quoted.yaml, source.yaml support.type.property-name.yaml, source.yaml entity.name.tag.yaml, source.yaml variable.other.alias.yaml, source.yaml entity.name.type.anchor.yaml, source.yaml support.type.property-name.github-actions, source.yaml string.unquoted.github-actions, source.yaml support.function.github-actions-expression, source.yaml variable.other.github-actions-expression, source.yaml keyword.operator.github-actions-expression</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#00A6FF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>codex-v2-env-docker-git-and-package-config</string>
+			<key>scope</key>
+			<string>source.env variable.other.env, source.env support.type.property-name.env, source.env string.unquoted.env, source.dockerfile keyword.other.special-method.dockerfile, source.dockerfile keyword.other.from.dockerfile, source.dockerfile variable.other.dockerfile, source.git-config entity.name.section.git-config, source.git-config variable.other.git-config, source.json string.quoted.double.package-json, source.json support.type.property-name.package-json, source.json entity.name.package-json</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#D7FF00</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>windows-paths-inside-strings</string>
 			<key>scope</key>
 			<string>string.quoted constant.character.escape, string.quoted constant.character.escaped, string.quoted invalid.illegal.unrecognized-string-escape, string.quoted invalid.illegal.bad-escape, string.template constant.character.escape, string.template constant.character.escaped, string.template invalid.illegal.unrecognized-string-escape, string.template invalid.illegal.bad-escape, string.unquoted constant.character.escape, string.unquoted constant.character.escaped, string.unquoted invalid.illegal.unrecognized-string-escape, string.unquoted invalid.illegal.bad-escape, string punctuation.separator.path, string punctuation.separator.directory, string punctuation.separator.file-path, string punctuation.separator.folder</string>
 			<key>settings</key>
@@ -2222,3 +2375,4 @@
 	</array>
 </dict>
 </plist>
+

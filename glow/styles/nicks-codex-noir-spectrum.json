@@ -1,0 +1,226 @@
+{
+    "_codex_terminal_themes": {
+        "generated_by": "codex-terminal-themes glow style translation",
+        "note": "Glow/Glamour styles map markdown and Chroma token groups, not TextMate scopes one-to-one.",
+        "source_name": "Nicks-Codex-Noir-Spectrum",
+        "source_theme": "Nicks-Codex-Noir-Spectrum.tmTheme"
+    },
+    "block_quote": {
+        "background_color": "#000000",
+        "color": "#7A7AA6",
+        "indent": 1,
+        "indent_token": "│ ",
+        "italic": true
+    },
+    "code": {
+        "background_color": "#08080D",
+        "color": "#00D86A",
+        "prefix": " ",
+        "suffix": " "
+    },
+    "code_block": {
+        "chroma": {
+            "background": {
+                "background_color": "#000000"
+            },
+            "comment": {
+                "color": "#FFC400",
+                "italic": true
+            },
+            "comment_preproc": {
+                "color": "#D900FF"
+            },
+            "error": {
+                "color": "#FF5C8A"
+            },
+            "generic_deleted": {
+                "color": "#FF003D"
+            },
+            "generic_emph": {
+                "italic": true
+            },
+            "generic_inserted": {
+                "color": "#00D86A"
+            },
+            "generic_strong": {
+                "bold": true
+            },
+            "generic_subheading": {
+                "color": "#FFC400"
+            },
+            "keyword": {
+                "bold": true,
+                "color": "#FFC400"
+            },
+            "keyword_namespace": {
+                "color": "#FFB000"
+            },
+            "keyword_reserved": {
+                "bold": true,
+                "color": "#FF2D95"
+            },
+            "keyword_type": {
+                "bold": true,
+                "color": "#FFC400"
+            },
+            "literal": {
+                "color": "#00D86A"
+            },
+            "literal_date": {
+                "color": "#FFB000"
+            },
+            "literal_number": {
+                "color": "#FFB000"
+            },
+            "literal_string": {
+                "color": "#00D86A"
+            },
+            "literal_string_escape": {
+                "color": "#00D86A"
+            },
+            "name": {
+                "color": "#E6E6EA"
+            },
+            "name_attribute": {
+                "bold": true,
+                "color": "#00A6FF"
+            },
+            "name_builtin": {
+                "color": "#FF2D95"
+            },
+            "name_class": {
+                "bold": true,
+                "color": "#FFC400"
+            },
+            "name_constant": {
+                "color": "#FF2D95"
+            },
+            "name_decorator": {
+                "color": "#D900FF"
+            },
+            "name_exception": {
+                "color": "#00D86A"
+            },
+            "name_function": {
+                "color": "#FFC400"
+            },
+            "name_other": {
+                "color": "#E6E6EA"
+            },
+            "name_tag": {
+                "color": "#D7FF00"
+            },
+            "operator": {
+                "color": "#00D6D6"
+            },
+            "punctuation": {
+                "color": "#716BC4"
+            },
+            "text": {
+                "color": "#E6E6EA"
+            }
+        },
+        "color": "#E6E6EA",
+        "margin": 2
+    },
+    "definition_description": {
+        "block_prefix": "\n "
+    },
+    "definition_list": {},
+    "definition_term": {
+        "bold": true,
+        "color": "#00A6FF"
+    },
+    "document": {
+        "background_color": "#000000",
+        "block_prefix": "\n",
+        "block_suffix": "\n",
+        "color": "#E6E6EA",
+        "margin": 2
+    },
+    "emph": {
+        "color": "#FFC400",
+        "italic": true
+    },
+    "enumeration": {
+        "block_prefix": ". ",
+        "color": "#00D6D6"
+    },
+    "h1": {
+        "bold": true,
+        "color": "#FFC400",
+        "prefix": "# "
+    },
+    "h2": {
+        "bold": true,
+        "color": "#00D6D6",
+        "prefix": "## "
+    },
+    "h3": {
+        "bold": true,
+        "color": "#FFC400",
+        "prefix": "### "
+    },
+    "h4": {
+        "prefix": "#### "
+    },
+    "h5": {
+        "prefix": "##### "
+    },
+    "h6": {
+        "color": "#4B448A",
+        "prefix": "###### "
+    },
+    "heading": {
+        "block_suffix": "\n",
+        "bold": true,
+        "color": "#FFC400"
+    },
+    "hr": {
+        "color": "#716BC4",
+        "format": "\n--------\n"
+    },
+    "html_block": {},
+    "html_span": {},
+    "image": {
+        "color": "#FF2D95",
+        "underline": true
+    },
+    "image_text": {
+        "color": "#FF2D95",
+        "format": "Image: {{.text}} →"
+    },
+    "item": {
+        "block_prefix": "• ",
+        "color": "#E6E6EA"
+    },
+    "link": {
+        "color": "#00D6D6",
+        "underline": true
+    },
+    "link_text": {
+        "bold": true,
+        "color": "#00A6FF"
+    },
+    "list": {
+        "color": "#E6E6EA",
+        "level_indent": 2
+    },
+    "paragraph": {},
+    "strikethrough": {
+        "crossed_out": true
+    },
+    "strong": {
+        "bold": true,
+        "color": "#FFC400"
+    },
+    "table": {
+        "color": "#E6E6EA",
+        "margin": 1
+    },
+    "task": {
+        "ticked": "[✓] ",
+        "unticked": "[ ] "
+    },
+    "text": {}
+}

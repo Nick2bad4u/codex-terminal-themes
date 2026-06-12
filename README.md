@@ -10,7 +10,8 @@ Browse the theme gallery:
 
 ## What You Get
 
-- 203 TextMate themes in `themes/`.
+- 204 TextMate themes in `themes/`.
+- Glow/Glamour JSON styles for the custom Codex Noir variants in `glow/styles/`.
 - A searchable online gallery with syntax previews, theme metadata, hue filtering, and color matching.
 - A generated metadata manifest at `metadata/themes.json` for scripts and theme pickers.
 - A dependency-light npm CLI for listing, previewing, installing, and diagnosing themes.
@@ -25,6 +26,12 @@ themes/Nicks-Codex-Noir.tmTheme
 ```
 
 It is the most customized AMOLED variant in this repo and has the broadest scope coverage for terminal-heavy workflows.
+
+Use the v2 variant when testing the newer JSON, Markdown, TOML, PowerShell, JavaScript, TypeScript, and config-file readability overrides:
+
+```text
+themes/Nicks-Codex-Noir-v2.tmTheme
+```
 
 ## Install With npm
 
@@ -114,6 +121,36 @@ To make a Bat theme permanent, put the theme name in Bat's config file:
 ```text
 --theme="Nicks-Codex-Noir"
 ```
+
+## Use With Glow
+
+Glow uses Glamour JSON styles, not TextMate `.tmTheme` files. The translated custom Noir styles live in:
+
+```text
+glow/styles/
+```
+
+Use the v2 style once:
+
+```powershell
+glow --style ".\glow\styles\nicks-codex-noir-v2.json" README.md
+```
+
+Install the generated styles into Glow's local config directory:
+
+```powershell
+$glowStyles = "$env:LOCALAPPDATA\glow\Config\styles"
+New-Item -ItemType Directory -Force -Path $glowStyles
+Copy-Item ".\glow\styles\*.json" $glowStyles -Force
+```
+
+Then point `style` in `$env:LOCALAPPDATA\glow\Config\glow.yml` at the JSON file you want:
+
+```yaml
+style: "C:/Users/Nick/AppData/Local/glow/Config/styles/nicks-codex-noir-v2.json"
+```
+
+These styles map the TextMate palette into Markdown element styles and Chroma token classes, so syntax colors are intentionally close but not a one-to-one scope conversion.
 
 ## Sync Everything Locally
 
