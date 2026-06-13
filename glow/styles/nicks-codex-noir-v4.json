@@ -1,0 +1,285 @@
+{
+    "$schema": "https://www.schemastore.org/glamour-style.json",
+    "_theme_meta": {
+        "inspired_by": "Nicks-Codex-Noir-v2",
+        "mood": [
+            "neon",
+            "cyberpunk",
+            "high-contrast",
+            "arcade",
+            "glow-heavy"
+        ],
+        "name": "Nick's Codex HyperNoir Prism",
+        "variant": "crazy-colorful"
+    },
+    "block_quote": {
+        "background_color": "#140A1F",
+        "bold": true,
+        "color": "#C792FF",
+        "indent": 1,
+        "indent_token": "┃ ",
+        "italic": true
+    },
+    "code": {
+        "background_color": "#0D0A16",
+        "bold": true,
+        "color": "#00FF9F",
+        "prefix": "  ",
+        "suffix": "  "
+    },
+    "code_block": {
+        "background_color": "#05030A",
+        "chroma": {
+            "background": {
+                "background_color": "#05030A"
+            },
+            "comment": {
+                "color": "#A6FF00",
+                "italic": true
+            },
+            "comment_preproc": {
+                "bold": true,
+                "color": "#FF6BFF"
+            },
+            "error": {
+                "bold": true,
+                "color": "#FF3355"
+            },
+            "generic_deleted": {
+                "bold": true,
+                "color": "#FF1744"
+            },
+            "generic_emph": {
+                "italic": true
+            },
+            "generic_inserted": {
+                "bold": true,
+                "color": "#00FF87"
+            },
+            "generic_strong": {
+                "bold": true
+            },
+            "generic_subheading": {
+                "bold": true,
+                "color": "#00D5FF"
+            },
+            "keyword": {
+                "bold": true,
+                "color": "#FCEE0C"
+            },
+            "keyword_namespace": {
+                "bold": true,
+                "color": "#FFB703"
+            },
+            "keyword_reserved": {
+                "bold": true,
+                "color": "#FF2D95"
+            },
+            "keyword_type": {
+                "bold": true,
+                "color": "#38BDF8"
+            },
+            "literal": {
+                "color": "#72F1B8"
+            },
+            "literal_date": {
+                "bold": true,
+                "color": "#00FFA6"
+            },
+            "literal_number": {
+                "bold": true,
+                "color": "#00FFA6"
+            },
+            "literal_string": {
+                "color": "#8BFFB0"
+            },
+            "literal_string_escape": {
+                "bold": true,
+                "color": "#00E5FF"
+            },
+            "name": {
+                "color": "#F5F7FF"
+            },
+            "name_attribute": {
+                "bold": true,
+                "color": "#FCEE0C"
+            },
+            "name_builtin": {
+                "bold": true,
+                "color": "#FF5C8A"
+            },
+            "name_class": {
+                "bold": true,
+                "color": "#00C2FF"
+            },
+            "name_constant": {
+                "bold": true,
+                "color": "#FF4FD8"
+            },
+            "name_decorator": {
+                "color": "#B388FF",
+                "italic": true
+            },
+            "name_exception": {
+                "bold": true,
+                "color": "#00FFB3"
+            },
+            "name_function": {
+                "bold": true,
+                "color": "#00A6FF"
+            },
+            "name_other": {
+                "color": "#E6E6EA"
+            },
+            "name_tag": {
+                "bold": true,
+                "color": "#00E5FF"
+            },
+            "operator": {
+                "bold": true,
+                "color": "#FF9F1C"
+            },
+            "punctuation": {
+                "color": "#9D7CFF"
+            },
+            "text": {
+                "color": "#F3F4F6"
+            }
+        },
+        "color": "#F8F8F2",
+        "margin": 2,
+        "padding_note": "unsupported by schema, intentionally omitted"
+    },
+    "definition_description": {
+        "block_prefix": "\n  ↳ ",
+        "color": "#7DF9FF"
+    },
+    "definition_list": {
+        "margin": 1
+    },
+    "definition_term": {
+        "bold": true,
+        "color": "#FFD60A",
+        "prefix": "◆ "
+    },
+    "document": {
+        "background_color": "#000000",
+        "block_prefix": "\n",
+        "block_suffix": "\n",
+        "color": "#F5F5F5",
+        "margin": 2
+    },
+    "emph": {
+        "bold": true,
+        "color": "#FF9E00",
+        "italic": true
+    },
+    "enumeration": {
+        "block_prefix": ". ",
+        "bold": true,
+        "color": "#00F5D4"
+    },
+    "h1": {
+        "background_color": "#1A102A",
+        "bold": true,
+        "color": "#FFB703",
+        "prefix": " █▓▒░ ",
+        "suffix": " ░▒▓█ "
+    },
+    "h2": {
+        "background_color": "#0D1320",
+        "bold": true,
+        "color": "#00E5FF",
+        "prefix": " ▶ ",
+        "suffix": " ◀ "
+    },
+    "h3": {
+        "bold": true,
+        "color": "#7C4DFF",
+        "prefix": " ✦ "
+    },
+    "h4": {
+        "bold": true,
+        "color": "#FF4FD8",
+        "prefix": " • "
+    },
+    "h5": {
+        "color": "#72F1B8",
+        "prefix": " › "
+    },
+    "h6": {
+        "color": "#A0A0FF",
+        "prefix": " · "
+    },
+    "heading": {
+        "block_suffix": "\n",
+        "bold": true,
+        "color": "#00C2FF"
+    },
+    "hr": {
+        "bold": true,
+        "color": "#7A7AA6",
+        "faint": false,
+        "format": "\n════════════════════════════════════════════════════════════\n",
+        "italic": false
+    },
+    "html_block": {
+        "color": "#FF7AF6"
+    },
+    "html_span": {
+        "color": "#FF7AF6"
+    },
+    "image": {
+        "bold": true,
+        "color": "#FF2D95",
+        "underline": true
+    },
+    "image_text": {
+        "color": "#FF66C4",
+        "format": "🖼 {{.text}} ⇢"
+    },
+    "item": {
+        "block_prefix": "✹ ",
+        "color": "#F8F8F2"
+    },
+    "link": {
+        "bold": true,
+        "color": "#00F5FF",
+        "underline": true
+    },
+    "link_text": {
+        "bold": true,
+        "color": "#00A6FF"
+    },
+    "list": {
+        "color": "#EDEDED",
+        "level_indent": 3
+    },
+    "paragraph": {
+        "color": "#F1F5F9"
+    },
+    "strikethrough": {
+        "color": "#FF5577",
+        "crossed_out": true
+    },
+    "strong": {
+        "bold": true,
+        "color": "#FFD60A"
+    },
+    "table": {
+        "center_separator": "┼",
+        "color": "#F8FAFC",
+        "column_separator": "│",
+        "margin": 1,
+        "row_separator": "─"
+    },
+    "task": {
+        "bold": true,
+        "color": "#E6E6EA",
+        "ticked": "[✔] ",
+        "unticked": "[✘] "
+    },
+    "text": {
+        "color": "#EAEAF2"
+    }
+}

@@ -1,4 +1,5 @@
 {
+    "$schema": "https://www.schemastore.org/glamour-style.json",
     "_codex_terminal_themes": {
         "generated_by": "codex-terminal-themes glow style translation",
         "note": "Glow/Glamour styles map markdown and Chroma token groups, not TextMate scopes one-to-one.",

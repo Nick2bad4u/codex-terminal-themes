@@ -2,26 +2,24 @@
     "$schema": "https://www.schemastore.org/glamour-style.json",
     "_codex_terminal_themes": {
         "generated_by": "codex-terminal-themes glow style translation",
-        "note": "Glow/Glamour styles map markdown and Chroma token groups, not TextMate scopes one-to-one.",
-        "source_name": "Nicks-Codex-Noir-v2",
+        "note": "Glow/Glamour styles map markdown and Chroma token groups, not TextMate scopes one-to-one. Nerd Font glyphs require the terminal font itself to be a Nerd Font.",
+        "source_name": "Nicks-Codex-Noir-v2-NerdFont",
         "source_theme": "Nicks-Codex-Noir-v2.tmTheme"
     },
     "block_quote": {
         "background_color": "#000000",
         "color": "#7A7AA6",
         "indent": 1,
-        "indent_token": "│ ",
+        "indent_token": " ",
         "italic": true
     },
     "code": {
         "background_color": "#08080D",
         "color": "#00D86A",
-        "prefix": " ",
+        "prefix": "  ",
         "suffix": " "
     },
     "code_block": {
-        "block_prefix": "\n```\n",
-        "block_suffix": "\n```\n",
         "chroma": {
             "background": {
                 "background_color": "#000000"
@@ -127,7 +125,7 @@
         "margin": 2
     },
     "definition_description": {
-        "block_prefix": "\n "
+        "block_prefix": "\n 󰌶 "
     },
     "definition_list": {},
     "definition_term": {
@@ -146,33 +144,33 @@
         "italic": true
     },
     "enumeration": {
-        "block_prefix": ". ",
+        "block_prefix": "󰎠 ",
         "color": "#00D6D6"
     },
     "h1": {
         "bold": true,
         "color": "#FFC400",
-        "prefix": "# "
+        "prefix": "󰎤 "
     },
     "h2": {
         "bold": true,
         "color": "#00D6D6",
-        "prefix": "## "
+        "prefix": "󰎧 "
     },
     "h3": {
         "bold": true,
         "color": "#00A6FF",
-        "prefix": "### "
+        "prefix": "󰎪 "
     },
     "h4": {
-        "prefix": "#### "
+        "prefix": "󰎭 "
     },
     "h5": {
-        "prefix": "##### "
+        "prefix": "󰎱 "
     },
     "h6": {
         "color": "#4B448A",
-        "prefix": "###### "
+        "prefix": "󰎳 "
     },
     "heading": {
         "block_suffix": "\n",
@@ -183,7 +181,7 @@
         "bold": true,
         "color": "#7A7AA6",
         "faint": true,
-        "format": "\n----------------\n",
+        "format": "\n━━━━━━━━━━━━━━━━\n",
         "italic": true
     },
     "html_block": {},
@@ -194,10 +192,10 @@
     },
     "image_text": {
         "color": "#FF2D95",
-        "format": "Image: {{.text}} →"
+        "format": "󰥶 Image: {{.text}} →"
     },
     "item": {
-        "block_prefix": "• ",
+        "block_prefix": " ",
         "color": "#E6E6EA"
     },
     "link": {
@@ -225,8 +223,8 @@
         "margin": 1
     },
     "task": {
-        "ticked": "[✓] ",
-        "unticked": "[ ] "
+        "ticked": " ",
+        "unticked": " "
     },
     "text": {}
 }
