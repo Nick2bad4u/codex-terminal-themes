@@ -72,9 +72,9 @@ function getContentType(filePath) {
  */
 function getIntegerOption(optionName, fallback) {
     const value = getStringOption(optionName, "");
-    const parsedValue = Number.parseInt(value, 10);
+    const parsedValue = Number(value);
 
-    return Number.isInteger(parsedValue) && parsedValue > 0
+    return Number.isSafeInteger(parsedValue) && parsedValue > 0
         ? parsedValue
         : fallback;
 }

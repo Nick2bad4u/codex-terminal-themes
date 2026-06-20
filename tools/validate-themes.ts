@@ -30,11 +30,7 @@ async function buildBatCache() {
 
     const closeResult = /** @type {readonly unknown[]} */ await Promise.race([
         once(childProcess, "close"),
-        once(childProcess, "error").then((errorResult) => {
-            const errorValues = /** @type {readonly unknown[]} */ errorResult;
-            const error = errorValues[0];
-            throw error;
-        }),
+        waitForProcessError(childProcess),
     ]);
     const [exitCode] = closeResult;
 
@@ -240,7 +236,13 @@ function isUnknownArray(value) {
  * @returns {Promise<number>}
  */
 async function main() {
-    const themeDirectoryStats = await stat(themeDirectory).catch(() => null);
+    let themeDirectoryStats: Awaited<ReturnType<typeof stat>> | null;
+
+    try {
+        themeDirectoryStats = await stat(themeDirectory);
+    } catch {
+        themeDirectoryStats = null;
+    }
 
     if (themeDirectoryStats?.isDirectory() === false) {
         process.stderr.write(
@@ -381,6 +383,20 @@ async function validateTheme(filePath) {
         ok: true,
         reason: "",
     };
+}
+
+/**
+ * @param {import("node:child_process").ChildProcess} childProcess
+ *
+ * @returns {Promise<never>}
+ */
+async function waitForProcessError(childProcess): Promise<never> {
+    const errorValues = /** @type {readonly unknown[]} */ await once(
+        childProcess,
+        "error"
+    );
+    const error = errorValues[0];
+    throw error;
 }
 
 // eslint-disable-next-line unicorn/prefer-top-level-await -- This published-module config also enforces n/no-top-level-await.

@@ -291,7 +291,9 @@ const styleKeys = [
 ];
 
 /** @type {ReturnType<typeof globalThis.setTimeout> | undefined} */
-let colorRenderTimer: ReturnType<typeof globalThis.setTimeout> | undefined;
+const colorRenderTimerState: {
+    value?: ReturnType<typeof globalThis.setTimeout>;
+} = {};
 
 const elements = {
     appearanceFilter: queryElement("#appearance_filter", HTMLSelectElement),
@@ -348,9 +350,9 @@ function closeColorWheel() {
 }
 
 function commitColorRender() {
-    if (colorRenderTimer !== undefined) {
-        globalThis.clearTimeout(colorRenderTimer);
-        colorRenderTimer = undefined;
+    if (colorRenderTimerState.value !== undefined) {
+        clearTimeout(colorRenderTimerState.value);
+        colorRenderTimerState.value = undefined;
     }
 
     render();
@@ -403,7 +405,7 @@ function getColorFromWheelPointer(event) {
     const hue = (Math.atan2(y, x) * 180) / Math.PI;
     const normalizedHue = (hue + 360) % 360;
     const saturation = Math.min(Math.hypot(x, y) / radius, 1);
-    const lightness = Number.parseInt(elements.colorLightness.value, 10) / 100;
+    const lightness = Number(elements.colorLightness.value) / 100;
 
     return rgbToHex(
         hslToRgb({
@@ -424,7 +426,7 @@ function getFilteredThemes() {
         .filter((part) => part.length > 0);
 
     return state.themes.filter((theme) => {
-        const matchesAppearance =
+        const isMatchesAppearance =
             state.appearance === "all" || theme.appearance === state.appearance;
         const searchText = [
             theme.name,
@@ -436,14 +438,19 @@ function getFilteredThemes() {
         ]
             .join(" ")
             .toLowerCase();
-        const matchesQuery = queryParts.every((part) =>
+        const isMatchesQuery = queryParts.every((part) =>
             searchText.includes(part)
         );
-        const matchesHue =
-            state.hue === "all" || themeMatchesHue(theme, state.hue);
-        const matchesColor = themeMatchesPickedColor(theme);
+        const isMatchesHue =
+            state.hue === "all" || hasThemeMatchingHue(theme, state.hue);
+        const isMatchesColor = themeMatchesPickedColor(theme);
 
-        return matchesAppearance && matchesQuery && matchesHue && matchesColor;
+        return (
+            isMatchesAppearance &&
+            isMatchesQuery &&
+            isMatchesHue &&
+            isMatchesColor
+        );
     });
 }
 
@@ -744,15 +751,15 @@ function readRules(value) {
 
             return [
                 {
-                    ...(readString(entry, "background").length === 0
-                        ? {}
-                        : { background: readString(entry, "background") }),
-                    ...(readString(entry, "fontStyle").length === 0
-                        ? {}
-                        : { fontStyle: readString(entry, "fontStyle") }),
-                    ...(readString(entry, "foreground").length === 0
-                        ? {}
-                        : { foreground: readString(entry, "foreground") }),
+                    ...(readString(entry, "background").length > 0 && {
+                        background: readString(entry, "background"),
+                    }),
+                    ...(readString(entry, "fontStyle").length > 0 && {
+                        fontStyle: readString(entry, "fontStyle"),
+                    }),
+                    ...(readString(entry, "foreground").length > 0 && {
+                        foreground: readString(entry, "foreground"),
+                    }),
                     scope,
                 },
             ];
@@ -1026,7 +1033,7 @@ function renderThemePreview(theme) {
  */
 function render(options: RenderOptions = {}) {
     const filteredThemes = getFilteredThemes();
-    const selectedThemeVisible = filteredThemes.some(
+    const isSelectedThemeVisible = filteredThemes.some(
         (theme) => theme.id === state.selectedId
     );
 
@@ -1035,7 +1042,7 @@ function render(options: RenderOptions = {}) {
             ? `${state.themes.length} themes`
             : `${filteredThemes.length}/${state.themes.length} themes`;
 
-    if (!selectedThemeVisible) {
+    if (!isSelectedThemeVisible) {
         state.selectedId = "";
 
         if (filteredThemes.length > 0) {
@@ -1109,12 +1116,12 @@ function selectTheme(themeId: string, options: RenderOptions = {}) {
 }
 
 function scheduleColorRender() {
-    if (colorRenderTimer !== undefined) {
-        globalThis.clearTimeout(colorRenderTimer);
+    if (colorRenderTimerState.value !== undefined) {
+        clearTimeout(colorRenderTimerState.value);
     }
 
-    colorRenderTimer = globalThis.setTimeout(() => {
-        colorRenderTimer = undefined;
+    colorRenderTimerState.value = setTimeout(() => {
+        colorRenderTimerState.value = undefined;
         render();
     }, colorRenderDelayMs);
 }
@@ -1179,11 +1186,9 @@ function rgbToHsl(color) {
         };
     }
 
-    let saturation = delta / (maximum + minimum);
-
-    if (lightness > 0.5) {
-        saturation = delta / (2 - maximum - minimum);
-    }
+    const saturationDenominator =
+        lightness > 0.5 ? 2 - maximum - minimum : maximum + minimum;
+    const saturation = delta / saturationDenominator;
 
     let hue = ((red - green) / delta + 4) * 60;
 
@@ -1297,7 +1302,7 @@ function themeMatchesPickedColor(theme) {
  *
  * @returns {boolean}
  */
-function themeMatchesHue(theme, hue) {
+function hasThemeMatchingHue(theme, hue) {
     return getThemeRgbColors(theme).some(
         (color) => getHueCategory(color) === hue
     );
@@ -1310,6 +1315,15 @@ function themeMatchesHue(theme, hue) {
  */
 function toHexChannel(value) {
     return Math.min(255, Math.max(0, value)).toString(16).padStart(2, "0");
+}
+
+/**
+ * @param {ColorHsl} color
+ *
+ * @returns {string}
+ */
+function hslToHex(color) {
+    return rgbToHex(hslToRgb(color));
 }
 
 function toggleColorWheel() {
@@ -1367,7 +1381,7 @@ elements.colorLightness.addEventListener("input", () => {
     }
 
     const hsl = rgbToHsl(color);
-    const lightness = Number.parseInt(elements.colorLightness.value, 10) / 100;
+    const lightness = Number(elements.colorLightness.value) / 100;
     setSelectedColor(
         rgbToHex(
             hslToRgb({
@@ -1392,12 +1406,10 @@ elements.colorWheel.addEventListener("keydown", (event) => {
         case "ArrowDown": {
             event.preventDefault();
             setSelectedColor(
-                rgbToHex(
-                    hslToRgb({
-                        ...hsl,
-                        saturation: Math.max(0, hsl.saturation - 0.05),
-                    })
-                )
+                hslToHex({
+                    ...hsl,
+                    saturation: Math.max(0, hsl.saturation - 0.05),
+                })
             );
             break;
         }
@@ -1431,12 +1443,10 @@ elements.colorWheel.addEventListener("keydown", (event) => {
         case "ArrowUp": {
             event.preventDefault();
             setSelectedColor(
-                rgbToHex(
-                    hslToRgb({
-                        ...hsl,
-                        saturation: Math.min(1, hsl.saturation + 0.05),
-                    })
-                )
+                hslToHex({
+                    ...hsl,
+                    saturation: Math.min(1, hsl.saturation + 0.05),
+                })
             );
             break;
         }

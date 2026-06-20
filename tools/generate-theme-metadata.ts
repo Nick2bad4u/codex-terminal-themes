@@ -427,19 +427,28 @@ function getThemeStatistics(settingsArray) {
                     : getDictionaryEntries(dictChildren);
             const settings = getDictionaryValue(entries, "settings");
 
-            return [...settings.values()].filter((value) => {
+            const colorValues: unknown[] = [];
+
+            for (const value of settings.values()) {
                 const stringValue = getStringValue(value);
-                return stringValue === undefined
-                    ? false
-                    : parseColor(stringValue) !== null;
-            });
+                if (
+                    stringValue !== undefined &&
+                    parseColor(stringValue) !== null
+                ) {
+                    colorValues.push(value);
+                }
+            }
+
+            return colorValues;
         }).length;
+
+    const uniqueScopes = new Set(scopes);
 
     return {
         colorReferences,
         scopedSettings: scopes.length,
         settings: settingsCount,
-        uniqueScopes: new Set(scopes).size,
+        uniqueScopes: uniqueScopes.size,
     };
 }
 
@@ -548,9 +557,9 @@ function parseColor(color) {
 
     if (hex.length === 3) {
         return [
-            Number.parseInt(`${hex[0]}${hex[0]}`, 16),
-            Number.parseInt(`${hex[1]}${hex[1]}`, 16),
-            Number.parseInt(`${hex[2]}${hex[2]}`, 16),
+            Number.parseInt(`${hex.at(0)}${hex.at(0)}`, 16),
+            Number.parseInt(`${hex.at(1)}${hex.at(1)}`, 16),
+            Number.parseInt(`${hex.at(2)}${hex.at(2)}`, 16),
         ];
     }
 

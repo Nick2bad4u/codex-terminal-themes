@@ -121,7 +121,7 @@ const packageRoot =
         : path.dirname(moduleDirectory);
 const manifestPath = path.join(packageRoot, "metadata", "themes.json");
 const themeRoot = path.join(packageRoot, "themes");
-const reset = "\u001B[0m";
+const reset = "\u{1B}[0m";
 
 const parser = new XMLParser({
     ignoreAttributes: false,
@@ -457,10 +457,10 @@ async function handleInstall(parsedArgs, io) {
         }
     }
 
-    const copiedBatThemes = results.some(
+    const isCopiedBatThemes = results.some(
         (result) => result.target === "bat" && result.status === "copied"
     );
-    if (!dryRun && copiedBatThemes && !skipBatCache) {
+    if (!dryRun && isCopiedBatThemes && !skipBatCache) {
         const batCacheResult = await runBatCache(io);
         results.push(batCacheResult);
     }
@@ -521,14 +521,14 @@ async function handlePath(parsedArgs, io) {
  * @returns {Promise<number>}
  */
 async function handlePicker(parsedArgs, io) {
-    const manifest = await loadManifest();
-    const themes = filterThemes(manifest.themes, parsedArgs);
-
     if (!io.stdin.isTTY || !io.stdout.isTTY) {
         throw new Error(
             "Interactive picker requires a TTY. Use `list` or `show` in scripts."
         );
     }
+
+    const manifest = await loadManifest();
+    const themes = filterThemes(manifest.themes, parsedArgs);
 
     const selectedTheme = await runPicker(themes, io);
     if (selectedTheme === null) {
@@ -634,7 +634,7 @@ async function copyTheme(options): Promise<InstallResult> {
  * @returns {string}
  */
 function dim(value) {
-    return `\u001B[2m${value}${reset}`;
+    return `\u{1B}[2m${value}${reset}`;
 }
 
 /**
@@ -662,7 +662,7 @@ function filterThemes(themes, parsedArgs) {
     const appearance = getStringFlag(parsedArgs, "appearance");
     const limit = getNumberFlag(parsedArgs, "limit");
     const filteredThemes = themes.filter((theme) => {
-        const matchesSearch =
+        const isMatchesSearch =
             search === undefined ||
             [
                 theme.id,
@@ -672,9 +672,9 @@ function filterThemes(themes, parsedArgs) {
                 .join(" ")
                 .toLowerCase()
                 .includes(search);
-        const matchesAppearance =
+        const isMatchesAppearance =
             appearance === undefined || theme.appearance === appearance;
-        return matchesSearch && matchesAppearance;
+        return isMatchesSearch && isMatchesAppearance;
     });
 
     return limit === undefined
@@ -828,7 +828,7 @@ function getNumberFlag(parsedArgs, name) {
         return undefined;
     }
 
-    const parsedValue = Number.parseInt(value, 10);
+    const parsedValue = Number(value);
     if (Number.isNaN(parsedValue)) {
         throw new TypeError(`Expected --${name} to be a number.`);
     }
@@ -1184,7 +1184,6 @@ async function readThemeStyles(theme) {
         const settings = getDictionaryValue(entries, "settings");
         const foreground = getStringValue(settings.get("foreground"));
         const background = getStringValue(settings.get("background"));
-        const fontStyle = getStringValue(settings.get("fontStyle"));
 
         if (
             scope === undefined ||
@@ -1192,6 +1191,8 @@ async function readThemeStyles(theme) {
         ) {
             return [];
         }
+
+        const fontStyle = getStringValue(settings.get("fontStyle"));
 
         return [
             {
@@ -1317,14 +1318,15 @@ async function resolveInstallTargets(parsedArgs, config, io) {
     const targets: InstallTarget[] = [];
 
     if (targetNames.includes("codex")) {
+        const codexHome =
+            io.env.CODEX_HOME ?? path.join(os.homedir(), ".codex");
+        const codexDirectory =
+            getStringFlag(parsedArgs, "codex-dir") ??
+            config.codexDir ??
+            path.join(codexHome, "themes");
+
         targets.push({
-            directory:
-                getStringFlag(parsedArgs, "codex-dir") ??
-                config.codexDir ??
-                path.join(
-                    io.env.CODEX_HOME ?? path.join(os.homedir(), ".codex"),
-                    "themes"
-                ),
+            directory: codexDirectory,
             name: "codex",
         });
     }
@@ -1505,7 +1507,7 @@ async function runPicker(themes, io): Promise<Theme | null> {
         const start = Math.max(0, index - Math.floor(listHeight / 2));
         const visibleThemes = filteredThemes.slice(start, start + listHeight);
         const lines = [
-            "\u001B[?25l\u001B[2J\u001B[H",
+            "\u{1B}[?25l\u{1B}[2J\u{1B}[H",
             "codex-terminal-themes picker",
             dim(
                 "Type to filter, use arrows or j/k, Enter selects, q/Esc cancels."
@@ -1543,8 +1545,8 @@ async function runPicker(themes, io): Promise<Theme | null> {
 
                 if (
                     [
-                        "\u0003",
-                        "\u001B",
+                        "\u{3}",
+                        "\u{1B}",
                         "q",
                     ].includes(input)
                 ) {
@@ -1560,21 +1562,21 @@ async function runPicker(themes, io): Promise<Theme | null> {
                     return;
                 }
 
-                if (input === "\u001B[A" || input === "k") {
+                if (input === "\u{1B}[A" || input === "k") {
                     index = Math.max(0, index - 1);
-                } else if (input === "\u001B[B" || input === "j") {
+                } else if (input === "\u{1B}[B" || input === "j") {
                     index = Math.min(
                         Math.max(0, filteredThemes.length - 1),
                         index + 1
                     );
-                } else if (input === "\u001B[5~") {
+                } else if (input === "\u{1B}[5~") {
                     index = Math.max(0, index - 10);
-                } else if (input === "\u001B[6~") {
+                } else if (input === "\u{1B}[6~") {
                     index = Math.min(
                         Math.max(0, filteredThemes.length - 1),
                         index + 10
                     );
-                } else if (input === "\u007F" || input === "\b") {
+                } else if (input === "\u{7F}" || input === "\b") {
                     query = query.slice(0, -1);
                     index = 0;
                 } else if (isPickerSearchCharacter(input)) {
@@ -1588,14 +1590,14 @@ async function runPicker(themes, io): Promise<Theme | null> {
             const cleanup = () => {
                 io.stdin.off("data", onData);
                 io.stdin.setRawMode(false);
-                io.stdout.write("\u001B[2J\u001B[H\u001B[?25h");
+                io.stdout.write("\u{1B}[2J\u{1B}[H\u{1B}[?25h");
             };
 
             io.stdin.on("data", onData);
         });
     } catch (error) {
         io.stdin.setRawMode(false);
-        io.stdout.write("\u001B[?25h");
+        io.stdout.write("\u{1B}[?25h");
         throw error;
     }
 }
@@ -1733,7 +1735,7 @@ async function spawnText(command, args, io): Promise<SpawnTextResult> {
  * @returns {boolean}
  */
 function isPickerSearchCharacter(input) {
-    return input.length === 1 && input >= " " && input !== "\u007F";
+    return input.length === 1 && input >= " " && input !== "\u{7F}";
 }
 
 /**
@@ -1891,7 +1893,7 @@ function colorBlock(color, text) {
     const parsedColor = color === undefined ? null : parseHexColor(color);
     return parsedColor === null
         ? text
-        : `\u001B[48;2;${parsedColor.red};${parsedColor.green};${parsedColor.blue}m${text}${reset}`;
+        : `\u{1B}[48;2;${parsedColor.red};${parsedColor.green};${parsedColor.blue}m${text}${reset}`;
 }
 
 /**
@@ -1919,7 +1921,7 @@ function colorText(text, style) {
 
     return codes.length === 0
         ? text
-        : `\u001B[${codes.join(";")}m${text}${reset}`;
+        : `\u{1B}[${codes.join(";")}m${text}${reset}`;
 }
 
 /**
@@ -1946,7 +1948,7 @@ function parseHexColor(color) {
     const { hex } = match.groups;
     const expandedHex =
         hex.length === 3
-            ? `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`
+            ? `${hex.at(0)}${hex.at(0)}${hex.at(1)}${hex.at(1)}${hex.at(2)}${hex.at(2)}`
             : hex.slice(0, 6);
 
     return {

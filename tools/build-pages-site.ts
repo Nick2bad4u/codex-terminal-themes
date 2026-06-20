@@ -313,9 +313,9 @@ function getPreviewRules(settingsArray) {
             .map((scopePart) => scopePart.trim())
             .filter((scopePart) => scopePart.length > 0)
             .map((scopePart) => ({
-                ...(background === undefined ? {} : { background }),
-                ...(fontStyle === undefined ? {} : { fontStyle }),
-                ...(foreground === undefined ? {} : { foreground }),
+                ...(background !== undefined && { background }),
+                ...(fontStyle !== undefined && { fontStyle }),
+                ...(foreground !== undefined && { foreground }),
                 scope: scopePart,
             }));
     });

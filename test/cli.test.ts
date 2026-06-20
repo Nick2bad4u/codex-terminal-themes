@@ -37,21 +37,11 @@ async function run(args, options: { readonly env?: NodeJS.ProcessEnv } = {}) {
 
     const stdin = {
         isTTY: false,
-        off() {
-            return stdin;
-        },
-        on() {
-            return stdin;
-        },
-        resume() {
-            return stdin;
-        },
-        setEncoding() {
-            return stdin;
-        },
-        setRawMode() {
-            return stdin;
-        },
+        off: () => stdin,
+        on: () => stdin,
+        resume: () => stdin,
+        setEncoding: () => stdin,
+        setRawMode: () => stdin,
     } as unknown as NodeJS.ReadStream & { readonly isTTY?: boolean };
     const stdoutStream = Object.assign(stdout.stream, {
         isTTY: false,
@@ -161,7 +151,7 @@ test("config set and get use the requested config path", async () => {
     const configPath = path.join(tempDirectory, "config.json");
 
     try {
-        const setResult = await run([
+        const configSetResult = await run([
             "config",
             "set",
             "defaultTheme",
@@ -169,7 +159,7 @@ test("config set and get use the requested config path", async () => {
             "--config",
             configPath,
         ]);
-        const getResult = await run([
+        const configGetResult = await run([
             "config",
             "get",
             "defaultTheme",
@@ -177,9 +167,9 @@ test("config set and get use the requested config path", async () => {
             configPath,
         ]);
 
-        expect(setResult.exitCode).toBe(0);
-        expect(getResult.exitCode).toBe(0);
-        expect(getResult.stdout.trim()).toBe("nicks-codex-noir");
+        expect(configSetResult.exitCode).toBe(0);
+        expect(configGetResult.exitCode).toBe(0);
+        expect(configGetResult.stdout.trim()).toBe("nicks-codex-noir");
     } finally {
         await rm(tempDirectory, { force: true, recursive: true });
     }
