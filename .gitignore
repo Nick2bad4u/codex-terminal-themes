@@ -15,3 +15,5 @@ Thumbs.db
 
 # Bat builds compiled caches under AppData\Local, not in this repo.
 *.bin
+.lychee.report.md
+.lycheecache

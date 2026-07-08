@@ -96,7 +96,13 @@
         "validate": "npm run build && npm run validate:built",
         "validate:bat": "npm run build:runtime && node dist/tools/validate-themes.js --bat-cache",
         "validate:built": "node dist/tools/validate-themes.js && node dist/tools/generate-theme-metadata.js --check && node dist/tools/build-pages-site.js --check",
-        "validate:themes": "npm run build:runtime && node dist/tools/validate-themes.js"
+        "validate:themes": "npm run build:runtime && node dist/tools/validate-themes.js",
+        "lint:jscpd": "jscpd --config node_modules/jscpd-config-nick2bad4u/jscpd.json",
+        "changelog:generate": "git cliff --config node_modules/gitcliff-config-nick2bad4u/cliff.toml --github-repo Nick2bad4u/codex-terminal-themes --output CHANGELOG.md",
+        "changelog:preview": "git cliff --config node_modules/gitcliff-config-nick2bad4u/cliff.toml --github-repo Nick2bad4u/codex-terminal-themes --unreleased",
+        "changelog:release-notes": "git cliff --config node_modules/gitcliff-config-nick2bad4u/cliff.toml --github-repo Nick2bad4u/codex-terminal-themes --current",
+        "lint:lychee": "lychee --config node_modules/lychee-config-nick2bad4u/lychee.toml .",
+        "lint:lychee:smoke": "lychee --config node_modules/lychee-config-nick2bad4u/lychee.toml --dump-inputs README.md"
     },
     "dependencies": {
         "fast-xml-parser": "^5.9.3",
@@ -107,7 +113,12 @@
         "actions-up": "^1.14.3",
         "eslint": "^10.6.0",
         "eslint-config-nick2bad4u": "^3.0.3",
+        "git-cliff": "^2.13.1",
+        "gitcliff-config-nick2bad4u": "^1.1.0",
         "gitleaks-config-nick2bad4u": "^1.0.2",
+        "jscpd": "^5.0.12",
+        "jscpd-config-nick2bad4u": "^1.0.0",
+        "lychee-config-nick2bad4u": "^1.0.0",
         "npm-package-json-lint": "^10.4.1",
         "npm-package-json-lint-config-nick2bad4u": "^1.0.3",
         "prettier": "^3.9.1",
