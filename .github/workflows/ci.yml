@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=https://www.schemastore.org/github-workflow.json
-name: "Ci"
+name: "CI"
 
 run-name: "Ci • ${{ github.ref_name }} @${{ github.actor }}"
 

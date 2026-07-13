@@ -10,6 +10,22 @@ const config = [
     ...nickTwoBadFourU.configs.all,
 
     {
+        files: ["**/*.{css,scss}"],
+        name: "Dedicated Stylelint validation",
+        rules: {
+            "stylelint-2/stylelint": "off",
+        },
+    },
+
+    {
+        files: ["stylelint.config.mjs"],
+        name: "Development-only shared Stylelint config",
+        rules: {
+            "n/no-unpublished-import": "off",
+        },
+    },
+
+    {
         files: [
             "bin/**/*.ts",
             "docs/app.ts",
@@ -54,6 +70,8 @@ const config = [
             "typefest/prefer-ts-extras-safe-cast-to": "off",
             "typefest/prefer-ts-extras-set-has": "off",
             "typefest/prefer-ts-extras-string-split": "off",
+            // Error.isError is not present in the repository's TypeScript target library.
+            "unicorn/prefer-error-is-error": "off",
         },
     },
 
@@ -106,6 +124,7 @@ const config = [
             "@typescript-eslint/no-unsafe-return": "off",
             "@typescript-eslint/prefer-readonly-parameter-types": "off",
             "@typescript-eslint/return-await": "off",
+            "canonical/no-use-extend-native": "off",
             "de-morgan/no-negated-conjunction": "off",
             "jsdoc/no-undefined-types": "off",
             "jsdoc/valid-types": "off",

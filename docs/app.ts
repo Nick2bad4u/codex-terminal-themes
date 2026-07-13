@@ -37,7 +37,12 @@ type ColorHsl = {
 };
 
 type MatchedStyle = Partial<
-    Record<"background" | "fontStyle" | "foreground", string>
+    Record<
+        | "background"
+        | "fontStyle"
+        | "foreground",
+        string
+    >
 >;
 
 type Sample = {
@@ -57,7 +62,10 @@ type GalleryState = {
 };
 
 type ColorRenderOptions = {
-    readonly renderMode?: "defer" | "none" | "now";
+    readonly renderMode?:
+        | "defer"
+        | "none"
+        | "now";
 };
 
 type RenderOptions = {

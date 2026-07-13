@@ -32,7 +32,10 @@ type ThemeStatistics = {
 };
 
 type Theme = {
-    readonly appearance: "dark" | "light" | "unknown";
+    readonly appearance:
+        | "dark"
+        | "light"
+        | "unknown";
     readonly author: null | string;
     readonly colors: ThemeColors;
     readonly colorSpace: null | string;
@@ -97,7 +100,12 @@ type InstallResult = {
     readonly destination: string;
     readonly reason?: string;
     readonly source: string;
-    readonly status: "copied" | "dry-run" | "failed" | "rebuilt" | "unchanged";
+    readonly status:
+        | "copied"
+        | "dry-run"
+        | "failed"
+        | "rebuilt"
+        | "unchanged";
     readonly target: string;
     readonly theme: string;
 };

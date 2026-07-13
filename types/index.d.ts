@@ -1,4 +1,7 @@
-export type ThemeAppearance = "dark" | "light" | "unknown";
+export type ThemeAppearance =
+    | "dark"
+    | "light"
+    | "unknown";
 
 export interface ThemeColors {
     readonly background: null | string;

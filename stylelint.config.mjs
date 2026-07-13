@@ -1,5 +1,10 @@
+import sharedConfig from "stylelint-config-nick2bad4u";
+
+/** @type {import("stylelint").Config} */
 const config = {
+    ...sharedConfig,
     rules: {
+        ...sharedConfig.rules,
         "color-no-invalid-hex": true,
         "declaration-block-no-duplicate-properties": true,
         "font-family-no-duplicate-names": true,
