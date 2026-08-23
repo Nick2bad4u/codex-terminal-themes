@@ -1,0 +1,27 @@
+codecov:
+    require_ci_to_pass: true
+
+comment:
+    behavior: "default"
+    layout: "reach,diff,flags,tree"
+    require_changes: true
+coverage:
+    precision: 2
+    range: "70...100"
+    round: "down"
+    status:
+        patch:
+            default:
+                target: "80%"
+
+        project:
+            default:
+                target: "auto"
+                threshold: "1%"
+github_checks:
+    annotations: true
+
+ignore:
+    - "dist/**"
+    - "test/**"
+    - "tools/**"
