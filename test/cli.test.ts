@@ -65,6 +65,24 @@ async function run(args, options: { readonly env?: NodeJS.ProcessEnv } = {}) {
     };
 }
 
+test("help and version flags print package information", async () => {
+    const helpResult = await run(["--help"]);
+    const versionResult = await run(["--version"]);
+
+    expect(helpResult.exitCode).toBe(0);
+    expect(helpResult.stdout).toMatch(/codex-terminal-themes/v);
+    expect(versionResult.exitCode).toBe(0);
+    expect(versionResult.stdout.trim()).toMatch(/^\d+\.\d+\.\d+$/v);
+});
+
+test("unknown commands fail with help on stderr", async () => {
+    const result = await run(["not-a-command"]);
+
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toMatch(/Unknown command: not-a-command/v);
+    expect(result.stderr).toMatch(/codex-terminal-themes/v);
+});
+
 test("list prints theme ids", async () => {
     const result = await run([
         "list",
@@ -74,6 +92,21 @@ test("list prints theme ids", async () => {
 
     expect(result.exitCode).toBe(0);
     expect(result.stdout).toMatch(/nicks-codex-noir/v);
+});
+
+test("list emits machine-readable JSON", async () => {
+    const result = await run([
+        "list",
+        "--json",
+        "--search",
+        "Noir",
+    ]);
+    const parsed = JSON.parse(result.stdout) as readonly {
+        readonly id: string;
+    }[];
+
+    expect(result.exitCode).toBe(0);
+    expect(parsed.some((theme) => theme.id === "nicks-codex-noir")).toBe(true);
 });
 
 test("show prints details and preview", async () => {
@@ -170,6 +203,49 @@ test("config set and get use the requested config path", async () => {
         expect(configSetResult.exitCode).toBe(0);
         expect(configGetResult.exitCode).toBe(0);
         expect(configGetResult.stdout.trim()).toBe("nicks-codex-noir");
+    } finally {
+        await rm(tempDirectory, { force: true, recursive: true });
+    }
+});
+
+test("config path reports the explicit path", async () => {
+    const configPath = path.join(process.cwd(), "custom-config.json");
+    const result = await run([
+        "config",
+        "path",
+        "--config",
+        configPath,
+    ]);
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout.trim()).toBe(configPath);
+});
+
+test("config rejects unsupported keys", async () => {
+    const result = await run([
+        "config",
+        "get",
+        "unsupported",
+    ]);
+
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toMatch(/Expected one of these config keys/v);
+});
+
+test("install requires an explicit or configured theme", async () => {
+    const tempDirectory = await mkdtemp(
+        path.join(os.tmpdir(), "codex-terminal-themes-")
+    );
+
+    try {
+        const result = await run([
+            "install",
+            "--config",
+            path.join(tempDirectory, "missing-config.json"),
+        ]);
+
+        expect(result.exitCode).toBe(1);
+        expect(result.stderr).toMatch(/Specify a theme id\/name\/path/v);
     } finally {
         await rm(tempDirectory, { force: true, recursive: true });
     }

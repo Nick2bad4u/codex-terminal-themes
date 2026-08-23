@@ -32,6 +32,7 @@ const config = [
             "src/**/*.ts",
             "test/**/*.ts",
             "tools/**/*.ts",
+            "vitest.config.ts",
         ],
         name: "Migrated TypeScript source",
         rules: {
